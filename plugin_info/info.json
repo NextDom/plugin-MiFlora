@@ -1,0 +1,9 @@
+{
+	"id" : "MiFlora",
+	"name" : "Mi Flora",
+        "description" : "Plugin pour lire les info des MiFlora",
+	"licence" : "AGPL",
+	"author" : "Rene",
+	"require" : "2.4",
+	"category" : "nature"
+}
