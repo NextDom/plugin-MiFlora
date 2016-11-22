@@ -28,6 +28,8 @@ if (!isConnect()) {
 	  Entrer la config d'un device distant ou la config du device ou tourne jeedom, je ne gere que l access par ssh actuellement
 	  <br>
 	  il faut installer le bluetooth et s assurer que <b>gatttool -b macAddMiFlora --char-read -a 0x35</b> fonctionne sur le device cible
+	  <br>
+	  cette version ne recupere pas la config ci dessous, elle est hardcode dans core/class/MiFlora.class.php, il faut la changer et mettre vos valeurs
 	</span>
         <div class="form-group"> <br>
             <label class="col-lg-4 control-label">{{Remote IP}}</label>

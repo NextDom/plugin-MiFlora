@@ -27,27 +27,35 @@ class MiFlora extends eqLogic {
     /*     * ***********************Methode static*************************** */
 
     /*
-     * Fonction exécutée automatiquement toutes les minutes par Jeedom*/
+     * Fonction exécutée automatiquement toutes les minutes par Jeedom
+     activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante
       public static function cron() {
 
             	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
 		  $macAdd = $mi_flora->getConfiguration('macAdd');
                   log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
 		  $mi_flora->getMesure($macAdd,$MiFloraData);
-		  $mi_flora->traiteConso($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
+		  $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
 		  $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
 		}
 
       }
-      /**/
+      /* */
 
 
     /*
-     * Fonction exécutée automatiquement toutes les heures par Jeedom
+     * Fonction exécutée automatiquement toutes les heures par Jeedom */
       public static function cronHourly() {
+            	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+		  $macAdd = $mi_flora->getConfiguration('macAdd');
+                  log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
+		  $mi_flora->getMesure($macAdd,$MiFloraData);
+		  $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
+		  $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
+		}
 
       }
-     */
+      /* */
 
     /*
      * Fonction exécutée automatiquement tous les jours par Jeedom
@@ -196,11 +204,12 @@ class MiFlora extends eqLogic {
 	   // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
 	  //TODO get data
 	   //TODO: tester chaine error et gerer erreur
-	     
+
+	   /* Work in progress -- hardcoded values to be changed */
            $ip='10.182.207.58';
 	   $port='22';
 	   $user='pi';
-	   $pass='myPass';
+	   $pass='YourPasswd';
 
 
 	   //eqLogic::
@@ -243,7 +252,7 @@ class MiFlora extends eqLogic {
            log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
     }
     
-    public function traiteConso($macAdd,$MiFloraData,&$temperature,&$moisture,&$fertility,&$lux) {
+    public function traiteMesure($macAdd,$MiFloraData,&$temperature,&$moisture,&$fertility,&$lux) {
          // process data
          // log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
 	 $MiFloraData = explode(": ", $MiFloraData);
