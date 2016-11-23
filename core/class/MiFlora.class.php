@@ -28,7 +28,7 @@ class MiFlora extends eqLogic {
 
     /*
      * Fonction exécutée automatiquement toutes les minutes par Jeedom
-     activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante
+     activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante 
       public static function cron() {
 
             	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
@@ -202,27 +202,13 @@ class MiFlora extends eqLogic {
 	   $MiFloraData='';
 	   // $MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
 	   // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
-	  //TODO get data
 	   //TODO: tester chaine error et gerer erreur
 
-	   /* Work in progress -- hardcoded values to be changed */
-           $ip='10.182.207.58';
-	   $port='22';
-	   $user='pi';
-	   $pass='YourPasswd';
+	   $ip = config::byKey('addressip', 'MiFlora');
+	   $port = config::byKey('portssh', 'MiFlora');
+	   $user = config::byKey('user', 'MiFlora');
+	   $pass = config::byKey('password', 'MiFlora');
 
-
-	   //eqLogic::
-	   //$id=$eqLogic->getId();
-	   //	   $eqLogic = $this->getEqLogic();
-	   //      $miflora = self::byId($eqLogic->getId(), 'MiFlora');
-	   // $miflora = self::byId($eqLogic->getId(), 'MiFlora');
-	   //$miflora = self::byId(242, 'MiFlora');
-	   //log::add('MiFlora', 'debug', 'miflora-obj:'. $miflora);
-	   //$ip=$miflora->getConfiguration('addressip');
-	   //$port=$miflora->getConfiguration('portssh');
-	   //$user=$miflora->getConfiguration('user');
-	   //$pass=$miflora->getConfiguration('password');
 	   log::add('MiFlora', 'debug', 'ip:'.$ip);
 	   log::add('MiFlora', 'debug', 'port:'.$port);
 	   log::add('MiFlora', 'debug', 'user:'.$user);
@@ -237,11 +223,11 @@ class MiFlora extends eqLogic {
 	       log::add('MiFlora', 'error', 'Authentification SSH KO');
 	     }else{ 
 	       log::add('MiFlora', 'debug', 'Commande par SSH'); 
-	       $pico = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x35");
-	       stream_set_blocking($pico, true);
-	       $result = stream_get_contents($pico);						
-	       log::add('MiFlora', 'debug', 'SSH result:'.$result);
-	       $MiFloraData=$result;
+	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x35");
+	       stream_set_blocking($gattresult, true);
+	       $MiFloraData = stream_get_contents($gattresult);						
+	       log::add('MiFlora', 'debug', 'SSH result:'.$MiFloraData);
+
 	       $closesession = ssh2_exec($connection, 'exit');
 	       stream_set_blocking($closesession, true);
 	       stream_get_contents($closesession);
