@@ -57,10 +57,11 @@ class MiFlora extends eqLogic {
 		  }
 		  // recupere le niveau de la batterie deux  fois par jour a x h
 	          log::add('MiFlora', 'debug', 'date:'.date("h")); 
-	          if (date("h")==12){
+	          if (date("h")==10){
 		    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
 		    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
 		    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
+		    $mi_flora->updateStaticData($battery,$FirmwareVersion,$MiFloraName);
 		    
 		  }
 		}
@@ -70,7 +71,7 @@ class MiFlora extends eqLogic {
 
 
     /*
-     * Fonction exécutée automatiquement toutes les heures par Jeedom */
+     * Fonction exécutée automatiquement toutes les heures par Jeedom */ 
       public static function cronHourly() {
             	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
 		  $macAdd = $mi_flora->getConfiguration('macAdd');
@@ -102,7 +103,7 @@ class MiFlora extends eqLogic {
 		    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
 		    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
 		    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
-		    
+		    $mi_flora->updateStaticData($battery,$FirmwareVersion,$MiFloraName);
 		  }
 		}
 
@@ -195,7 +196,7 @@ class MiFlora extends eqLogic {
 			$MiFloraCmd->setName(__('Moisture', __FILE__));
 			$MiFloraCmd->setEqLogic_id($this->id);
 			$MiFloraCmd->setLogicalId('moisture');
-			$MiFloraCmd->setConfiguration('data', 'temperature');
+			$MiFloraCmd->setConfiguration('data', 'moisture');
 			$MiFloraCmd->setType('info');
 			$MiFloraCmd->setSubType('numeric');
 			$MiFloraCmd->setUnite('%');
@@ -226,6 +227,45 @@ class MiFlora extends eqLogic {
 			$MiFloraCmd->setSubType('numeric');
 			$MiFloraCmd->setUnite('lx');
 			$MiFloraCmd->setIsHistorized(1);
+			$MiFloraCmd->save();
+		}
+      		$cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'battery');
+		if (!is_object($cmdlogic)) {
+			$MiFloraCmd = new MiFloraCmd();
+			$MiFloraCmd->setName(__('Battery', __FILE__));
+			$MiFloraCmd->setEqLogic_id($this->id);
+			$MiFloraCmd->setLogicalId('battery');
+			$MiFloraCmd->setConfiguration('data', 'battery');
+			$MiFloraCmd->setType('info');
+			$MiFloraCmd->setSubType('numeric');
+			$MiFloraCmd->setUnite('%');
+			$MiFloraCmd->setIsHistorized(1);
+			$MiFloraCmd->save();
+		}
+      		$cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'firmware_version');
+		if (!is_object($cmdlogic)) {
+			$MiFloraCmd = new MiFloraCmd();
+			$MiFloraCmd->setName(__('Firmware Version', __FILE__));
+			$MiFloraCmd->setEqLogic_id($this->id);
+			$MiFloraCmd->setLogicalId('firmware_version');
+			$MiFloraCmd->setConfiguration('data', 'firmware_version');
+			$MiFloraCmd->setType('info');
+			$MiFloraCmd->setSubType('string');
+			$MiFloraCmd->setUnite('');
+			$MiFloraCmd->setIsHistorized(0);
+			$MiFloraCmd->save();
+		}
+      		$cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'MiFloraName');
+		if (!is_object($cmdlogic)) {
+			$MiFloraCmd = new MiFloraCmd();
+			$MiFloraCmd->setName(__('MiFlora Name', __FILE__));
+			$MiFloraCmd->setEqLogic_id($this->id);
+			$MiFloraCmd->setLogicalId('MiFloraName');
+			$MiFloraCmd->setConfiguration('data', 'MiFloraName');
+			$MiFloraCmd->setType('info');
+			$MiFloraCmd->setSubType('string');
+			$MiFloraCmd->setUnite('');
+			$MiFloraCmd->setIsHistorized(0);
 			$MiFloraCmd->save();
 		}
 		
@@ -348,12 +388,21 @@ class MiFlora extends eqLogic {
 	   }
     } 
 
+    public function hex2bin($h)
+    {
+      if (!is_string($h)) return null;
+      $r='';
+      for ($a=0; $a<strlen($h); $a+=2) { $r.=chr(hexdec($h{$a}.$h{($a+1)})); }
+      return $r;
+    }
+  
     public function traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraData,&$battery,&$FirmwareVersion) {
          //Characteristic value/descriptor: 64 10 32 2e 36 2e 32 
 	 $MiFloraData = explode(": ", $MiFloraData);
 	 $MiFloraData = explode(" ", $MiFloraData[1]);
 	 $battery=hexdec($MiFloraData[0]);
 	 $FirmwareVersion=$MiFloraData[2].$MiFloraData[3].$MiFloraData[4].$MiFloraData[5].$MiFloraData[6];
+	 $FirmwareVersion=hex2bin($FirmwareVersion);
          log::add('MiFlora', 'debug', $macAdd.' MiFloraData[0]:'.$MiFloraData[0]);
          log::add('MiFlora', 'debug', $macAdd.' battery:'.$battery);
          log::add('MiFlora', 'debug', $macAdd.' FirmwareVersion:'.$FirmwareVersion);
@@ -363,6 +412,7 @@ class MiFlora extends eqLogic {
 	 $MiFloraData = explode(": ", $MiFloraData);
 	 $MiFloraData = explode(" ", $MiFloraData[1]);
 	 $miFloraName=$MiFloraData[0].$MiFloraData[1].$MiFloraData[2].$MiFloraData[3].$MiFloraData[4].$MiFloraData[5].$MiFloraData[6].$MiFloraData[7].$MiFloraData[8].$MiFloraData[9].$MiFloraData[10];
+	 $miFloraName=hex2bin($miFloraName);
          log::add('MiFlora', 'debug', $macAdd.' miFloraName:'.$miFloraName);
     }
     
@@ -412,6 +462,38 @@ class MiFlora extends eqLogic {
       }
 	 
     }
+
+
+    public function updateStaticData($battery,$FirmwareVersion,$MiFloraName) {
+
+	 // store into Jeedom DB
+      if ($battery==0) {
+	log::add('MiFlora', 'error', 'Battery=0,  erreur probable de connection Mi Flora');
+      } else {
+	 $cmd = $this->getCmd(null, 'battery');
+	 if (is_object($cmd)) {
+	   $cmd->event($battery);
+	   log::add('MiFlora', 'debug', $macAdd.' Store battery:'.$battery);
+	 }
+	 $cmd = $this->getCmd(null, 'firmware_version');
+	 if (is_object($cmd)) {
+	   $cmd->event($FirmwareVersion);
+	   log::add('MiFlora', 'debug', $macAdd.' Store firmware version:'.$FirmwareVersion);
+	 }
+      }
+      if ($MiFloraName=='') {
+	log::add('MiFlora', 'error', 'MiFloraName vide,  erreur probable de connection Mi Flora');
+      } else {
+	 $cmd = $this->getCmd(null, 'MiFloraName');
+	 if (is_object($cmd)) {
+	   $cmd->event($MiFloraName);
+	   log::add('MiFlora', 'debug', $macAdd.' Store MiFloraName:'.$MiFloraName);
+	 }
+      }
+	 
+    }
+
+
     public function sendCommand( $id, $type, $option ) {
       log::add('MiFlora', 'debug', 'Lecture : '.$id. ' ' . $type . ' ' . $option);
       $playtts = self::byId($id, 'MiFlora');
