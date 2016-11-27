@@ -45,7 +45,7 @@ class MiFlora extends eqLogic {
 		    $mi_flora->getMesure($macAdd,$MiFloraData);
 		    log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
 		    $tryGetData++;
-		    sleep 5; // wait 5 s hopping it'll be better ...
+		    sleep(5); // wait 5 s hopping it'll be better ...
 
 		  }
 		  if ($MiFloraData=='') {
@@ -121,7 +121,7 @@ class MiFlora extends eqLogic {
 		    $mi_flora->getMesure($macAdd,$MiFloraData);
 		    log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
 		    $tryGetData++;
-		    sleep 5; // wait 5 s hopping it'll be better ...
+		    sleep(5); // wait 5 s hopping it'll be better ...
 		  }
 		  if ($MiFloraData=='') {
 		      log::add('MiFlora', 'error', 'mi flora data is empty, retried '.$tryGetData.' times, stop');
