@@ -66,40 +66,6 @@ class MiFlora extends eqLogic {
 		}
          }
 
-	 /*
-	
-            	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
-		  $macAdd = $mi_flora->getConfiguration('macAdd');
-                  log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
-		  $tryGetData=0;
-		  $mi_flora->getMesure($macAdd,$MiFloraData);
-                  log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
-		  if ($MiFloraData=='') {
-                     log::add('MiFlora', 'debug', 'mi flora data is empty, triing a second time');
-		    if ($tryGetData==0){
-		      $tryGetData++;
-                      log::add('MiFlora', 'error', 'mi flora try again');
-		      $mi_flora->getMesure($macAdd,$MiFloraData);
-                      log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
-		    }
-		    if ($MiFloraData=='') {
-		      log::add('MiFlora', 'error', 'mi flora data is empty, second time, stop');
-		    }
-		  } else {
-		    $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
-		    $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
-		  }
-		  // recupere le niveau de la batterie deux  fois par jour a x h
-	          log::add('MiFlora', 'debug', 'date:'.date("h")); 
-	          if (date("h")==12){
-		    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
-		    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
-		    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
-		    
-		  }
-		}
-
-      }
       /* */
 
 
