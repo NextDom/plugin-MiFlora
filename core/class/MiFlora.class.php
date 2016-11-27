@@ -29,14 +29,74 @@ class MiFlora extends eqLogic {
     /*
      * Fonction exécutée automatiquement toutes les minutes par Jeedom
      activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante 
-      public static function cron() {
-
+      public static function cron() { 
             	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
 		  $macAdd = $mi_flora->getConfiguration('macAdd');
                   log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
+		  $tryGetData=0;
+		  $MiFloraData='';
+		  while($MiFloraData==''){
+		    if ($tryGetData>3){ // stop after 4 try
+		      break;
+		    }
+		    if ($tryGetData>0){
+                      log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:'.$tryGetData);
+		    }
+		    $mi_flora->getMesure($macAdd,$MiFloraData);
+		    log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
+		    $tryGetData++;
+		    sleep 5; // wait 5 s hopping it'll be better ...
+
+		  }
+		  if ($MiFloraData=='') {
+		    log::add('MiFlora', 'error', 'mi flora data is empty, retried '.$tryGetData.' times, stop');
+		  }
+		  else {
+		    $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
+		    $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
+		  }
+		  // recupere le niveau de la batterie deux  fois par jour a x h
+	          log::add('MiFlora', 'debug', 'date:'.date("h")); 
+	          if (date("h")==12){
+		    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
+		    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
+		    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
+		    
+		  }
+		}
+         }
+
+	 /*
+	
+            	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+		  $macAdd = $mi_flora->getConfiguration('macAdd');
+                  log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
+		  $tryGetData=0;
 		  $mi_flora->getMesure($macAdd,$MiFloraData);
-		  $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
-		  $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
+                  log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
+		  if ($MiFloraData=='') {
+                     log::add('MiFlora', 'debug', 'mi flora data is empty, triing a second time');
+		    if ($tryGetData==0){
+		      $tryGetData++;
+                      log::add('MiFlora', 'error', 'mi flora try again');
+		      $mi_flora->getMesure($macAdd,$MiFloraData);
+                      log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
+		    }
+		    if ($MiFloraData=='') {
+		      log::add('MiFlora', 'error', 'mi flora data is empty, second time, stop');
+		    }
+		  } else {
+		    $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
+		    $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
+		  }
+		  // recupere le niveau de la batterie deux  fois par jour a x h
+	          log::add('MiFlora', 'debug', 'date:'.date("h")); 
+	          if (date("h")==12){
+		    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
+		    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
+		    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
+		    
+		  }
 		}
 
       }
@@ -49,10 +109,37 @@ class MiFlora extends eqLogic {
             	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
 		  $macAdd = $mi_flora->getConfiguration('macAdd');
                   log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
-		  $mi_flora->getMesure($macAdd,$MiFloraData);
-		  $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
-		  $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
+		  $tryGetData=0;
+		  $MiFloraData='';
+		  while($MiFloraData==''){
+		    if ($tryGetData>3){ // stop after 4 try
+		      break;
+		    }
+		    if ($tryGetData>0){
+                     log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:'.$tryGetData);
+		    }
+		    $mi_flora->getMesure($macAdd,$MiFloraData);
+		    log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
+		    $tryGetData++;
+		    sleep 5; // wait 5 s hopping it'll be better ...
+		  }
+		  if ($MiFloraData=='') {
+		      log::add('MiFlora', 'error', 'mi flora data is empty, retried '.$tryGetData.' times, stop');
+		  }
+		  else {
+		    $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
+		    $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
+		  }
+		  // recupere le niveau de la batterie deux  fois par jour a x h
+	          // log::add('MiFlora', 'debug', 'date:'.date("h")); 
+	          if (date("h")==12){
+		    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
+		    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
+		    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
+		    
+		  }
 		}
+
 
       }
       /* */
@@ -238,6 +325,82 @@ class MiFlora extends eqLogic {
            log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
     }
     
+
+   
+
+    
+    public function getMiFloraStaticData($macAdd,&$MiFloraBatteryAndFirmwareVersion,&$MiFloraName) {
+	   log::add('MiFlora', 'debug', 'macAdd:'.$macAdd);
+	   $MiFloraBatteryAndFirmwareVersion='';
+	   $MiFloraName='';
+	   // $MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
+	   // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
+	   //TODO: tester chaine error et gerer erreur
+
+	   $ip = config::byKey('addressip', 'MiFlora');
+	   $port = config::byKey('portssh', 'MiFlora');
+	   $user = config::byKey('user', 'MiFlora');
+	   $pass = config::byKey('password', 'MiFlora');
+
+	   log::add('MiFlora', 'debug', 'ip:'.$ip);
+	   log::add('MiFlora', 'debug', 'port:'.$port);
+	   log::add('MiFlora', 'debug', 'user:'.$user);
+	   log::add('MiFlora', 'debug', 'pass:'.$pass);
+	   
+			
+	   log::add('MiFlora', 'debug', 'connexion SSH ...');
+	   if (!$connection = ssh2_connect($ip,$port)) {
+	     log::add('MiFlora', 'error', 'connexion SSH KO');
+	   }else{ 
+	     if (!ssh2_auth_password($connection,$user,$pass)){
+	       log::add('MiFlora', 'error', 'Authentification SSH KO');
+	     }else{ 
+	       log::add('MiFlora', 'debug', 'Commande par SSH'); 
+	       // get MiFlora Battery And Firmware Version
+               //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x038
+               //Characteristic value/descriptor: 64 10 32 2e 36 2e 32 
+               //battery:64 version 2.6.2
+	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x038");
+	       stream_set_blocking($gattresult, true);
+	       $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);						
+	       log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion:'.$MiFloraBatteryAndFirmwareVersion);
+		 
+	       // get MiFlora Name
+               //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x03
+	       // Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 (Flower mate)
+	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x03");
+	       stream_set_blocking($gattresult, true);
+	       $MiFloraName = stream_get_contents($gattresult);						
+	       log::add('MiFlora', 'debug', 'MiFloraName:'.$MiFloraName);
+	       
+
+
+	       $closesession = ssh2_exec($connection, 'exit');
+	       stream_set_blocking($closesession, true);
+	       stream_get_contents($closesession);
+	       }
+	   }
+    } 
+
+    public function traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraData,&$battery,&$FirmwareVersion) {
+         //Characteristic value/descriptor: 64 10 32 2e 36 2e 32 
+	 $MiFloraData = explode(": ", $MiFloraData);
+	 $MiFloraData = explode(" ", $MiFloraData[1]);
+	 $battery=hexdec($MiFloraData[0]);
+	 $FirmwareVersion=$MiFloraData[2].$MiFloraData[3].$MiFloraData[4].$MiFloraData[5].$MiFloraData[6];
+         log::add('MiFlora', 'debug', $macAdd.' MiFloraData[0]:'.$MiFloraData[0]);
+         log::add('MiFlora', 'debug', $macAdd.' battery:'.$battery);
+         log::add('MiFlora', 'debug', $macAdd.' FirmwareVersion:'.$FirmwareVersion);
+    }
+    public function traiteMiFloraName($macAdd,$MiFloraData,&$miFloraName) {
+         //Characteristic value/descriptor: 64 10 32 2e 36 2e 32 
+	 $MiFloraData = explode(": ", $MiFloraData);
+	 $MiFloraData = explode(" ", $MiFloraData[1]);
+	 $miFloraName=$MiFloraData[0].$MiFloraData[1].$MiFloraData[2].$MiFloraData[3].$MiFloraData[4].$MiFloraData[5].$MiFloraData[6].$MiFloraData[7].$MiFloraData[8].$MiFloraData[9].$MiFloraData[10];
+         log::add('MiFlora', 'debug', $macAdd.' miFloraName:'.$miFloraName);
+    }
+    
+
     public function traiteMesure($macAdd,$MiFloraData,&$temperature,&$moisture,&$fertility,&$lux) {
          // process data
          // log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
