@@ -1,0 +1,6 @@
+[panel,primary]
+.Est-ce que le plugin s'appuie sur des API tiers ?
+--
+Le plugin utilise le bluetooth pour recuperer les info du Mi Flora.
+il faut installer le bluetooth et s assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.
+--
