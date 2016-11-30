@@ -316,7 +316,7 @@ class MiFlora extends eqLogic {
 	       log::add('MiFlora', 'error', 'Authentification SSH KO');
 	     }else{ 
 	       log::add('MiFlora', 'debug', 'Commande par SSH'); 
-	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x35");
+	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x35 --sec-level=high");
 	       stream_set_blocking($gattresult, true);
 	       $MiFloraData = stream_get_contents($gattresult);						
 	       log::add('MiFlora', 'debug', 'SSH result:'.$MiFloraData);
@@ -366,7 +366,7 @@ class MiFlora extends eqLogic {
                //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x038
                //Characteristic value/descriptor: 64 10 32 2e 36 2e 32 
                //battery:64 version 2.6.2
-	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x038");
+	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x038 --sec-level=high");
 	       stream_set_blocking($gattresult, true);
 	       $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);						
 	       log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion:'.$MiFloraBatteryAndFirmwareVersion);
@@ -374,7 +374,7 @@ class MiFlora extends eqLogic {
 	       // get MiFlora Name
                //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x03
 	       // Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 (Flower mate)
-	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x03");
+	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x03 --sec-level=high");
 	       stream_set_blocking($gattresult, true);
 	       $MiFloraName = stream_get_contents($gattresult);						
 	       log::add('MiFlora', 'debug', 'MiFloraName:'.$MiFloraName);
@@ -468,7 +468,8 @@ class MiFlora extends eqLogic {
 
 	 // store into Jeedom DB
       if ($battery==0) {
-	log::add('MiFlora', 'error', 'Battery=0,  erreur probable de connection Mi Flora');
+	// pas de retry pour ce type d info, on peut perdre une ou deux mesures
+	log::add('MiFlora', 'info', 'Battery=0,  erreur probable de connection Mi Flora');
       } else {
 	 $cmd = $this->getCmd(null, 'battery');
 	 if (is_object($cmd)) {
@@ -482,7 +483,7 @@ class MiFlora extends eqLogic {
 	 }
       }
       if ($MiFloraName=='') {
-	log::add('MiFlora', 'error', 'MiFloraName vide,  erreur probable de connection Mi Flora');
+	log::add('MiFlora', 'info', 'MiFloraName vide,  erreur probable de connection Mi Flora');
       } else {
 	 $cmd = $this->getCmd(null, 'MiFloraName');
 	 if (is_object($cmd)) {
