@@ -36,8 +36,9 @@ if (!isConnect()) {
               <label class="col-lg-4 control-label">{{Equipement local ou déporté ?}}</label>
               <div class="col-lg-2">
                 <select id="maitreesclave" class="configKey form-control" data-l1key="maitreesclave"
-                onchange="if(this.selectedIndex == 0) document.getElementById('deporte').style.display = 'block';
+                onchange="if(this.selectedIndex == 1) document.getElementById('deporte').style.display = 'block';
                 else document.getElementById('deporte').style.display = 'none';">
+                <option value="local">{{Local}}</option>
                 <option value="deporte">{{Déporté}}</option>
               </select>
             </div>
