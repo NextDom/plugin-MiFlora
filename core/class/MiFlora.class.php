@@ -71,7 +71,7 @@ class MiFlora extends eqLogic {
 
 
     /*
-     * Fonction exécutée automatiquement toutes les heures par Jeedom */ 
+     * Fonction exécutée automatiquement toutes les heures par Jeedom */
       public static function cronHourly() {
             	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
 		  $macAdd = $mi_flora->getConfiguration('macAdd');
@@ -297,36 +297,46 @@ class MiFlora extends eqLogic {
 	   // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
 	   //TODO: tester chaine error et gerer erreur
 
-	   $ip = config::byKey('addressip', 'MiFlora');
-	   $port = config::byKey('portssh', 'MiFlora');
-	   $user = config::byKey('user', 'MiFlora');
-	   $pass = config::byKey('password', 'MiFlora');
-
-	   log::add('MiFlora', 'debug', 'ip:'.$ip);
-	   log::add('MiFlora', 'debug', 'port:'.$port);
-	   log::add('MiFlora', 'debug', 'user:'.$user);
-	   log::add('MiFlora', 'debug', 'pass:'.$pass);
+	   $is_deporte = config::byKey('maitreesclave', 'MiFlora');
+	   log::add('MiFlora', 'debug', 'is_deporte:'.$is_deporte);
+           if ( $is_deporte == "deporte"){
+	     $ip = config::byKey('addressip', 'MiFlora');
+	     $port = config::byKey('portssh', 'MiFlora');
+	     $user = config::byKey('user', 'MiFlora');
+	     $pass = config::byKey('password', 'MiFlora');
+	   
+	     log::add('MiFlora', 'debug', 'ip:'.$ip);
+	     log::add('MiFlora', 'debug', 'port:'.$port);
+	     log::add('MiFlora', 'debug', 'user:'.$user);
+	     log::add('MiFlora', 'debug', 'pass:'.$pass);
 	   
 			
-	   log::add('MiFlora', 'debug', 'connexion SSH ...');
-	   if (!$connection = ssh2_connect($ip,$port)) {
-	     log::add('MiFlora', 'error', 'connexion SSH KO');
-	   }else{ 
-	     if (!ssh2_auth_password($connection,$user,$pass)){
-	       log::add('MiFlora', 'error', 'Authentification SSH KO');
+	     log::add('MiFlora', 'debug', 'connexion SSH ...');
+	     if (!$connection = ssh2_connect($ip,$port)) {
+	       log::add('MiFlora', 'error', 'connexion SSH KO');
 	     }else{ 
-	       log::add('MiFlora', 'debug', 'Commande par SSH'); 
-	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x35 --sec-level=high");
-	       stream_set_blocking($gattresult, true);
-	       $MiFloraData = stream_get_contents($gattresult);						
-	       log::add('MiFlora', 'debug', 'SSH result:'.$MiFloraData);
+	       if (!ssh2_auth_password($connection,$user,$pass)){
+	         log::add('MiFlora', 'error', 'Authentification SSH KO');
+	       }else{ 
+	         log::add('MiFlora', 'debug', 'Commande par SSH'); 
+	         $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x35 --sec-level=high");
+	         stream_set_blocking($gattresult, true);
+	         $MiFloraData = stream_get_contents($gattresult);						
+	         log::add('MiFlora', 'debug', 'SSH result:'.$MiFloraData);
 
-	       $closesession = ssh2_exec($connection, 'exit');
-	       stream_set_blocking($closesession, true);
-	       stream_get_contents($closesession);
+	         $closesession = ssh2_exec($connection, 'exit');
+	         stream_set_blocking($closesession, true);
+	         stream_get_contents($closesession);
 	       }
+	     }
+	   } else {
+	     //$MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
+	     log::add('MiFlora', 'debug', 'local call');
+	     // exec("sudo gatttool -b ".$macAdd." --char-read -a 0x35 --sec-level=high", $MiFloraData);
+	     // log::add('MiFlora', 'debug',  'result : [' . implode("]  [", $$MiFloraData) . ']');
+	     log::add('MiFlora','error','option pas encore supporte, il faut choisir le mode deporte');
+	     // TOTO: get data in local
 	   }
-
 	   
            log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
     }
@@ -343,48 +353,55 @@ class MiFlora extends eqLogic {
 	   // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
 	   //TODO: tester chaine error et gerer erreur
 
-	   $ip = config::byKey('addressip', 'MiFlora');
-	   $port = config::byKey('portssh', 'MiFlora');
-	   $user = config::byKey('user', 'MiFlora');
-	   $pass = config::byKey('password', 'MiFlora');
+	   $is_deporte = config::byKey('maitreesclave', 'MiFlora');
+	   log::add('MiFlora', 'debug', 'is_deporte:'.$is_deporte);
+           if ( $is_deporte == "deporte"){
 
-	   log::add('MiFlora', 'debug', 'ip:'.$ip);
-	   log::add('MiFlora', 'debug', 'port:'.$port);
-	   log::add('MiFlora', 'debug', 'user:'.$user);
-	   log::add('MiFlora', 'debug', 'pass:'.$pass);
+	     $ip = config::byKey('addressip', 'MiFlora');
+	     $port = config::byKey('portssh', 'MiFlora');
+	     $user = config::byKey('user', 'MiFlora');
+	     $pass = config::byKey('password', 'MiFlora');
+
+	     log::add('MiFlora', 'debug', 'ip:'.$ip);
+	     log::add('MiFlora', 'debug', 'port:'.$port);
+	     log::add('MiFlora', 'debug', 'user:'.$user);
+	     log::add('MiFlora', 'debug', 'pass:'.$pass);
 	   
 			
-	   log::add('MiFlora', 'debug', 'connexion SSH ...');
-	   if (!$connection = ssh2_connect($ip,$port)) {
-	     log::add('MiFlora', 'error', 'connexion SSH KO');
-	   }else{ 
-	     if (!ssh2_auth_password($connection,$user,$pass)){
-	       log::add('MiFlora', 'error', 'Authentification SSH KO');
+	     log::add('MiFlora', 'debug', 'connexion SSH ...');
+	     if (!$connection = ssh2_connect($ip,$port)) {
+	       log::add('MiFlora', 'error', 'connexion SSH KO');
 	     }else{ 
-	       log::add('MiFlora', 'debug', 'Commande par SSH'); 
-	       // get MiFlora Battery And Firmware Version
-               //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x038
-               //Characteristic value/descriptor: 64 10 32 2e 36 2e 32 
-               //battery:64 version 2.6.2
-	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x038 --sec-level=high");
-	       stream_set_blocking($gattresult, true);
-	       $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);						
-	       log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion:'.$MiFloraBatteryAndFirmwareVersion);
+	       if (!ssh2_auth_password($connection,$user,$pass)){
+		 log::add('MiFlora', 'error', 'Authentification SSH KO');
+	       }else{ 
+		 log::add('MiFlora', 'debug', 'Commande par SSH'); 
+		 // get MiFlora Battery And Firmware Version
+		 //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x038
+		 //Characteristic value/descriptor: 64 10 32 2e 36 2e 32 
+		 //battery:64 version 2.6.2
+		 $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x038 --sec-level=high");
+		 stream_set_blocking($gattresult, true);
+		 $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);						
+		 log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion:'.$MiFloraBatteryAndFirmwareVersion);
 		 
-	       // get MiFlora Name
-               //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x03
-	       // Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 (Flower mate)
-	       $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x03 --sec-level=high");
-	       stream_set_blocking($gattresult, true);
-	       $MiFloraName = stream_get_contents($gattresult);						
-	       log::add('MiFlora', 'debug', 'MiFloraName:'.$MiFloraName);
+		 // get MiFlora Name
+		 //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x03
+		 // Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 (Flower mate)
+		 $gattresult = ssh2_exec($connection,"gatttool -b ".$macAdd." --char-read -a 0x03 --sec-level=high");
+		 stream_set_blocking($gattresult, true);
+		 $MiFloraName = stream_get_contents($gattresult);						
+		 log::add('MiFlora', 'debug', 'MiFloraName:'.$MiFloraName);
 	       
-
-
-	       $closesession = ssh2_exec($connection, 'exit');
-	       stream_set_blocking($closesession, true);
-	       stream_get_contents($closesession);
+		 $closesession = ssh2_exec($connection, 'exit');
+		 stream_set_blocking($closesession, true);
+		 stream_get_contents($closesession);
 	       }
+	     }
+	   } else {
+	       $MiFloraBatteryAndFirmwareVersion ='Characteristic value/descriptor: 64 10 32 2e 36 2e 32 ';
+	       $MiFloraName='Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 \n'; 
+	       // TOTO: get data in local
 	   }
     } 
 

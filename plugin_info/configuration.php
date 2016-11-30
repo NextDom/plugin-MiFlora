@@ -22,6 +22,7 @@ if (!isConnect()) {
     die();
 }
 ?>
+  
 <form class="form-horizontal">
     <fieldset>
     	<span>
@@ -30,21 +31,41 @@ if (!isConnect()) {
 	  il faut installer le bluetooth et s assurer que <b>gatttool -b macAddMiFlora --char-read -a 0x35</b> fonctionne sur le device cible
 	</span>
         <div class="form-group"> <br>
+
+
+              <label class="col-lg-4 control-label">{{Equipement local ou déporté ?}}</label>
+              <div class="col-lg-2">
+                <select id="maitreesclave" class="configKey form-control" data-l1key="maitreesclave"
+                onchange="if(this.selectedIndex == 0) document.getElementById('deporte').style.display = 'block';
+                else document.getElementById('deporte').style.display = 'none';">
+                <option value="deporte">{{Déporté}}</option>
+              </select>
+            </div>
+
+            <div id="deporte">
+            <div class="form-group"> <br>
+
+
             <label class="col-lg-4 control-label">{{Remote IP}}</label>
             <div class="col-lg-2">
                 <input class="configKey form-control"  data-l1key="addressip" type="text" placeholder="{{saisir l'adresse IP}}" />
             </div>
+
             <label class="col-lg-4 control-label">{{Port SSH}}</label>
             <div class="col-lg-2">
                 <input class="configKey form-control"  data-l1key="portssh" type="text" placeholder="{{saisir le port SSH (22)}}" />
             </div>
+
             <label class="col-lg-4 control-label">{{User Id}}</label>
             <div class="col-lg-2">
                 <input class="configKey form-control"  data-l1key="user" type="text" placeholder="{{saisir le login}}" />
             </div>
+
             <label class="col-lg-4 control-label">{{Password}}</label>
             <div class="col-lg-2">
                 <input class="configKey form-control"  data-l1key="password" type="password" placeholder="{{saisir le password}}" />
+            </div>
+            </div>
             </div>
 
 </div>
