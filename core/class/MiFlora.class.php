@@ -335,13 +335,14 @@ class MiFlora extends eqLogic {
 	   } else {
 	     //$MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
 	     log::add('MiFlora', 'debug', 'local call');
-	     // exec("sudo gatttool -b ".$macAdd." --char-read -a 0x35 --sec-level=high", $MiFloraData);
-	     // log::add('MiFlora', 'debug',  'result : [' . implode("]  [", $$MiFloraData) . ']');
-	     log::add('MiFlora','error','option pas encore supporte, il faut choisir le mode deporte');
-	     // TOTO: get data in local
+	     $command = 'gatttool -b '.$macAdd.'  --char-read -a 0x35 --sec-level=high  2>&1 ';
+	     $MiFloraData=exec($command);
+	     log::add('MiFlora', 'debug',  'MiFloraData: '.$MiFloraData);
+	     if (strpos($MiFloraData, 'read failed') !== false or strpos($MiFloraData,'connect')!== false) {
+	       log::add('MiFlora', 'error',  'erreur: gatttool ne fonctionne pas - '.$MiFloraData);
+	       $MiFloraData='';
+	     }
 	   }
-	   
-           log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
     }
     
 
@@ -402,9 +403,25 @@ class MiFlora extends eqLogic {
 	       }
 	     }
 	   } else {
-	       $MiFloraBatteryAndFirmwareVersion ='Characteristic value/descriptor: 64 10 32 2e 36 2e 32 ';
-	       $MiFloraName='Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 \n'; 
-	       // TOTO: get data in local
+	     // $MiFloraBatteryAndFirmwareVersion ='Characteristic value/descriptor: 64 10 32 2e 36 2e 32 ';
+	     // $MiFloraName='Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 \n';
+	     // connect error: Connection timed out
+	     // connect: Device or resource busy
+	     log::add('MiFlora', 'debug', 'local call static data');
+	     $command = 'gatttool -b '.$macAdd.'  --char-read -a 0x38 --sec-level=high  2>&1 ';
+	     $MiFloraBatteryAndFirmwareVersion=exec($command);
+	     log::add('MiFlora', 'debug',  'MiFloraBatteryAndFirmwareVersion: '.$MiFloraBatteryAndFirmwareVersion);
+	     if (strpos($MiFloraBatteryAndFirmwareVersion, 'read failed') !== false or strpos($MiFloraBatteryAndFirmwareVersion,'connect')!== false){
+	       log::add('MiFlora', 'error',  'erreur: gatttool ne fonctionne pas - '.$MiFloraBatteryAndFirmwareVersion);
+	       $MiFloraBatteryAndFirmwareVersion='';
+	     }
+	     $command = 'gatttool -b '.$macAdd.'  --char-read -a 0x03 --sec-level=high  2>&1 ';
+	     $MiFloraName=exec($command);
+	     log::add('MiFlora', 'debug',  'MiFloraName: '.$MiFloraName);
+	     if (strpos($MiFloraName, 'read failed') !== false or strpos($MiFloraName,'connect')!== false){
+	       log::add('MiFlora', 'error',  'erreur: gatttool ne fonctionne pas - '.$MiFloraName);
+	       $MiFloraName='';
+	     }
 	   }
     } 
 
@@ -458,6 +475,9 @@ class MiFlora extends eqLogic {
       if ($temperature==0 && $moisture==0 && $fertility==0 && $lux==0) {
 	 log::add('MiFlora', 'error', 'Toutes les mesures a 0, erreur de connection Mi Flora');
       } else {
+	if($temperature > 100){
+	  log::add('MiFlora', 'error', 'Temperature >100 erreur de connection bluetooth');
+	} else {
 	 $cmd = $this->getCmd(null, 'temperature');
 	 if (is_object($cmd)) {
 	   // $cmd->setCollectDate($date);
@@ -479,8 +499,8 @@ class MiFlora extends eqLogic {
 	   $cmd->event($lux);
 	   log::add('MiFlora', 'debug', $macAdd.' Store Lux:'.$lux);
 	 }
-      }
-	 
+	}
+      } 
     }
 
 
