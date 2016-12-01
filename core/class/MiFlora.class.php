@@ -159,6 +159,9 @@ class MiFlora extends eqLogic {
     /* fonction appelé pendant la séquence de sauvegarde avant l'insertion 
      * dans la base de données pour une mise à jour d'une entrée */
     public function preUpdate() {
+        if (empty($this->getConfiguration('macAdd'))) {
+            throw new Exception(__('L\'adresse Mac doit être spécifiée',__FILE__));
+        }
     }
 
  
