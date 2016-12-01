@@ -4,7 +4,7 @@ Configuration générale :
 La partie configuration du plugin permet de saisir un ip, port, userid et mot de passe d'un device distant afin de gérer le mode déporté.
 Dans la version actuelle (0.2) ces informations sont aussi utilisées pour le mode local (connexion SSH en local). Je vais modifier cette partie les versions suivantes.
 Le plugin va alors se connecter en SSH a l IP saisi précédemment et récupérer les informations du MiFlora en bluetooth grâce a la commande gatttools
-il faut installer le bluetooth et s assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible
+il faut installer le bluetooth et s'assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible
 
 En créant un équipement, il faut rentrer l'adresse bluetooth de l'équipement.
 
