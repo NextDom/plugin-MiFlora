@@ -87,11 +87,12 @@ class MiFlora extends eqLogic {
     /*
      * Fonction exécutée automatiquement toutes les heures par Jeedom */
     public static function cronHourly() {
+        $debug = false;
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
           $frequence=config::byKey('frequence', 'MiFlora');
           log::add('MiFlora', 'debug','frequence:'.$frequence.'; modulo heure courante % frequence:'.(date("h")%$frequence));
 
-          if (!(date("h")%$frequence)){
+          if (!(date("h")%$frequence)|| $debug){
 
             $macAdd = $mi_flora->getConfiguration('macAdd');
             log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
@@ -125,7 +126,7 @@ class MiFlora extends eqLogic {
             }
             // recupere le niveau de la batterie deux  fois par jour a x h
             // log::add('MiFlora', 'debug', 'date:'.date("h"));
-            if (date("h")==12){
+              if (date("h")==12 || $debug){
                 $MiFloraBatteryAndFirmwareVersion= '';
                 $MiFloraNameString = '';
                 $FirmwareVersion = '';
@@ -197,6 +198,8 @@ class MiFlora extends eqLogic {
 
     public function preInsert() {
         $this->setConfiguration('battery_type', '1x3V CR2032');
+        $this->setConfiguration('firmware_version','');
+        $this->setConfiguration('plant_name','');
     }
 
     public function postInsert() {
@@ -258,45 +261,6 @@ class MiFlora extends eqLogic {
             $MiFloraCmd->setSubType('numeric');
             $MiFloraCmd->setUnite('lx');
             $MiFloraCmd->setIsHistorized(1);
-            $MiFloraCmd->save();
-        }
-        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'battery');
-        if (!is_object($cmdlogic)) {
-            $MiFloraCmd = new MiFloraCmd();
-            $MiFloraCmd->setName(__('Battery', __FILE__));
-            $MiFloraCmd->setEqLogic_id($this->id);
-            $MiFloraCmd->setLogicalId('battery');
-            $MiFloraCmd->setConfiguration('data', 'battery');
-            $MiFloraCmd->setType('info');
-            $MiFloraCmd->setSubType('numeric');
-            $MiFloraCmd->setUnite('%');
-            $MiFloraCmd->setIsHistorized(1);
-            $MiFloraCmd->save();
-        }
-        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'firmware_version');
-        if (!is_object($cmdlogic)) {
-            $MiFloraCmd = new MiFloraCmd();
-            $MiFloraCmd->setName(__('Firmware Version', __FILE__));
-            $MiFloraCmd->setEqLogic_id($this->id);
-            $MiFloraCmd->setLogicalId('firmware_version');
-            $MiFloraCmd->setConfiguration('data', 'firmware_version');
-            $MiFloraCmd->setType('info');
-            $MiFloraCmd->setSubType('string');
-            $MiFloraCmd->setUnite('');
-            $MiFloraCmd->setIsHistorized(0);
-            $MiFloraCmd->save();
-        }
-        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'MiFloraName');
-        if (!is_object($cmdlogic)) {
-            $MiFloraCmd = new MiFloraCmd();
-            $MiFloraCmd->setName(__('MiFlora Name', __FILE__));
-            $MiFloraCmd->setEqLogic_id($this->id);
-            $MiFloraCmd->setLogicalId('MiFloraName');
-            $MiFloraCmd->setConfiguration('data', 'MiFloraName');
-            $MiFloraCmd->setType('info');
-            $MiFloraCmd->setSubType('string');
-            $MiFloraCmd->setUnite('');
-            $MiFloraCmd->setIsHistorized(0);
             $MiFloraCmd->save();
         }
     }
@@ -536,35 +500,31 @@ class MiFlora extends eqLogic {
             // pas de retry pour ce type d info, on peut perdre une ou deux mesures
             log::add('MiFlora', 'info', 'Battery=0,  erreur probable de connection Mi Flora');
         } else {
-            $cmd = $this->getCmd(null, 'battery');
-            if (is_object($cmd)) {
-                $cmd->event($battery);
-                $this->batteryStatus($battery);
-                log::add('MiFlora', 'debug', $macAdd.' Store battery:'.$battery);
-            }
-            $cmd = $this->getCmd(null, 'firmware_version');
-            if (is_object($cmd)) {
-                $cmd->event($FirmwareVersion);
-                log::add('MiFlora', 'debug', $macAdd.' Store firmware version:'.$FirmwareVersion);
+            $this->batteryStatus($battery);
+            log::add('MiFlora', 'debug', $macAdd.' Store battery:'.$battery);
+
+            if ($FirmwareVersion != $this->getConfiguration('firmware_version')) {
+                log::add('MiFlora', 'info', $macAdd.' Store firmware version:'.$FirmwareVersion);
+                $this->setConfiguration('firmware_version',$FirmwareVersion);
+                $this->save();
             }
         }
         if ($MiFloraName=='') {
             log::add('MiFlora', 'info', 'MiFloraName vide,  erreur probable de connection Mi Flora');
         } else {
-            $cmd = $this->getCmd(null, 'MiFloraName');
-            if (is_object($cmd)) {
-                $cmd->event($MiFloraName);
-                log::add('MiFlora', 'debug', $macAdd.' Store MiFloraName:'.$MiFloraName);
+            if ($MiFloraName != $this->getConfiguration('plant_name')) {
+                log::add('MiFlora', 'info', $macAdd.' Store MiFloraName:'.$MiFloraName);
+                $this->setConfiguration('plant_name',$MiFloraName);
+                $this->save();
             }
         }
-
     }
 
 
     public function sendCommand( $id, $type, $option ) {
         log::add('MiFlora', 'debug', 'Lecture : '.$id. ' ' . $type . ' ' . $option);
-        $playtts = self::byId($id, 'MiFlora');
-        $ip=$playtts->getConfiguration('addressip');
+        $command = self::byId($id, 'MiFlora');
+        $ip=$command->getConfiguration('addressip');
         log::add('MiFlora', 'debug', 'Lecture : '.$ip);
     }
 
