@@ -30,42 +30,56 @@ class MiFlora extends eqLogic {
      * Fonction exécutée automatiquement toutes les minutes par Jeedom
      activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante
       public static function cron() {
-            	foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
-		  $macAdd = $mi_flora->getConfiguration('macAdd');
-                  log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
-		  $tryGetData=0;
-		  $MiFloraData='';
-		  while($MiFloraData==''){
-		    if ($tryGetData>3){ // stop after 4 try
-		      break;
-		    }
-		    if ($tryGetData>0){
-                      log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:'.$tryGetData);
-		    }
-		    $mi_flora->getMesure($macAdd,$MiFloraData);
-		    log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
-		    $tryGetData++;
-		    sleep(5); // wait 5 s hopping it'll be better ...
+          foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+            $frequence=config::byKey('frequence', 'MiFlora');
+            log::add('MiFlora', 'debug','frequence:'.$frequence.'; modulo heure courante % frequence:'.(date("h")%$frequence));
 
-		  }
-		  if ($MiFloraData=='') {
-		    log::add('MiFlora', 'error', 'mi flora data is empty, retried '.$tryGetData.' times, stop');
-		  }
-		  else {
-		    $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
-		    $mi_flora->updateJeedom($temperature,$moisture,$fertility,$lux);
-		  }
+            if (!(date("h")%$frequence)){
+		          $macAdd = $mi_flora->getConfiguration('macAdd');
+              log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
+		          $tryGetData=0;
+		          $MiFloraData='';
+		          while($MiFloraData==''){
+		            if ($tryGetData>3){ // stop after 4 try
+		             break;
+		            }
+		            if ($tryGetData>0){
+                 log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:'.$tryGetData);
+		            }
+		            $mi_flora->getMesure($macAdd,$MiFloraData);
+		            log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
+		            $tryGetData++;
+                if($MiFloraData==''){
+                  // wait 5 s hopping it'll be better ...
+                  sleep(5);
+                }
+		          }
+		          if ($MiFloraData=='') {
+		            log::add('MiFlora', 'warning', 'mi flora data is empty, retried '.$tryGetData.' times, stop');
+		          } else {
+                $temperature = -1;
+                $moisture = -1;
+                $fertility = -1;
+                $lux = -1;
+		            $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
+		            $mi_flora->updateJeedom($macAdd,$temperature,$moisture,$fertility,$lux);
+		          }
 		  // recupere le niveau de la batterie deux  fois par jour a x h
-	          log::add('MiFlora', 'debug', 'date:'.date("h"));
-	          if (date("h")==10){
-		    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
-		    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
-		    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
-		    $mi_flora->updateStaticData($battery,$FirmwareVersion,$MiFloraName);
-
-		  }
-		}
-         }
+	            log::add('MiFlora', 'debug', 'date:'.date("h"));
+	            if (date("h")==9){
+                $MiFloraBatteryAndFirmwareVersion= '';
+                $MiFloraNameString = '';
+                $FirmwareVersion = '';
+                $MiFloraName = '';
+                $battery = -1;
+		            $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
+		            $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
+		            $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
+		            $mi_flora->updateStaticData($macAdd,$battery,$FirmwareVersion,$MiFloraName);
+             }
+           }
+		     }
+      }
 
       /* */
 
@@ -74,6 +88,11 @@ class MiFlora extends eqLogic {
      * Fonction exécutée automatiquement toutes les heures par Jeedom */
     public static function cronHourly() {
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+          $frequence=config::byKey('frequence', 'MiFlora');
+          log::add('MiFlora', 'debug','frequence:'.$frequence.'; modulo heure courante % frequence:'.(date("h")%$frequence));
+
+          if (!(date("h")%$frequence)){
+
             $macAdd = $mi_flora->getConfiguration('macAdd');
             log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
             $tryGetData=0;
@@ -118,7 +137,7 @@ class MiFlora extends eqLogic {
                 $mi_flora->updateStaticData($macAdd,$battery,$FirmwareVersion,$MiFloraName);
             }
         }
-
+      }
     }
     /* */
 

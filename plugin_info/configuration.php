@@ -22,7 +22,7 @@ if (!isConnect()) {
     die();
 }
 ?>
-  
+
 <form class="form-horizontal">
     <fieldset>
     	<span>
@@ -32,6 +32,25 @@ if (!isConnect()) {
 	</span>
         <div class="form-group"> <br>
 
+          <label class="col-lg-4 control-label">{{frequence}}</label>
+          <div class="col-lg-2">
+              <select id="frequence d'update" class="configKey form-control"  data-l1key="frequence" >
+              <option value="1">{{1}}</option>
+              <option value="2">{{2}}</option>
+              <option value="3">{{3}}</option>
+              <option value="4">{{4}}</option>
+              <option value="5">{{5}}</option>
+              <option value="6">{{6}}</option>
+              <option value="7">{{7}}</option>
+              <option value="8">{{8}}</option>
+              <option value="9">{{9}}</option>
+              <option value="10">{{10}}</option>
+              <option value="11">{{11}}</option>
+              <option value="12">{{12}}</option>
+                </select>
+          </div>
+        </div>
+          <div class="form-group"> <br>
 
               <label class="col-lg-4 control-label">{{Equipement local ou déporté ?}}</label>
               <div class="col-lg-2">
@@ -72,9 +91,3 @@ if (!isConnect()) {
 </div>
   </fieldset>
 </form>
-
-
-
-
-
-
