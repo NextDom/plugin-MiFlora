@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<title>Description</title>
+<title>Untitled</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -418,92 +418,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_description">1. Description</a>
-<ul class="sectlevel2">
-<li><a href="#_mi_flora">1.1. Mi Flora</a></li>
-</ul>
-</li>
-<li><a href="#_configuration">2. Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_configuration_du_plugin">2.1. Configuration du plugin</a></li>
-<li><a href="#_utilisation_en_déporté">2.2. Utilisation en déporté</a></li>
-</ul>
-</li>
-<li><a href="#_faq">3. FAQ</a></li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_description">1. Description</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_mi_flora">1.1. Mi Flora</h3>
-<div class="paragraph">
-<p>Plugin permettant de récupérer les informations des Xiaomi Plants ou Mi Flora.</p>
-</div>
-<div class="paragraph">
-<p>Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de mesurer l&#8217;hygrométrie, la température, la lumière, l&#8217;engrais d&#8217;une plante. Nul besoin d&#8217;autre chose qu&#8217;une connexion Bluetooth, y compris via un appareil déporté.</p>
-</div>
-<hr>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_configuration">2. Configuration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_configuration_du_plugin">2.1. Configuration du plugin</h3>
-<div class="paragraph">
-<p>La partie configuration du plugin permet:</p>
-</div>
-<div class="openblock">
-<div class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>de choisir la frequence de relevés de information du Mi Flora, depuis toutes les heures jusqu&#8217;à toutes les 12 heures</p>
-</li>
-<li>
-<p>de choisir entre un mode local et un mode deporté</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Pour chaque équipement, il faut rentrer l&#8217;adresse bluetooth de l&#8217;équipement.
-Il est possible de trouver celle ci en utilisant la commande <strong>bluetoothctl</strong></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_utilisation_en_déporté">2.2. Utilisation en déporté</h3>
-<div class="paragraph">
-<p>Il est possible d&#8217;envoyer les commandes bluetooth à un appareil déporté.</p>
-</div>
-<div class="paragraph">
-<p>Dans ce cas, il faut renseigner les paramètres de connexion SSH:</p>
-</div>
-<div class="paragraph">
-<p>La partie configuration permet de saisir une ip, un port, un userid ainsi que le mot de passe associé pour un appareil distant afin de gérer le mode déporté.
-Le plugin va alors se connecter en SSH à l&#8217;IP saisie précédemment et récupérer les informations du MiFlora en bluetooth grâce à la commande <strong>gatttools</strong>
-il faut installer le bluetooth et s&#8217;assurer que <strong>gatttool -b <em>macAddMiFlora</em> --char-read -a 0x35</strong> fonctionne sur l&#8217;appareil cible.</p>
-</div>
-<div class="paragraph">
-<p>Aucun Jeedom n&#8217;est nécessaire sur l&#8217;équipement distant.</p>
-</div>
-<hr>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_faq">3. FAQ</h2>
-<div class="sectionbody">
 <div class="openblock">
 <div class="title">Est-ce que ce plugin s&#8217;appuie sur des API tiers ?</div>
 <div class="content">
@@ -517,7 +435,7 @@ il faut installer le bluetooth et s assurer que gatttool -b macAddMiFlora --char
 <div class="title">Est ce que ce plugin monopolise le bluetooth ?</div>
 <div class="content">
 <div class="paragraph">
-<p>Non pas du tout, il a besoin du bluetooth pour chaque relevé, cf question suivante pour plus de details sur le nombre de relevés par jour.</p>
+<p>Non pas du tout, il a besoin du bluetooth pour chaque relevé, cf question suivante pour plus de details sur le nombre de relevé par jour.</p>
 </div>
 </div>
 </div>
@@ -530,12 +448,12 @@ il faut installer le bluetooth et s assurer que gatttool -b macAddMiFlora --char
 </div>
 </div>
 <div class="openblock">
-<div class="title">Combien de fois par jour les mesures sont elles recupérées ?</div>
+<div class="title">Combien de fois par jour les mesures sont elles recupérés ?</div>
 <div class="content">
 <div class="paragraph">
 <p>C&#8217;est defini dans la configuration globale du plugin, pour tous les objets: depuis toutes les heures jusqu&#8217;a toutes les 12 heures.
-J&#8217;utilise le modulo de l&#8217;heure actuelle avec la fréquence saisie en parametre.<br>
-Les informations statiques (batterie, nom de l appareil, version du firmware) sont recuperées toutes les 12 heures: à minuit et midi)</p>
+J&#8217;utilise le modulo de l&#8217;heure actuelle avec la fequence saisi en parametre.<br>
+Les informations statiques (batterie, nom de l appareil, version du firmware) sont recuperés toutes les 12 heures: à minuit et midi)</p>
 </div>
 </div>
 </div>
@@ -543,12 +461,12 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <div class="title">Avec quelle version de firmware ce plugin est il compatible ?</div>
 <div class="content">
 <div class="paragraph">
-<p>Il est compatible seulement avec la version 2.6.2, la version 2.6.6 n&#8217;est pas compatible pour le moment, la version 2.7.0 n&#8217;a pas été testée.</p>
+<p>Il est compatible seulement avec la version 2.6.2, la version 2.6.6 n&#8217;est pas compatible pour le moment, la version 2.7.0 n&#8217;a pas été testé.</p>
 </div>
 </div>
 </div>
 <div class="openblock">
-<div class="title">Je possède un Rpbi3, J&#8217;ai dû désactiver le BT interne pour ne pas avoir d&#8217;interférence avec le Zwave (razberry). Est-ce qu&#8217;il faut toujours garder le BT interne désactivé pour résoudre ce souci ? Sinon est-ce que n&#8217;importe quelle clef USB BT fait l&#8217;affaire pour être compatible avec les MiFlora et le rpbi3 ?</div>
+<div class="title">Je possède un Rpbi3, J&#8217;ai dû désactivé le BT interne pour ne pas avoir d&#8217;interférence avec le Zwave (razberry). Est-ce qu&#8217;il faut toujours garder le BT interne désactivé pour résoudre ce souci ? Sinon est-ce que n&#8217;importe quelle clef USB BT fait l&#8217;affaire pour être compatible avec les MiFlora et le rpbi3 ?</div>
 <div class="content">
 <div class="paragraph">
 <p>il faut prendre un dongle BLE sans faute. Le problème avec le RAZ c&#8217;est seulement si on utilise le contrôleur interne.</p>
@@ -564,7 +482,7 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </div>
 </div>
 <div class="openblock">
-<div class="title">Quelles sont les ameliorations à venir ?</div>
+<div class="title">Quelles sont les ameliorations a venir ?</div>
 <div class="content">
 <div class="ulist">
 <ul>
@@ -581,7 +499,7 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <p>Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais</p>
 </li>
 <li>
-<p>Le mode debug pourrait éventuellement suivre le log level, à savoir que si on lance en debug il passe à la minute
+<p>Le mode debug pourrait éventuellement suivre le log level, a savoir que si on lance en debug il passe a la minute
 pcq on veut debuger justement, mais c&#8217;est à réfléchir.</p>
 </li>
 </ul>
@@ -597,11 +515,9 @@ pcq on veut debuger justement, mais c&#8217;est à réfléchir.</p>
 </div>
 </div>
 </div>
-</div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-04 19:00:28 CET
+Last updated 2016-12-04 19:27:26 CET
 </div>
 </div>
 </body>

@@ -1,6 +1,43 @@
-[panel,primary]
-.Est-ce que le plugin s'appuie sur des API tiers ?
+
+.Est-ce que ce plugin s'appuie sur des API tiers ?
 --
 Le plugin utilise le bluetooth pour recuperer les info du Mi Flora.
 il faut installer le bluetooth et s assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.
+--
+.Est ce que ce plugin monopolise le bluetooth ?
+--
+Non pas du tout, il a besoin du bluetooth pour chaque relevé, cf question suivante pour plus de details sur le nombre de relevés par jour.
+--
+.Est ce que ce plugin est compatible avec le plugin FlowerPower ?
+--
+Theoriquement oui, à confirmer
+--
+.Combien de fois par jour les mesures sont elles recupérées ?
+--
+C'est defini dans la configuration globale du plugin, pour tous les objets: depuis toutes les heures jusqu'a toutes les 12 heures.
+J'utilise le modulo de l'heure actuelle avec la fréquence saisie en parametre. +
+Les informations statiques (batterie, nom de l appareil, version du firmware) sont recuperées toutes les 12 heures: à minuit et midi)
+--
+.Avec quelle version de firmware ce plugin est il compatible ?
+--
+Il est compatible seulement avec la version 2.6.2, la version 2.6.6 n'est pas compatible pour le moment, la version 2.7.0 n'a pas été testée.
+--
+.Je possède un Rpbi3, J'ai dû désactiver le BT interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le BT interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le rpbi3 ?
+--
+il faut prendre un dongle BLE sans faute. Le problème avec le RAZ c'est seulement si on utilise le contrôleur interne.
+--
+.Je souhaite contribuer à l'amelioration de ce plugin, est ce possible ?
+--
+Bien sur, le code est sur github: rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests
+--
+.Quelles sont les ameliorations à venir ?
+--
+* Support du firmware 2.6.6 et 2.7.0
+* Affichage des items de Configuration en champ lecture seul.
+* Faire un joli UI.
+* Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais
+* Le mode debug pourrait éventuellement suivre le log level, à savoir que si on lance en debug il passe à la minute
+pcq on veut debuger justement, mais c'est à réfléchir.
+--
+Cette liste de questions provient essentiellement de vos questions sur le forum jeedom topic MiFlora
 --

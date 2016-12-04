@@ -8,4 +8,3 @@ include::configuration.asciidoc[]
 '''
 == FAQ
 include::faq.asciidoc[]
-

@@ -1,19 +1,23 @@
 === Configuration du plugin
 
-Configuration générale :
-La partie configuration du plugin permet de saisir un ip, port, userid et mot de passe d'un device distant afin de gérer le mode déporté.
-Dans la version actuelle (0.2) ces informations sont aussi utilisées pour le mode local (connexion SSH en local). Je vais modifier cette partie les versions suivantes.
-Le plugin va alors se connecter en SSH a l IP saisi précédemment et récupérer les informations du MiFlora en bluetooth grâce a la commande gatttools
-il faut installer le bluetooth et s'assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible
+La partie configuration du plugin permet:
+--
+* de choisir la frequence de relevés de information du Mi Flora, depuis toutes les heures jusqu'à toutes les 12 heures
+* de choisir entre un mode local et un mode deporté
+--
+Pour chaque équipement, il faut rentrer l'adresse bluetooth de l'équipement.
+Il est possible de trouver celle ci en utilisant la commande *bluetoothctl*
 
-En créant un équipement, il faut rentrer l'adresse bluetooth de l'équipement.
+=== Utilisation en déporté
 
-==== Utilisation en déporté
+Il est possible d'envoyer les commandes bluetooth à un appareil déporté.
 
-Il est possible d'envoyer les commandes bluetooth a un déporté.
+Dans ce cas, il faut renseigner les paramètres de connexion SSH:
 
-Dans ce cas, il faut renseigner les paramètres de connexion SSH.
+La partie configuration permet de saisir une ip, un port, un userid ainsi que le mot de passe associé pour un appareil distant afin de gérer le mode déporté.
+Le plugin va alors se connecter en SSH à l'IP saisie précédemment et récupérer les informations du MiFlora en bluetooth grâce à la commande *gatttools*
+il faut installer le bluetooth et s'assurer que *gatttool -b _macAddMiFlora_ --char-read -a 0x35* fonctionne sur l'appareil cible.
+
+
 
 Aucun Jeedom n'est nécessaire sur l'équipement distant.
-
-
