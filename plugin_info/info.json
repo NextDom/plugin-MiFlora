@@ -5,6 +5,6 @@
 	"licence" : "AGPL",
 	"author" : "Rene",
 	"require" : "2.4",
-        "version" : "0.6",
+        "version" : "0.7",
         "category" : "nature"
 }

@@ -32,9 +32,9 @@ if (!isConnect()) {
 	</span>
         <div class="form-group"> <br>
 
-          <label class="col-lg-4 control-label">{{frequence}}</label>
+          <label class="col-lg-4 control-label">{{frequence d'update}}</label>
           <div class="col-lg-2">
-              <select id="frequence d'update" class="configKey form-control"  data-l1key="frequence" >
+              <select id="frequence" class="configKey form-control"  data-l1key="frequence" >
               <option value="1">{{1}}</option>
               <option value="2">{{2}}</option>
               <option value="3">{{3}}</option>
