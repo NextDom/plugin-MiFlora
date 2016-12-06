@@ -32,6 +32,7 @@ Bien sur, le code est sur github: rjullien/jeedom_MiFlora, vous pouvez soumettre
 --
 .Quelles sont les ameliorations à venir ?
 --
+* changer l'icone pour etre plus homogene avec Jeedom
 * Support du firmware 2.6.6 et 2.7.0
 * Affichage des items de Configuration en champ lecture seul.
 * Faire un joli UI.

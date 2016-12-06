@@ -519,6 +519,9 @@ class MiFlora extends eqLogic
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
         }
+
+        log::add('MiFlora','debug', $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'miflora'))));
+
         return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'MiFlora')));
     }
 
