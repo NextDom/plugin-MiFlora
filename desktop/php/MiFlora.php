@@ -112,7 +112,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{Dernière Collecte}}</label>
-                            <span class="col-sm-3 eqLogicAttr" data-l1key="status" data-l2key="lastCommunication"></span>
+                            <span class="col-sm-3 eqLogicAttr" data-l1key="configuration" data-l2key="updatetime"></span>
                         </div>
                     </fieldset>
                 </form>

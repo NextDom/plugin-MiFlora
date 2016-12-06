@@ -21,6 +21,14 @@ import time
 LOGGER = logging.getLogger(__name__)
 LOCK = Lock()
 
+def parse_data(data):
+        res = {}
+        print("MI_TEMPERATURE=",float(data[1] * 256 + data[0]) / 10)
+        print("MI_MOISTURE=",data[7])
+        print("MI_LIGHT=", data[4] * 256 + data[3])
+        print("MI_CONDUCTIVITY=", data[9] * 256 + data[8])
+        return data
+
 def write_ble(mac, handle, value, retries=3, timeout=20):
     """
     Read from a BLE address
@@ -108,6 +116,6 @@ macAdd=sys.argv[1]
 handlerd="0x0035"
 handlewr="0x0033"
 firmware=sys.argv[2]
-if firmware == "2.6.6":
+if firmware == "2.6.6" or firmware == "2.7.0":
     write_ble(macAdd,handlewr,"A01F",0)
-print ("read_ble:",read_ble(macAdd,handlerd))
+print ("read_ble:",parse_data(read_ble(macAdd,handlerd)))
