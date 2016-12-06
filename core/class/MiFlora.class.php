@@ -77,6 +77,7 @@ class MiFlora extends eqLogic
                     $lux = -1;
                     $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
                     $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
+                    $mi_flora->refreshWidget();
                 }
                 // recupere le niveau de la batterie deux  fois par jour a x h
                 // log::add('MiFlora', 'debug', 'date:'.date("h"));
