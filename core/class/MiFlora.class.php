@@ -89,56 +89,56 @@ class MiFlora extends eqLogic {
     public static function cronHourly() {
         $debug = false;
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
-          $frequence=config::byKey('frequence', 'MiFlora');
-          log::add('MiFlora', 'debug','frequence:'.$frequence.'; modulo heure courante % frequence:'.(date("h")%$frequence));
+            $frequence=config::byKey('frequence', 'MiFlora');
+            log::add('MiFlora', 'debug','frequence:'.$frequence.'; modulo heure courante % frequence:'.(date("h")%$frequence));
 
-          if (!(date("h")%$frequence)|| $debug){
+            if (!(date("h")%$frequence)|| $debug){
 
-            $macAdd = $mi_flora->getConfiguration('macAdd');
-            log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
-            $tryGetData=0;
-            $MiFloraData='';
-            while($MiFloraData==''){
-                if ($tryGetData>3){ // stop after 4 try
-                    break;
+                $macAdd = $mi_flora->getConfiguration('macAdd');
+                log::add('MiFlora', 'debug', 'mi flora mac add:'.$macAdd);
+                $tryGetData=0;
+                $MiFloraData='';
+                while($MiFloraData==''){
+                    if ($tryGetData>3){ // stop after 4 try
+                        break;
+                    }
+                    if ($tryGetData>0){
+                        log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:'.$tryGetData);
+                    }
+                    $mi_flora->getMesure($macAdd,$MiFloraData);
+                    log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
+                    $tryGetData++;
+                    if($MiFloraData==''){
+                        // wait 5 s hopping it'll be better ...
+                        sleep(5);
+                    }
                 }
-                if ($tryGetData>0){
-                    log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:'.$tryGetData);
+                if ($MiFloraData=='') {
+                    log::add('MiFlora', 'warning', 'mi flora data is empty, retried '.$tryGetData.' times, stop');
                 }
-                $mi_flora->getMesure($macAdd,$MiFloraData);
-                log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
-                $tryGetData++;
-                if($MiFloraData==''){
-                    // wait 5 s hopping it'll be better ...
-                    sleep(5);
+                else {
+                    $temperature = -1;
+                    $moisture = -1;
+                    $fertility = -1;
+                    $lux = -1;
+                    $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
+                    $mi_flora->updateJeedom($macAdd,$temperature,$moisture,$fertility,$lux);
                 }
-            }
-            if ($MiFloraData=='') {
-                log::add('MiFlora', 'warning', 'mi flora data is empty, retried '.$tryGetData.' times, stop');
-            }
-            else {
-                $temperature = -1;
-                $moisture = -1;
-                $fertility = -1;
-                $lux = -1;
-                $mi_flora->traiteMesure($macAdd,$MiFloraData,$temperature,$moisture,$fertility,$lux);
-                $mi_flora->updateJeedom($macAdd,$temperature,$moisture,$fertility,$lux);
-            }
-            // recupere le niveau de la batterie deux  fois par jour a x h
-            // log::add('MiFlora', 'debug', 'date:'.date("h"));
-              if (date("h")==12 || $debug){
-                $MiFloraBatteryAndFirmwareVersion= '';
-                $MiFloraNameString = '';
-                $FirmwareVersion = '';
-                $MiFloraName = '';
-                $battery = -1;
-                $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
-                $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
-                $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
-                $mi_flora->updateStaticData($macAdd,$battery,$FirmwareVersion,$MiFloraName);
+                // recupere le niveau de la batterie deux  fois par jour a x h
+                // log::add('MiFlora', 'debug', 'date:'.date("h"));
+                if (date("h")==12 || $debug){
+                    $MiFloraBatteryAndFirmwareVersion= '';
+                    $MiFloraNameString = '';
+                    $FirmwareVersion = '';
+                    $MiFloraName = '';
+                    $battery = -1;
+                    $mi_flora->getMiFloraStaticData($macAdd,$MiFloraBatteryAndFirmwareVersion,$MiFloraNameString);
+                    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd,$MiFloraBatteryAndFirmwareVersion,$battery,$FirmwareVersion);
+                    $mi_flora->traiteMiFloraName($macAdd,$MiFloraNameString,$MiFloraName);
+                    $mi_flora->updateStaticData($macAdd,$battery,$FirmwareVersion,$MiFloraName);
+                }
             }
         }
-      }
     }
     /* */
 
@@ -198,6 +198,7 @@ class MiFlora extends eqLogic {
 
     public function preInsert() {
         $this->setConfiguration('battery_type', '1x3V CR2032');
+        $this->setConfiguration('batteryStatus','');
         $this->setConfiguration('firmware_version','');
         $this->setConfiguration('plant_name','');
     }
@@ -501,8 +502,11 @@ class MiFlora extends eqLogic {
             log::add('MiFlora', 'info', 'Battery=0,  erreur probable de connection Mi Flora');
         } else {
             $this->batteryStatus($battery);
-            log::add('MiFlora', 'debug', $macAdd.' Store battery:'.$battery);
-
+            if ($battery != $this->getConfiguration('batteryStatus')) {
+                log::add('MiFlora', 'debug', $macAdd.' Store battery:'.$battery);
+                $this->setConfiguration('batteryStatus',$battery);
+                $this->save();
+            }
             if ($FirmwareVersion != $this->getConfiguration('firmware_version')) {
                 log::add('MiFlora', 'info', $macAdd.' Store firmware version:'.$FirmwareVersion);
                 $this->setConfiguration('firmware_version',$FirmwareVersion);
