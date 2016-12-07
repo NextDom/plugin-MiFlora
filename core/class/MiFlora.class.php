@@ -49,8 +49,22 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', 'frequence:' . $frequence . '; modulo heure courante % frequence:' . (date("h") % $frequence));
         if (!(date("h") % $frequence) || $debug) {
             foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+                //$mi_flora->refreshWidget();
                 $macAdd = $mi_flora->getConfiguration('macAdd');
                 log::add('MiFlora', 'debug', 'mi flora mac add:' . $macAdd);
+                $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
+                // recupere le niveau de la batterie deux  fois par jour a x h
+                // log::add('MiFlora', 'debug', 'date:'.date("h"));
+                if (date("h") == 12 || $FirmwareVersion == '') {
+                    $MiFloraBatteryAndFirmwareVersion = '';
+                    $MiFloraNameString = '';
+                    $MiFloraName = '';
+                    $battery = -1;
+                    $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString);
+                    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
+                    $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
+                    $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
+                }
                 $tryGetData = 0;
                 $MiFloraData = '';
                 while ($MiFloraData == '') {
@@ -60,6 +74,7 @@ class MiFlora extends eqLogic
                     if ($tryGetData > 0) {
                         log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:' . $tryGetData);
                     }
+                    //TODO: use $FirmwareVersion
                     $mi_flora->getMesure($macAdd, $MiFloraData);
                     log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
                     $tryGetData++;
@@ -79,19 +94,8 @@ class MiFlora extends eqLogic
                     $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
                     $mi_flora->refreshWidget();
                 }
-                // recupere le niveau de la batterie deux  fois par jour a x h
-                // log::add('MiFlora', 'debug', 'date:'.date("h"));
-                if (date("h") == 12 || $debug) {
-                    $MiFloraBatteryAndFirmwareVersion = '';
-                    $MiFloraNameString = '';
-                    $FirmwareVersion = '';
-                    $MiFloraName = '';
-                    $battery = -1;
-                    $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString);
-                    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
-                    $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
-                    $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
-                }
+
+
             }
         }
     }
