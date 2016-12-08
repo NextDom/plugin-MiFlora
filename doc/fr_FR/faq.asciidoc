@@ -42,6 +42,7 @@ pcq on veut debuger justement, mais c'est à réfléchir.
 * tester que la macadd est <> entre les equipements (erreur de copie colle)
 * tester la version du firmware et logger une erreur si elle n est pas supporte
 * tester l etat du bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)
+* Choix du no de hci dans la config
 --
 Cette liste de questions provient essentiellement de vos questions sur le forum jeedom topic MiFlora
 --
