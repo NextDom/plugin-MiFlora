@@ -162,6 +162,8 @@ class MiFlora extends eqLogic
 
     public function preInsert()
     {
+        $this->setIsEnable(1);
+        $this->setIsVisible(1);
         $this->setConfiguration('battery_type', '1x3V CR2032');
         $this->setConfiguration('batteryStatus', '');
         $this->setConfiguration('firmware_version', '');
