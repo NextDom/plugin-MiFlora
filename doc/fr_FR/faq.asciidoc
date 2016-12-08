@@ -32,17 +32,22 @@ Bien sur, le code est sur github: rjullien/jeedom_MiFlora, vous pouvez soumettre
 --
 .Quelles sont les ameliorations à venir ?
 --
-* changer l'icone pour etre plus homogene avec Jeedom
-* Support du firmware 2.6.6 et 2.7.0
-* Affichage des items de Configuration en champ lecture seul.
-* Faire un joli UI.
-* Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais
-* Le mode debug pourrait éventuellement suivre le log level, à savoir que si on lance en debug il passe à la minute
-pcq on veut debuger justement, mais c'est à réfléchir.
-* tester que la macadd est <> entre les equipements (erreur de copie colle)
-* tester la version du firmware et logger une erreur si elle n est pas supporte
-* tester l etat du bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)
-* Choix du no de hci dans la config
+* version 1.0: 10 Dec?
+** Support du firmware 2.6.6 et 2.7.0
+** tester la version du firmware et logger une erreur si elle n est pas supporte
+** Affichage des items de Configuration en champ lecture seul.
+** Faire un joli UI.
+** Le mode debug pourrait éventuellement suivre le log level, à savoir que si on lance en debug il passe à la minute
+pcq on veut debuger justement.
+** definir les equipements en visible et actives par defaut
+
+* versions suivantes:
+** changer l'icone pour etre plus homogene avec Jeedom
+** Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais
+** tester que la macadd est <> entre les equipements (erreur de copie colle)
+** tester l etat du bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)
+** Choix du no de hci dans la config
+** Provoquer une recuperation des donnees tout de suite après l'ajout du materiel ? ou une commande pour forcer l'update
 --
 Cette liste de questions provient essentiellement de vos questions sur le forum jeedom topic MiFlora
 --

@@ -569,10 +569,14 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <div class="ulist">
 <ul>
 <li>
-<p>changer l&#8217;icone pour etre plus homogene avec Jeedom</p>
-</li>
+<p>version 1.0: 10 Dec?</p>
+<div class="ulist">
+<ul>
 <li>
 <p>Support du firmware 2.6.6 et 2.7.0</p>
+</li>
+<li>
+<p>tester la version du firmware et logger une erreur si elle n est pas supporte</p>
 </li>
 <li>
 <p>Affichage des items de Configuration en champ lecture seul.</p>
@@ -581,23 +585,39 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <p>Faire un joli UI.</p>
 </li>
 <li>
+<p>Le mode debug pourrait éventuellement suivre le log level, à savoir que si on lance en debug il passe à la minute
+pcq on veut debuger justement.</p>
+</li>
+<li>
+<p>definir les equipements en visible et actives par defaut</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>versions suivantes:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>changer l&#8217;icone pour etre plus homogene avec Jeedom</p>
+</li>
+<li>
 <p>Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais</p>
 </li>
 <li>
-<p>Le mode debug pourrait éventuellement suivre le log level, à savoir que si on lance en debug il passe à la minute
-pcq on veut debuger justement, mais c&#8217;est à réfléchir.</p>
-</li>
-<li>
 <p>tester que la macadd est &lt;&gt; entre les equipements (erreur de copie colle)</p>
-</li>
-<li>
-<p>tester la version du firmware et logger une erreur si elle n est pas supporte</p>
 </li>
 <li>
 <p>tester l etat du bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)</p>
 </li>
 <li>
 <p>Choix du no de hci dans la config</p>
+</li>
+<li>
+<p>Provoquer une recuperation des donnees tout de suite après l&#8217;ajout du materiel ? ou une commande pour forcer l&#8217;update</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
