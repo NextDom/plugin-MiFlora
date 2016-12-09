@@ -1,0 +1,29 @@
+
+Version 0.8: 9 Decembre 2016
+--
+* Affichage des items de Configuration en champ lecture seul.
+* Widget desktop et mobile dedié.
+* ajout de la date de derniere collecte
+* forcer la recuperation du firmware s'il est vide
+* Le mode debug provoque une collection de donneés toutes les minutes, attention à ne pas le laisser en permanence surtout si vous etes sur une carte SD
+* definir les nouveaux équipements en visible et activés par défaut
+* Ajout de l unité pour 'fertility', ce champ mesure en fait la conductivité ce qui permet de deduire la fertilité du sol
+
+Version 1.0: 10 Decembre 2016 ?
+--
+* Support du firmware 2.6.6 et 2.7.0 en mode local
+* test de la version du firmware et log d'une erreur si elle n'est pas supporté
+
+Versions suivantes:
+--
+* Support du firmware 2.6.6 et 2.7.0 en mode déporté
+* changer l'icone pour etre plus homogene avec Jeedom
+* Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais
+* tester que la macadd est <> entre les equipements (erreur de copie colle)
+* tester l etat du bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)
+* Choix du no de hci dans la config
+* Provoquer une recuperation des donnees tout de suite après l'ajout du materiel ? ou une commande pour forcer l'update
+* Bouton pour detecter un nouveau MiFlora (éviter de trouver l addresse à la main)
+--
+Cette liste de questions provient essentiellement de vos questions sur le forum jeedom topic MiFlora
+--
