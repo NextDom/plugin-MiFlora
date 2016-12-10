@@ -20,7 +20,7 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 --
 .Avec quelle version de firmware ce plugin est il compatible ?
 --
-Il est compatible seulement avec la version 2.6.2, la version 2.6.6 n'est pas compatible pour le moment, la version 2.7.0 n'a pas été testée.
+Il est compatible avec les versions 2.6.2, 2.6.6 et 2.7.0 depuis la version 1.0
 --
 .Je possède un Rpbi3, J'ai dû désactiver le BT interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le BT interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le rpbi3 ?
 --

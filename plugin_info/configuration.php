@@ -26,9 +26,9 @@ if (!isConnect()) {
 <form class="form-horizontal">
     <fieldset>
     	<span>
-	  Entrer la config d'un device distant ou la config du device ou tourne jeedom, je ne gere que l access par ssh actuellement
-	  <br>
-	  il faut installer le bluetooth et s assurer que <b>gatttool -b macAddMiFlora --char-read -a 0x35</b> fonctionne sur le device cible
+        <div class="form-group"> <br>
+           <a href=https://rjullien.github.io/jeedom_MiFlora target="_blank"><font size="+1"><center>Cliquer pour voir la documentation du plugin</center></font></a>
+       </div>
 	</span>
         <div class="form-group"> <br>
 
@@ -50,6 +50,32 @@ if (!isConnect()) {
                 </select>
           </div>
         </div>
+
+        <div class="form-group"> <br>
+          <label class="col-lg-4 control-label">{{niveau de securité bluetooth (high)}}</label>
+          <div class="col-lg-2">
+              <select id="seclvl" class="configKey form-control"  data-l1key="seclvl" >
+              <option value="low">{{low}}</option>
+              <option value="medium">{{medium}}</option>
+              <option value="high">{{high}}</option>
+                </select>
+          </div>
+        </div>
+
+        <div class="form-group"> <br>
+          <label class="col-lg-4 control-label">{{adaptateur bluetooth (hci0)}}</label>
+          <div class="col-lg-2">
+              <select id="adapter" class="configKey form-control"  data-l1key="adapter" >
+              <option value="hci0">{{hci0}}</option>
+              <option value="hci1">{{hci1}}</option>
+              <option value="hci2">{{hci2}}</option>
+              <option value="hci3">{{hci3}}</option>
+              <option value="hci4">{{hci4}}</option>
+              <option value="hci5">{{hci5}}</option>
+                </select>
+          </div>
+        </div>
+
           <div class="form-group"> <br>
 
               <label class="col-lg-4 control-label">{{Equipement local ou déporté ?}}</label>

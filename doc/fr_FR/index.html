@@ -432,6 +432,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_configuration_du_plugin">2.1. Configuration du plugin</a></li>
 <li><a href="#_utilisation_en_déporté">2.2. Utilisation en déporté</a></li>
+<li><a href="#_pre_requis">2.3. Pre-requis</a></li>
+<li><a href="#_configuration_avancée">2.4. Configuration avancée</a></li>
 </ul>
 </li>
 <li><a href="#_faq">3. FAQ</a></li>
@@ -468,7 +470,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>de choisir la frequence de relevés de information du Mi Flora, depuis toutes les heures jusqu&#8217;à toutes les 12 heures</p>
+<p>de choisir la frequence de relevés des informations du Mi Flora, depuis toutes les heures jusqu&#8217;à toutes les 12 heures</p>
+</li>
+<li>
+<p>de choisir le dongle/port bluetooth (<strong>hci0</strong> en général, <strong>hciconfig</strong> permet de lister ceux disponible sur votre systeme)</p>
+</li>
+<li>
+<p>de choisir le niveau de securité de la communication bluetooth (<strong>high</strong> sauf si ce n&#8217;est pas supporté par votre systeme)</p>
 </li>
 <li>
 <p>de choisir entre un mode local et un mode deporté</p>
@@ -478,25 +486,62 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>Pour chaque équipement, il faut rentrer l&#8217;adresse bluetooth de l&#8217;équipement.
-Il est possible de trouver celle ci en utilisant la commande <strong>bluetoothctl</strong></p>
+<p>Pour chaque équipement, il faut rentrer l&#8217;adresse bluetooth de l&#8217;équipement.</p>
+</div>
+<div class="paragraph">
+<p>Il est possible de trouver celle ci en utilisant les commandes:</p>
+</div>
+<div class="paragraph">
+<p><strong>bluetoothctl</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>scan on</strong></p>
+</div>
+<div class="paragraph">
+<p>Les adresses des Mi Flora appaissent comme ci dessous:</p>
+</div>
+<div class="paragraph">
+<p><strong>[NEW] Device C4:7C:8D:xx:xx:xx Flower mate</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>[NEW] Device C4:7C:8D:xx:xx:xx Flower care</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>scan off</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>quit</strong></p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_utilisation_en_déporté">2.2. Utilisation en déporté</h3>
 <div class="paragraph">
-<p>Il est possible d&#8217;envoyer les commandes bluetooth à un appareil déporté.</p>
+<p>Il est possible que Jeedom pilote un appareil deporté qui se chargera de la communication bluetooth avec les Mi Flora.</p>
 </div>
 <div class="paragraph">
-<p>Dans ce cas, il faut renseigner les paramètres de connexion SSH:</p>
+<p>Dans ce cas, il faut renseigner les paramètres de connexion SSH entre Jeedom et cet appareil deporté:</p>
 </div>
 <div class="paragraph">
-<p>La partie configuration permet de saisir une ip, un port, un userid ainsi que le mot de passe associé pour un appareil distant afin de gérer le mode déporté.
-Le plugin va alors se connecter en SSH à l&#8217;IP saisie précédemment et récupérer les informations du MiFlora en bluetooth grâce à la commande <strong>gatttools</strong>
-il faut installer le bluetooth et s&#8217;assurer que <strong>gatttool -b <em>macAddMiFlora</em> --char-read -a 0x35</strong> fonctionne sur l&#8217;appareil cible.</p>
+<p>Le choix deporté active la partie configuration qui permet de saisir une ip, un port, un nom d&#8217;utlisateur ainsi que le mot de passe associé pour l&#8217;appareil distant.
+Le plugin va alors se connecter en SSH à l&#8217;IP saisie précédemment et récupérer les informations du MiFlora en bluetooth grâce à la commande <strong>gatttools</strong></p>
 </div>
 <div class="paragraph">
 <p>Aucun Jeedom n&#8217;est nécessaire sur l&#8217;équipement distant.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pre_requis">2.3. Pre-requis</h3>
+<div class="paragraph">
+<p>il faut installer le bluetooth et s assurer que <strong>gatttool --device=hci0 -b <em>macAddMiFlora</em> --char-read -a 0x35 --sec-level=high</strong> fonctionne sur l&#8217;appareil cible (selon le choix local ou deporté)</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_avancée">2.4. Configuration avancée</h3>
+<div class="paragraph">
+<p><strong>hci:</strong> permet de choisir le dongle bluetooth pour ceux qui en ont plusieurs.</p>
+</div>
+<div class="paragraph">
+<p><strong>niveau de securite:</strong> permet de choisir le niveau de securité bluetooth, <strong>high</strong> semble bien dans la majorité des cas, cependant changer le niveau de secuté semble resoudre certains problemes de connections</p>
 </div>
 <hr>
 </div>
@@ -544,7 +589,7 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <div class="title">Avec quelle version de firmware ce plugin est il compatible ?</div>
 <div class="content">
 <div class="paragraph">
-<p>Il est compatible seulement avec la version 2.6.2, la version 2.6.6 n&#8217;est pas compatible pour le moment, la version 2.7.0 n&#8217;a pas été testée.</p>
+<p>Il est compatible avec les versions 2.6.2, 2.6.6 et 2.7.0 depuis la version 1.0</p>
 </div>
 </div>
 </div>
@@ -571,10 +616,22 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <h2 id="_change_log">4. Change log</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Version 0.8: 9 Decembre 2016</p>
+<p>Versions 0.1 &#8230;&#8203; 0.7: 24 Novembre 2016 - 2 Decembre 2016</p>
 </div>
 <div class="openblock">
 <div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>Version intiales du plugin.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 0.8: 9 Decembre 2016</p>
+</div>
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -601,29 +658,38 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </ul>
 </div>
 <div class="paragraph">
-<p>Version 1.0: 10 Decembre 2016 ?</p>
-</div>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Support du firmware 2.6.6 et 2.7.0 en mode local</p>
-</li>
-<li>
-<p>test de la version du firmware et log d&#8217;une erreur si elle n&#8217;est pas supporté</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Versions suivantes:</p>
+<p>Version 1.0: 10 Decembre 2016</p>
 </div>
 <div class="openblock">
 <div class="content">
 <div class="ulist">
 <ul>
 <li>
-<p>Support du firmware 2.6.6 et 2.7.0 en mode déporté</p>
+<p>Support du firmware 2.6.6 et 2.7.0 en mode local et deporté</p>
+</li>
+<li>
+<p>Choix du no de hci dans la config, tres utile si le hci0 est affecté à un plugin exclusif ou s&#8217;il ne gere pas le bluetooth BLE</p>
+</li>
+<li>
+<p>Choix du niveau de securité bluetooth afin de resoudre les problemes de certains dongles qui ne gerent pas le niveau high</p>
+</li>
+<li>
+<p>le hci et niveau de securité n&#8217;est pas pris en compte pour le firmaware 2.6.6 et 2.7.0. (modif du script python pas encore testées)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Versions suivantes:</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>utilisation du parametre hci et sec-level pour le firmaware 2.6.6 et 2.7.0. (modif du script python)</p>
+</li>
+<li>
+<p>test de la version du firmware et log d&#8217;une erreur si elle n&#8217;est pas supporté</p>
 </li>
 <li>
 <p>changer l&#8217;icone pour etre plus homogene avec Jeedom</p>
@@ -638,9 +704,6 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <p>tester l etat du bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)</p>
 </li>
 <li>
-<p>Choix du no de hci dans la config</p>
-</li>
-<li>
 <p>Provoquer une recuperation des donnees tout de suite après l&#8217;ajout du materiel ? ou une commande pour forcer l&#8217;update</p>
 </li>
 <li>
@@ -648,17 +711,15 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </li>
 </ul>
 </div>
-</div>
-</div>
-<div class="paragraph">
-<p>Cette liste de questions provient essentiellement de vos questions sur le forum jeedom topic MiFlora</p>
-</div>
 <div class="openblock">
 <div class="content">
 <div class="paragraph">
+<p>Cette liste de questions provient essentiellement de vos questions sur le forum jeedom topic MiFlora</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
 <p>&#8230;&#8203;</p>
-</div>
-</div>
 </div>
 </div>
 </div>

@@ -1,4 +1,8 @@
 
+Versions 0.1 ... 0.7: 24 Novembre 2016 - 2 Decembre 2016
+--
+* Version intiales du plugin.
+
 Version 0.8: 9 Decembre 2016
 --
 * Affichage des items de Configuration en champ lecture seul.
@@ -9,19 +13,21 @@ Version 0.8: 9 Decembre 2016
 * definir les nouveaux équipements en visible et activés par défaut
 * Ajout de l unité pour 'fertility', ce champ mesure en fait la conductivité ce qui permet de deduire la fertilité du sol
 
-Version 1.0: 10 Decembre 2016 ?
+Version 1.0: 10 Decembre 2016
 --
-* Support du firmware 2.6.6 et 2.7.0 en mode local
-* test de la version du firmware et log d'une erreur si elle n'est pas supporté
+* Support du firmware 2.6.6 et 2.7.0 en mode local et deporté
+* Choix du no de hci dans la config, tres utile si le hci0 est affecté à un plugin exclusif ou s'il ne gere pas le bluetooth BLE
+* Choix du niveau de securité bluetooth afin de resoudre les problemes de certains dongles qui ne gerent pas le niveau high
+* le hci et niveau de securité n'est pas pris en compte pour le firmaware 2.6.6 et 2.7.0. (modif du script python pas encore testées)
 
 Versions suivantes:
 --
-* Support du firmware 2.6.6 et 2.7.0 en mode déporté
+* utilisation du parametre hci et sec-level pour le firmaware 2.6.6 et 2.7.0. (modif du script python)
+* test de la version du firmware et log d'une erreur si elle n'est pas supporté
 * changer l'icone pour etre plus homogene avec Jeedom
 * Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais
 * tester que la macadd est <> entre les equipements (erreur de copie colle)
 * tester l etat du bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)
-* Choix du no de hci dans la config
 * Provoquer une recuperation des donnees tout de suite après l'ajout du materiel ? ou une commande pour forcer l'update
 * Bouton pour detecter un nouveau MiFlora (éviter de trouver l addresse à la main)
 --

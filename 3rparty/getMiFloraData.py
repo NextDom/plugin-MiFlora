@@ -49,13 +49,13 @@ def write_ble(mac, handle, value, retries=3, timeout=20):
             with LOCK:
                 result = subprocess.check_output(cmd,shell=True)
             result = result.decode("utf-8").strip(' \n\t')
-            print("Got ",result," from gatttool")
+            #print("Got ",result," from gatttool")
 
         except subprocess.CalledProcessError as err:
             print("Error ",err.returncode," from gatttool (",err.output,")")
 
         attempt += 1
-        print("Waiting for ",delay," seconds before retrying")
+        # print("Waiting for ",delay," seconds before retrying")
         if attempt < retries:
             time.sleep(delay)
             delay *= 2
@@ -82,12 +82,13 @@ def read_ble(mac, handle, retries=3, timeout=20):
                                                  shell=True)
 
             result = result.decode("utf-8").strip(' \n\t')
-            print("Got ",result, " from gatttool")
+            # print("Got ",result, " from gatttool")
             # Parse the output
             res = re.search("( [0-9a-fA-F][0-9a-fA-F])+", result)
 
             if res:
-                return [int(x, 16) for x in res.group(0).split()]
+                # return [int(x, 16) for x in res.group(0).split()]
+                return result
 
         except subprocess.CalledProcessError as err:
             print("Error ",err.returncode," from gatttool (",err.output,")")
@@ -96,7 +97,7 @@ def read_ble(mac, handle, retries=3, timeout=20):
         #    print("Timeout while waiting for gatttool output")
 
         attempt += 1
-        print("Waiting for ",delay," seconds before retrying")
+        # print("Waiting for ",delay," seconds before retrying")
         if attempt < retries:
             time.sleep(delay)
             delay *= 2
@@ -116,6 +117,15 @@ macAdd=sys.argv[1]
 handlerd="0x0035"
 handlewr="0x0033"
 firmware=sys.argv[2]
+FloraDebug=sys.argv[3]
 if firmware == "2.6.6" or firmware == "2.7.0":
     write_ble(macAdd,handlewr,"A01F",0)
-print ("read_ble:",parse_data(read_ble(macAdd,handlerd)))
+resultFlora=read_ble(macAdd,handlerd)
+
+if FloraDebug == "1":
+    print ("read_ble:",parse_data(resultFlora))
+
+if FloraDebug == "0":
+    print(resultFlora)
+
+#print ("read_ble:",parse_data(resultFlora))

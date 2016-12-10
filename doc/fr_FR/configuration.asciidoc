@@ -2,22 +2,44 @@
 
 La partie configuration du plugin permet:
 --
-* de choisir la frequence de relevés de information du Mi Flora, depuis toutes les heures jusqu'à toutes les 12 heures
+* de choisir la frequence de relevés des informations du Mi Flora, depuis toutes les heures jusqu'à toutes les 12 heures
+* de choisir le dongle/port bluetooth (*hci0* en général, *hciconfig* permet de lister ceux disponible sur votre systeme)
+* de choisir le niveau de securité de la communication bluetooth (*high* sauf si ce n'est pas supporté par votre systeme)
 * de choisir entre un mode local et un mode deporté
 --
 Pour chaque équipement, il faut rentrer l'adresse bluetooth de l'équipement.
-Il est possible de trouver celle ci en utilisant la commande *bluetoothctl*
+
+Il est possible de trouver celle ci en utilisant les commandes:
+
+*bluetoothctl*
+
+*scan on*
+
+Les adresses des Mi Flora appaissent comme ci dessous:
+
+*[NEW] Device C4:7C:8D:xx:xx:xx Flower mate*
+
+*[NEW] Device C4:7C:8D:xx:xx:xx Flower care*
+
+*scan off*
+
+*quit*
 
 === Utilisation en déporté
 
-Il est possible d'envoyer les commandes bluetooth à un appareil déporté.
+Il est possible que Jeedom pilote un appareil deporté qui se chargera de la communication bluetooth avec les Mi Flora.
 
-Dans ce cas, il faut renseigner les paramètres de connexion SSH:
+Dans ce cas, il faut renseigner les paramètres de connexion SSH entre Jeedom et cet appareil deporté:
 
-La partie configuration permet de saisir une ip, un port, un userid ainsi que le mot de passe associé pour un appareil distant afin de gérer le mode déporté.
+Le choix deporté active la partie configuration qui permet de saisir une ip, un port, un nom d'utlisateur ainsi que le mot de passe associé pour l'appareil distant.
 Le plugin va alors se connecter en SSH à l'IP saisie précédemment et récupérer les informations du MiFlora en bluetooth grâce à la commande *gatttools*
-il faut installer le bluetooth et s'assurer que *gatttool -b _macAddMiFlora_ --char-read -a 0x35* fonctionne sur l'appareil cible.
-
-
 
 Aucun Jeedom n'est nécessaire sur l'équipement distant.
+
+=== Pre-requis
+il faut installer le bluetooth et s assurer que *gatttool --device=hci0 -b _macAddMiFlora_ --char-read -a 0x35 --sec-level=high* fonctionne sur l'appareil cible (selon le choix local ou deporté)
+
+=== Configuration avancée
+*hci:* permet de choisir le dongle bluetooth pour ceux qui en ont plusieurs.
+
+*niveau de securite:* permet de choisir le niveau de securité bluetooth, *high* semble bien dans la majorité des cas, cependant changer le niveau de secuté semble resoudre certains problemes de connections

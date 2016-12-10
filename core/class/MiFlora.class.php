@@ -46,6 +46,10 @@ class MiFlora extends eqLogic
     {
         $debug = log::getLogLevel('MiFlora') == 100;
         $frequence = config::byKey('frequence', 'MiFlora');
+        $adapter = config::byKey('adapter', 'MiFlora');
+        $seclvl=config::byKey('seclvl', 'MiFlora');
+        /*$adapter='hci0';
+        $seclvl='high';*/
         log::add('MiFlora', 'debug', 'frequence:' . $frequence . '; modulo heure courante % frequence:' . (date("h") % $frequence));
         if (!(date("h") % $frequence) || $debug) {
             foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
@@ -60,7 +64,7 @@ class MiFlora extends eqLogic
                     $MiFloraNameString = '';
                     $MiFloraName = '';
                     $battery = -1;
-                    $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString);
+                    $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString,$adapter,$seclvl);
                     $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
                     $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
                     $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
@@ -74,8 +78,10 @@ class MiFlora extends eqLogic
                     if ($tryGetData > 0) {
                         log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:' . $tryGetData);
                     }
-                    //TODO: use $FirmwareVersion
-                    $mi_flora->getMesure($macAdd, $MiFloraData);
+
+                    log::add('MiFlora', 'debug', 'mi flora FirmwareVersion:' . $FirmwareVersion);
+
+                    $mi_flora->getMesure($macAdd, $MiFloraData,$FirmwareVersion,$adapter,$seclvl);
                     log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
                     $tryGetData++;
                     if ($MiFloraData == '') {
@@ -259,7 +265,7 @@ class MiFlora extends eqLogic
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function getMesure($macAdd, &$MiFloraData)
+    public function getMesure($macAdd, &$MiFloraData, $FirmwareVersion,$adapter,$seclvl)
     {
         log::add('MiFlora', 'debug', 'macAdd:' . $macAdd);
         $MiFloraData = '';
@@ -280,8 +286,15 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', 'user:' . $user);
             log::add('MiFlora', 'debug', 'pass:' . $pass);
 
+            if ($FirmwareVersion=="2.6.2"){
+              $commande="gatttool --adapter=".$adapter." -b " . $macAdd . " --char-read -a 0x35 --sec-level=".$seclvl;
+            } else {
+              #$commande="/usr/bin/python /home/pi/MiFlora/jeedom_MiFlora/3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0";
+              $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0";
+            }
+            # $commande="/usr/bin/python /home/pi/MiFlora/jeedom_MiFlora/3rparty/getMiFloraData.py C4:7C:8D:61:7E:84 2.6.6 0";
 
-            log::add('MiFlora', 'debug', 'connexion SSH ...');
+            log::add('MiFlora', 'debug', 'connexion SSH ...'.$commande);
             if (!$connection = ssh2_connect($ip, $port)) {
                 log::add('MiFlora', 'error', 'connexion SSH KO');
             } else {
@@ -289,7 +302,9 @@ class MiFlora extends eqLogic
                     log::add('MiFlora', 'error', 'Authentification SSH KO');
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
-                    $gattresult = ssh2_exec($connection, "gatttool -b " . $macAdd . " --char-read -a 0x35 --sec-level=high");
+                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../3rparty/getMiFloraData.py', '/tmp/getMiFloraData.py', 0755);
+
+                    $gattresult = ssh2_exec($connection, $commande);
                     stream_set_blocking($gattresult, true);
                     $MiFloraData = stream_get_contents($gattresult);
                     log::add('MiFlora', 'debug', 'SSH result:' . $MiFloraData);
@@ -302,7 +317,13 @@ class MiFlora extends eqLogic
         } else {
             //$MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
             log::add('MiFlora', 'debug', 'local call');
-            $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x35 --sec-level=high  2>&1 ';
+            #  $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x35 --sec-level=high  2>&1 ';
+            if ($FirmwareVersion=="2.6.2"){
+              $command = "gatttool --adapter=".$adapter." -b " . $macAdd . '  --char-read -a 0x35 --sec-level='.$seclvl.' 2>&1 ';
+            } else {
+              $command="/usr/bin/python .dirname(__FILE__) . '/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0";
+            }
+            log::add('MiFlora', 'debug', 'command: ' . $command);
             $MiFloraData = exec($command);
             log::add('MiFlora', 'debug', 'MiFloraData: ' . $MiFloraData);
             if (strpos($MiFloraData, 'read failed') !== false or strpos($MiFloraData, 'connect') !== false) {
@@ -313,7 +334,7 @@ class MiFlora extends eqLogic
     }
 
 
-    public function getMiFloraStaticData($macAdd, &$MiFloraBatteryAndFirmwareVersion, &$MiFloraName)
+    public function getMiFloraStaticData($macAdd, &$MiFloraBatteryAndFirmwareVersion, &$MiFloraName,$adapter,$seclvl)
     {
         log::add('MiFlora', 'debug', 'macAdd:' . $macAdd);
         $MiFloraBatteryAndFirmwareVersion = '';
@@ -349,7 +370,7 @@ class MiFlora extends eqLogic
                     //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x038
                     //Characteristic value/descriptor: 64 10 32 2e 36 2e 32
                     //battery:64 version 2.6.2
-                    $gattresult = ssh2_exec($connection, "gatttool -b " . $macAdd . " --char-read -a 0x038 --sec-level=high");
+                    $gattresult = ssh2_exec($connection, "gatttool --adapter=".$adapter." -b " . $macAdd . " --char-read -a 0x038 --sec-level=".$seclvl);
                     stream_set_blocking($gattresult, true);
                     $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);
                     log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion:' . $MiFloraBatteryAndFirmwareVersion);
@@ -357,7 +378,7 @@ class MiFlora extends eqLogic
                     // get MiFlora Name
                     //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x03
                     // Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 (Flower mate)
-                    $gattresult = ssh2_exec($connection, "gatttool -b " . $macAdd . " --char-read -a 0x03 --sec-level=high");
+                    $gattresult = ssh2_exec($connection, "gatttool --adapter=".$adapter." -b " . $macAdd . " --char-read -a 0x03 --sec-level=".$seclvl);
                     stream_set_blocking($gattresult, true);
                     $MiFloraName = stream_get_contents($gattresult);
                     log::add('MiFlora', 'debug', 'MiFloraName:' . $MiFloraName);
@@ -373,14 +394,14 @@ class MiFlora extends eqLogic
             // connect error: Connection timed out
             // connect: Device or resource busy
             log::add('MiFlora', 'debug', 'local call static data');
-            $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x38 --sec-level=high  2>&1 ';
+            $command = 'gatttool --adapter='.$adapter.' -b ' . $macAdd . '  --char-read -a 0x38 --sec-level='.$seclvl.' 2>&1 ';
             $MiFloraBatteryAndFirmwareVersion = exec($command);
             log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion: ' . $MiFloraBatteryAndFirmwareVersion);
             if (strpos($MiFloraBatteryAndFirmwareVersion, 'read failed') !== false or strpos($MiFloraBatteryAndFirmwareVersion, 'connect') !== false) {
                 log::add('MiFlora', 'error', 'erreur: gatttool ne fonctionne pas - ' . $MiFloraBatteryAndFirmwareVersion);
                 $MiFloraBatteryAndFirmwareVersion = '';
             }
-            $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x03 --sec-level=high  2>&1 ';
+            $command = 'gatttool --adapter='.$adapter.' -b ' . $macAdd . '  --char-read -a 0x03 --sec-level='.$seclvl.'  2>&1 ';
             $MiFloraName = exec($command);
             log::add('MiFlora', 'debug', 'MiFloraName: ' . $MiFloraName);
             if (strpos($MiFloraName, 'read failed') !== false or strpos($MiFloraName, 'connect') !== false) {

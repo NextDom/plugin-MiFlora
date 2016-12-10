@@ -1,2 +1,12 @@
 
 *.php~
+
+3rparty/sshmifloa.py
+
+3rparty/test.php
+
+resources/hci.php
+
+resources/install.py
+
+resources/install.sh
