@@ -321,7 +321,7 @@ class MiFlora extends eqLogic
             if ($FirmwareVersion=="2.6.2"){
               $command = "gatttool --adapter=".$adapter." -b " . $macAdd . '  --char-read -a 0x35 --sec-level='.$seclvl.' 2>&1 ';
             } else {
-              $command="/usr/bin/python .dirname(__FILE__) . '/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0";
+              $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0";
             }
             log::add('MiFlora', 'debug', 'command: ' . $command);
             $MiFloraData = exec($command);
