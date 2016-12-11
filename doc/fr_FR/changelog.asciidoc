@@ -22,11 +22,14 @@ Version 1.0: 10 Decembre 2016
 
 Version 1.0.1: 11 Decembre 2016
 --
-Fix bug pour les nouveaux firmware en mode local
+* Fix bug pour les nouveaux firmware en mode local
+
+Version 1.1: 11 Decembre 2016
+--
+* utilisation du parametre hci et sec-level pour le firmware 2.6.6 et 2.7.0. (modif du script python)
 
 Versions suivantes:
 --
-* utilisation du parametre hci et sec-level pour le firmaware 2.6.6 et 2.7.0. (modif du script python)
 * test de la version du firmware et log d'une erreur si elle n'est pas supporté
 * changer l'icone pour etre plus homogene avec Jeedom
 * Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais

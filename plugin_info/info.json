@@ -1,10 +1,11 @@
 {
 	"id" : "MiFlora",
 	"name" : "Mi Flora",
-        "description" : "Plugin pour lire les info des MiFlora",
+  "description" : "Plugin pour lire les info des MiFlora",
 	"licence" : "AGPL",
 	"author" : "Rene",
 	"require" : "2.4",
-        "version" : "1.0.1",
-        "category" : "nature"
+  "version" : "1.1",
+  "category" : "nature",
+	"icon" : "icon nature-drops1"
 }

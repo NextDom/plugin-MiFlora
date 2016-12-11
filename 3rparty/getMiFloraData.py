@@ -29,7 +29,7 @@ def parse_data(data):
         print("MI_CONDUCTIVITY=", data[9] * 256 + data[8])
         return data
 
-def write_ble(mac, handle, value, retries=3, timeout=20):
+def write_ble(mac, handle, value, adpater="hci0", security="high", retries=3, timeout=20):
     """
     Read from a BLE address
 
@@ -44,7 +44,7 @@ def write_ble(mac, handle, value, retries=3, timeout=20):
     delay = 10
     while attempt <= retries:
         try:
-            cmd = "gatttool --device={} --char-write-req -a {} -n {}".format(mac, handle, value)
+            cmd = "gatttool --adapter={} --device={} --char-write-req -a {} -n {} --sec-level={} ".format(adpater, mac, handle, value, security)
             #cmd = "gatttool --device={} --char-read -a {} 2>/dev/null".format(mac, handle)
             with LOCK:
                 result = subprocess.check_output(cmd,shell=True)
@@ -62,7 +62,7 @@ def write_ble(mac, handle, value, retries=3, timeout=20):
 
     return None
 
-def read_ble(mac, handle, retries=3, timeout=20):
+def read_ble(mac, handle,adpater="hci0",security="high", retries=3, timeout=20):
     """
     Read from a BLE address
 
@@ -76,7 +76,7 @@ def read_ble(mac, handle, retries=3, timeout=20):
     delay = 10
     while attempt <= retries:
         try:
-            cmd = "gatttool --device={} --char-read -a {} 2>/dev/null".format(mac, handle)
+            cmd = "gatttool --adapter={} --device={} --char-read -a {} --sec-level={} 2>/dev/null".format(adpater, mac, handle, security)
             with LOCK:
                 result = subprocess.check_output(cmd,
                                                  shell=True)
@@ -118,9 +118,12 @@ handlerd="0x0035"
 handlewr="0x0033"
 firmware=sys.argv[2]
 FloraDebug=sys.argv[3]
+adpater=sys.argv[4]
+security=sys.argv[5]
+
 if firmware == "2.6.6" or firmware == "2.7.0":
-    write_ble(macAdd,handlewr,"A01F",0)
-resultFlora=read_ble(macAdd,handlerd)
+    write_ble(macAdd,handlewr,"A01F",adpater,security,3)
+resultFlora=read_ble(macAdd,handlerd,adpater,security)
 
 if FloraDebug == "1":
     print ("read_ble:",parse_data(resultFlora))
