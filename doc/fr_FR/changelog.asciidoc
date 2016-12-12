@@ -30,6 +30,7 @@ Version 1.1: 11 Decembre 2016
 
 Versions suivantes:
 --
+* ajouter le test des config: hci et sec-level doivent etre rempli
 * test de la version du firmware et log d'une erreur si elle n'est pas supporté
 * changer l'icone pour etre plus homogene avec Jeedom
 * Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais
