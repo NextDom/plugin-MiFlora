@@ -62,7 +62,7 @@ def write_ble(mac, handle, value, adpater="hci0", security="high", retries=3, ti
 
     return None
 
-def read_ble(mac, handle,adpater="hci0",security="high", retries=3, timeout=20):
+def read_ble(mac, handle,adpater="hci0",security="high", FloraDebug=0, retries=3, timeout=20):
     """
     Read from a BLE address
 
@@ -87,7 +87,8 @@ def read_ble(mac, handle,adpater="hci0",security="high", retries=3, timeout=20):
             res = re.search("( [0-9a-fA-F][0-9a-fA-F])+", result)
 
             if res:
-                # return [int(x, 16) for x in res.group(0).split()]
+                if FloraDebug == "1":
+                    return [int(x, 16) for x in res.group(0).split()]
                 return result
 
         except subprocess.CalledProcessError as err:
@@ -123,7 +124,7 @@ security=sys.argv[5]
 
 if firmware == "2.6.6" or firmware == "2.7.0":
     write_ble(macAdd,handlewr,"A01F",adpater,security,3)
-resultFlora=read_ble(macAdd,handlerd,adpater,security)
+resultFlora=read_ble(macAdd,handlerd,adpater,security,FloraDebug)
 
 if FloraDebug == "1":
     print ("read_ble:",parse_data(resultFlora))
