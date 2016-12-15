@@ -1,32 +1,32 @@
 
 .Est-ce que ce plugin s'appuie sur des API tiers ?
 --
-Le plugin utilise le bluetooth pour recuperer les info du Mi Flora.
-il faut installer le bluetooth et s assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.
+Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
+Il faut installer le Bluetooth et s'assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.
 --
-.Est ce que ce plugin monopolise le bluetooth ?
+.Est ce que ce plugin monopolise le Bluetooth ?
 --
-Non pas du tout, il a besoin du bluetooth pour chaque relevé, cf question suivante pour plus de details sur le nombre de relevés par jour.
+Non pas du tout, il a besoin du Bluetooth pour chaque relevé, Cd. question suivante pour plus de détails sur le nombre de relevés par jour.
 --
 .Est ce que ce plugin est compatible avec le plugin FlowerPower ?
 --
 Oui, validé par Nechry.
 --
-.Combien de fois par jour les mesures sont elles recupérées ?
+.Combien de fois par jour les mesures sont-elles récupérées ?
 --
-C'est defini dans la configuration globale du plugin, pour tous les objets: depuis toutes les heures jusqu'a toutes les 12 heures.
-J'utilise le modulo de l'heure actuelle avec la fréquence saisie en parametre. +
-Les informations statiques (batterie, nom de l appareil, version du firmware) sont recuperées toutes les 12 heures: à minuit et midi)
+C'est défini dans la configuration globale du plugin, pour tous les objets : de toutes les heures à toutes les 12 heures.
+J'utilise le modulo de l'heure actuelle avec la fréquence saisie en paramètre. +
+Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi).
 --
-.Avec quelle version de firmware ce plugin est il compatible ?
+.Avec quelle version de firmware ce plugin est-il compatible ?
 --
 Il est compatible avec les versions 2.6.2, 2.6.6 et 2.7.0 depuis la version 1.0
 --
-.Je possède un Rpbi3, J'ai dû désactiver le BT interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le BT interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le rpbi3 ?
+.Je possède un Rpbi3, J'ai dû désactiver le Bluetooth interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le Bluetooth interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le rpbi3 ?
 --
-il faut prendre un dongle BLE sans faute. Le problème avec le RAZ c'est seulement si on utilise le contrôleur interne.
+Il faut prendre un dongle BLE sans faute. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
 --
-.Je souhaite contribuer à l'amelioration de ce plugin, est ce possible ?
+.Je souhaite contribuer à l'amélioration de ce plugin, est ce possible ?
 --
-Bien sur, le code est sur github: rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests
+Bien sur, le code est sur GitHub : rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests.
 --

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
     <id>MiFlora</id>
-    <name>Mi Flora</name>
-    <description>Plugin pour lire les info des MiFlora</description>
+    <name>MiFlora</name>
+    <description>Plugin pour lire les infos des MiFlora</description>
     <icon>icon nature-drops1</icon>
     <licence>AGPL</licence>
     <author>René Jullien</author>

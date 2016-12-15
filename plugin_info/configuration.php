@@ -52,7 +52,7 @@ if (!isConnect()) {
         </div>
 
         <div class="form-group"> <br>
-          <label class="col-lg-4 control-label">{{niveau de securité bluetooth (high)}}</label>
+          <label class="col-lg-4 control-label">{{niveau de sécurité Bluetooth (high)}}</label>
           <div class="col-lg-2">
               <select id="seclvl" class="configKey form-control"  data-l1key="seclvl" >
               <option value="low">{{low}}</option>
@@ -63,7 +63,7 @@ if (!isConnect()) {
         </div>
 
         <div class="form-group"> <br>
-          <label class="col-lg-4 control-label">{{adaptateur bluetooth (hci0)}}</label>
+          <label class="col-lg-4 control-label">{{adaptateur Bluetooth (hci0)}}</label>
           <div class="col-lg-2">
               <select id="adapter" class="configKey form-control"  data-l1key="adapter" >
               <option value="hci0">{{hci0}}</option>
@@ -78,7 +78,7 @@ if (!isConnect()) {
 
           <div class="form-group"> <br>
 
-              <label class="col-lg-4 control-label">{{Equipement local ou déporté ?}}</label>
+              <label class="col-lg-4 control-label">{{Équipement local ou déporté ?}}</label>
               <div class="col-lg-2">
                 <select id="maitreesclave" class="configKey form-control" data-l1key="maitreesclave"
                 onchange="if(this.selectedIndex == 1) document.getElementById('deporte').style.display = 'block';
@@ -109,7 +109,7 @@ if (!isConnect()) {
 
             <label class="col-lg-4 control-label">{{Password}}</label>
             <div class="col-lg-2">
-                <input class="configKey form-control"  data-l1key="password" type="password" placeholder="{{saisir le password}}" />
+                <input class="configKey form-control"  data-l1key="password" type="password" placeholder="{{saisir le mot de passe}}" />
             </div>
             </div>
             </div>
