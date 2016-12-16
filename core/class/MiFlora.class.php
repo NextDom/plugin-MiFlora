@@ -468,7 +468,7 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'error', 'Toutes les mesures a 0, erreur de connection Mi Flora');
         } else {
             if ($temperature > 100) {
-                log::add('MiFlora', 'error', 'Temperature >100 erreur de connection bluetooth');
+                log::add('MiFlora', 'error', 'Temperature >100 erreur de connection Bluetooth');
             } else {
                 $cmd = $this->getCmd(null, 'temperature');
                 if (is_object($cmd)) {
