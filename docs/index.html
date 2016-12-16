@@ -425,14 +425,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_description">1. Description</a>
 <ul class="sectlevel2">
-<li><a href="#_mi_flora">1.1. MiFlora</a></li>
+<li><a href="#_miflora">1.1. MiFlora</a></li>
 </ul>
 </li>
 <li><a href="#_configuration">2. Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_configuration_du_plugin">2.1. Configuration du plugin</a></li>
 <li><a href="#_utilisation_en_déporté">2.2. Utilisation en déporté</a></li>
-<li><a href="#_pre_requis">2.3. Pre-requis</a></li>
+<li><a href="#_pré_requis">2.3. Pré-requis</a></li>
 <li><a href="#_configuration_avancée">2.4. Configuration avancée</a></li>
 </ul>
 </li>
@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_description">1. Description</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_mi_flora">1.1. MiFlora</h3>
+<h3 id="_miflora">1.1. MiFlora</h3>
 <div class="paragraph">
 <p>Plugin permettant de récupérer les informations des Xiaomi Plants ou MiFlora.</p>
 </div>
@@ -463,23 +463,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_configuration_du_plugin">2.1. Configuration du plugin</h3>
 <div class="paragraph">
-<p>La partie configuration du plugin permet:</p>
+<p>La partie configuration du plugin permet :</p>
 </div>
 <div class="openblock">
 <div class="content">
 <div class="ulist">
 <ul>
 <li>
-<p>de choisir la frequence de relevés des informations du MiFlora, depuis toutes les heures jusqu&#8217;à toutes les 12 heures</p>
+<p>de choisir la fréquence de relevés des informations du MiFlora, de toutes les heures à toutes les 12 heures,</p>
 </li>
 <li>
-<p>de choisir le dongle/port Bluetooth (<strong>hci0</strong> en général, <strong>hciconfig</strong> permet de lister ceux disponible sur votre systeme)</p>
+<p>de choisir le dongle/port Bluetooth (<strong>hci0</strong> en général, <strong>hciconfig</strong> permet de lister ceux disponibles sur votre système),</p>
 </li>
 <li>
-<p>de choisir le niveau de sécurité de la communication Bluetooth (<strong>high</strong> sauf si ce n&#8217;est pas supporté par votre systeme)</p>
+<p>de choisir le niveau de sécurité de la communication Bluetooth (<strong>high</strong> sauf si ce n&#8217;est pas supporté par votre système),</p>
 </li>
 <li>
-<p>de choisir entre un mode local et un mode déporté</p>
+<p>de choisir entre un mode local et un mode déporté.</p>
 </li>
 </ul>
 </div>
@@ -489,7 +489,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Pour chaque équipement, il faut rentrer l&#8217;adresse Bluetooth de l&#8217;équipement.</p>
 </div>
 <div class="paragraph">
-<p>Il est possible de trouver celle ci en utilisant les commandes:</p>
+<p>Il est possible de trouver celle-ci en utilisant les commandes :</p>
 </div>
 <div class="paragraph">
 <p><strong>bluetoothctl</strong></p>
@@ -498,7 +498,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>scan on</strong></p>
 </div>
 <div class="paragraph">
-<p>Les adresses des MiFlora appaissent comme ci dessous:</p>
+<p>Les adresses des MiFlora apparaissent comme ci-dessous:</p>
 </div>
 <div class="paragraph">
 <p><strong>[NEW] Device C4:7C:8D:xx:xx:xx Flower mate</strong></p>
@@ -519,10 +519,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Il est possible que Jeedom pilote un appareil déporté qui se chargera de la communication Bluetooth avec les MiFlora.</p>
 </div>
 <div class="paragraph">
-<p>Dans ce cas, il faut renseigner les paramètres de connexion SSH entre Jeedom et cet appareil déporté:</p>
+<p>Dans ce cas, il faut renseigner les paramètres de connexion SSH entre Jeedom et cet appareil déporté :</p>
 </div>
 <div class="paragraph">
-<p>Le choix déporté active la partie configuration qui permet de saisir une ip, un port, un nom d&#8217;utlisateur ainsi que le mot de passe associé pour l&#8217;appareil distant.
+<p>Le choix déporté active la partie configuration qui permet de saisir une adresse IP, un port, un nom d&#8217;utilisateur ainsi que le mot de passe associé pour l&#8217;appareil distant.
 Le plugin va alors se connecter en SSH à l&#8217;IP saisie précédemment et récupérer les informations du MiFlora en Bluetooth grâce à la commande <strong>gatttools</strong></p>
 </div>
 <div class="paragraph">
@@ -530,18 +530,18 @@ Le plugin va alors se connecter en SSH à l&#8217;IP saisie précédemment et r�
 </div>
 </div>
 <div class="sect2">
-<h3 id="_pre_requis">2.3. Pre-requis</h3>
+<h3 id="_pré_requis">2.3. Pré-requis</h3>
 <div class="paragraph">
-<p>il faut installer le Bluetooth et s assurer que <strong>gatttool --device=hci0 -b <em>macAddMiFlora</em> --char-read -a 0x35 --sec-level=high</strong> fonctionne sur l&#8217;appareil cible (selon le choix local ou déporté)</p>
+<p>Il faut installer le Bluetooth et s&#8217;assurer que <strong>gatttool --device=hci0 -b <em>macAddMiFlora</em> --char-read -a 0x35 --sec-level=high</strong> fonctionne sur l&#8217;appareil cible (selon le choix local ou déporté).</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_configuration_avancée">2.4. Configuration avancée</h3>
 <div class="paragraph">
-<p><strong>hci:</strong> permet de choisir le dongle Bluetooth pour ceux qui en ont plusieurs.</p>
+<p><strong>hci :</strong> permet de choisir le dongle Bluetooth pour ceux qui en ont plusieurs.</p>
 </div>
 <div class="paragraph">
-<p><strong>niveau de sécurité:</strong> permet de choisir le niveau de sécurité Bluetooth, <strong>high</strong> semble bien dans la majorité des cas, cependant changer le niveau de sécurité semble résoudre certains problèmes de connexions</p>
+<p><strong>niveau de sécurité :</strong> permet de choisir le niveau de sécurité Bluetooth, <strong>high</strong> semble bien dans la majorité des cas, cependant changer le niveau de sécurité semble résoudre certains problèmes de connexions.</p>
 </div>
 <hr>
 </div>
@@ -554,8 +554,8 @@ Le plugin va alors se connecter en SSH à l&#8217;IP saisie précédemment et r�
 <div class="title">Est-ce que ce plugin s&#8217;appuie sur des API tiers ?</div>
 <div class="content">
 <div class="paragraph">
-<p>Le plugin utilise le Bluetooth pour recuperer les info du MiFlora.
-il faut installer le Bluetooth et s assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.</p>
+<p>Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
+Il faut installer le Bluetooth et s&#8217;assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.</p>
 </div>
 </div>
 </div>
@@ -563,7 +563,7 @@ il faut installer le Bluetooth et s assurer que gatttool -b macAddMiFlora --char
 <div class="title">Est ce que ce plugin monopolise le Bluetooth ?</div>
 <div class="content">
 <div class="paragraph">
-<p>Non pas du tout, il a besoin du Bluetooth pour chaque relevé, cf question suivante pour plus de details sur le nombre de relevés par jour.</p>
+<p>Non pas du tout, il a besoin du Bluetooth pour chaque relevé, Cd. question suivante pour plus de détails sur le nombre de relevés par jour.</p>
 </div>
 </div>
 </div>
@@ -576,17 +576,17 @@ il faut installer le Bluetooth et s assurer que gatttool -b macAddMiFlora --char
 </div>
 </div>
 <div class="openblock">
-<div class="title">Combien de fois par jour les mesures sont elles recupérées ?</div>
+<div class="title">Combien de fois par jour les mesures sont-elles récupérées ?</div>
 <div class="content">
 <div class="paragraph">
-<p>C&#8217;est defini dans la configuration globale du plugin, pour tous les objets: depuis toutes les heures jusqu&#8217;a toutes les 12 heures.
-J&#8217;utilise le modulo de l&#8217;heure actuelle avec la fréquence saisie en parametre.<br>
-Les informations statiques (batterie, nom de l appareil, version du firmware) sont recuperées toutes les 12 heures: à minuit et midi)</p>
+<p>C&#8217;est défini dans la configuration globale du plugin, pour tous les objets : de toutes les heures à toutes les 12 heures.
+J&#8217;utilise le modulo de l&#8217;heure actuelle avec la fréquence saisie en paramètre.<br>
+Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi).</p>
 </div>
 </div>
 </div>
 <div class="openblock">
-<div class="title">Avec quelle version de firmware ce plugin est il compatible ?</div>
+<div class="title">Avec quelle version de firmware ce plugin est-il compatible ?</div>
 <div class="content">
 <div class="paragraph">
 <p>Il est compatible avec les versions 2.6.2, 2.6.6 et 2.7.0 depuis la version 1.0</p>
@@ -594,18 +594,18 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </div>
 </div>
 <div class="openblock">
-<div class="title">Je possède un Rpbi3, J&#8217;ai dû désactiver le BT interne pour ne pas avoir d&#8217;interférence avec le Zwave (razberry). Est-ce qu&#8217;il faut toujours garder le BT interne désactivé pour résoudre ce souci ? Sinon est-ce que n&#8217;importe quelle clef USB BT fait l&#8217;affaire pour être compatible avec les MiFlora et le rpbi3 ?</div>
+<div class="title">Je possède un Rpbi3, J&#8217;ai dû désactiver le Bluetooth interne pour ne pas avoir d&#8217;interférence avec le Zwave (razberry). Est-ce qu&#8217;il faut toujours garder le Bluetooth interne désactivé pour résoudre ce souci ? Sinon est-ce que n&#8217;importe quelle clef USB BT fait l&#8217;affaire pour être compatible avec les MiFlora et le rpbi3 ?</div>
 <div class="content">
 <div class="paragraph">
-<p>il faut prendre un dongle BLE sans faute. Le problème avec le RAZ c&#8217;est seulement si on utilise le contrôleur interne.</p>
+<p>Il faut prendre un dongle BLE sans faute. Le problème avec le razberry c&#8217;est seulement si on utilise le contrôleur interne.</p>
 </div>
 </div>
 </div>
 <div class="openblock">
-<div class="title">Je souhaite contribuer à l&#8217;amelioration de ce plugin, est ce possible ?</div>
+<div class="title">Je souhaite contribuer à l&#8217;amélioration de ce plugin, est ce possible ?</div>
 <div class="content">
 <div class="paragraph">
-<p>Bien sur, le code est sur github: rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests</p>
+<p>Bien sur, le code est sur GitHub : rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests.</p>
 </div>
 </div>
 </div>
@@ -623,12 +623,12 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <div class="ulist">
 <ul>
 <li>
-<p>Version intiales du plugin.</p>
+<p>Version initiale du plugin.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Version 0.8: 9 Décembre 2016</p>
+<p>Version 0.8 : 9 décembre 2016</p>
 </div>
 </div>
 </div>
@@ -638,27 +638,27 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <p>Affichage des items de Configuration en champ lecture seul.</p>
 </li>
 <li>
-<p>Widget desktop et mobile dedié.</p>
+<p>Widget desktop et mobile dédié.</p>
 </li>
 <li>
-<p>ajout de la date de derniere collecte</p>
+<p>ajout de la date de dernière collecte</p>
 </li>
 <li>
-<p>forcer la recuperation du firmware s&#8217;il est vide</p>
+<p>forcer la récupération du firmware s&#8217;il est vide</p>
 </li>
 <li>
-<p>Le mode debug provoque une collection de donneés toutes les minutes, attention à ne pas le laisser en permanence surtout si vous etes sur une carte SD</p>
+<p>Le mode debug provoque une collection de données toutes les minutes, attention à ne pas le laisser en permanence surtout si vous êtes sur une carte SD</p>
 </li>
 <li>
-<p>definir les nouveaux équipements en visible et activés par défaut</p>
+<p>Définir les nouveaux équipements en visible et activés par défaut</p>
 </li>
 <li>
-<p>Ajout de l unité pour 'fertility', ce champ mesure en fait la conductivité ce qui permet de deduire la fertilité du sol</p>
+<p>Ajout de l&#8217;unité pour 'fertility', ce champ mesure en fait la conductivité ce qui permet de déduire la fertilité du sol</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Version 1.0: 10 Décembre 2016</p>
+<p>Version 1.0 : 10 décembre 2016</p>
 </div>
 <div class="openblock">
 <div class="content">
@@ -668,10 +668,10 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <p>Support du firmware 2.6.6 et 2.7.0 en mode local et déporté</p>
 </li>
 <li>
-<p>Choix du no de hci dans la config, tres utile si le hci0 est affecté à un plugin exclusif ou s&#8217;il ne gere pas le Bluetooth BLE</p>
+<p>Choix du no de hci dans la config, très utile si le hci0 est affecté à un plugin exclusif ou s&#8217;il ne gère pas le Bluetooth BLE</p>
 </li>
 <li>
-<p>Choix du niveau de sécurité Bluetooth afin de résoudre les problèmes de certains dongles qui ne gerent pas le niveau high</p>
+<p>Choix du niveau de sécurité Bluetooth afin de résoudre les problèmes de certains dongles qui ne gèrent pas le niveau high</p>
 </li>
 <li>
 <p>le hci et niveau de sécurité n&#8217;est pas pris en compte pour le firmaware 2.6.6 et 2.7.0. (modif du script python pas encore testées)</p>
@@ -679,7 +679,7 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </ul>
 </div>
 <div class="paragraph">
-<p>Version 1.0.1: 11 Décembre 2016</p>
+<p>Version 1.0.1: 11 décembre 2016</p>
 </div>
 </div>
 </div>
@@ -691,54 +691,54 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </ul>
 </div>
 <div class="paragraph">
-<p>Version 1.1: 11 Décembre 2016</p>
+<p>Version 1.1: 11 décembre 2016</p>
 </div>
 <div class="openblock">
 <div class="content">
 <div class="ulist">
 <ul>
 <li>
-<p>utilisation du parametre hci et sec-level pour le firmware 2.6.6 et 2.7.0. (modif du script python)</p>
+<p>Utilisation du paramètre hci et sec-level pour le firmware 2.6.6 et 2.7.0. (modif du script python)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Versions suivantes:</p>
+<p>Versions suivantes :</p>
 </div>
 </div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>ajouter le test des config: hci et sec-level doivent etre rempli</p>
+<p>Ajouter le test des config : hci et sec-level doivent etre rempli</p>
 </li>
 <li>
-<p>test de la version du firmware et log d&#8217;une erreur si elle n&#8217;est pas supporté</p>
+<p>Test de la version du firmware et log d&#8217;une erreur si elle n&#8217;est pas supportée</p>
 </li>
 <li>
-<p>changer l&#8217;icone pour etre plus homogene avec Jeedom</p>
+<p>Changer l&#8217;icône pour être plus homogène avec Jeedom</p>
 </li>
 <li>
-<p>Choix du log erreur ou info en cas de probleme de connection au bout de 4 essais</p>
+<p>Choix du log erreur ou info en cas de problème de connexion au bout de 4 essais</p>
 </li>
 <li>
-<p>tester que la macadd est &lt;&gt; entre les Équipements (erreur de copie colle)</p>
+<p>Tester que la macadd est &lt;&gt; entre les Équipements (erreur de copie colle)</p>
 </li>
 <li>
-<p>tester l etat du Bluetooth et le redemmarer si pb (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l erreur connect error: Connection refused (111)</p>
+<p>Tester l&#8217;état du Bluetooth et le redémarrer en cas de problème (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l&#8217;erreur connect error: Connection refused (111)</p>
 </li>
 <li>
-<p>Provoquer une recuperation des donnees tout de suite après l&#8217;ajout du materiel ? ou une commande pour forcer l&#8217;update</p>
+<p>Provoquer une récupération des données tout de suite après l&#8217;ajout du matériel ? ou une commande pour forcer l&#8217;update</p>
 </li>
 <li>
-<p>Bouton pour detecter un nouveau MiFlora (éviter de trouver l addresse à la main)</p>
+<p>Bouton pour détecter un nouveau MiFlora (éviter de trouver l&#8217;adresse à la main)</p>
 </li>
 </ul>
 </div>
 <div class="openblock">
 <div class="content">
 <div class="paragraph">
-<p>Cette liste de questions provient essentiellement de vos questions sur le forum jeedom topic MiFlora</p>
+<p>Cette liste de questions provient essentiellement de vos questions sur le fil de discussion MiFlora du forum.</p>
 </div>
 </div>
 </div>
