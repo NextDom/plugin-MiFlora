@@ -287,7 +287,8 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', 'pass:' . $pass);
 
             if ($FirmwareVersion=="2.6.2"){
-              $commande="gatttool --adapter=".$adapter." -b " . $macAdd . " --char-read -a 0x35 --sec-level=".$seclvl;
+            #  $commande="gatttool --adapter=".$adapter." -b " . $macAdd . " --char-read -a 0x35 --sec-level=".$seclvl;
+              $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             } else {
               $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             }
@@ -317,7 +318,8 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', 'local call');
             #  $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x35 --sec-level=high  2>&1 ';
             if ($FirmwareVersion=="2.6.2"){
-              $command = "gatttool --adapter=".$adapter." -b " . $macAdd . '  --char-read -a 0x35 --sec-level='.$seclvl.' 2>&1 ';
+              # $command = "gatttool --adapter=".$adapter." -b " . $macAdd . '  --char-read -a 0x35 --sec-level='.$seclvl.' 2>&1 ';
+              $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             } else {
               $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             }
