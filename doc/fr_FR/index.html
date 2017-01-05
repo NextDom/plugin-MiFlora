@@ -609,6 +609,32 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </div>
 </div>
 </div>
+<div class="openblock">
+<div class="title">gatttool est instable et se bloque sur RPI</div>
+<div class="content">
+<div class="paragraph">
+<p>Il y a beaucoup de configuration qui peuvent génèrer ce problème. Avec Pixel il faut faire attention d&#8217;avoir un seul gestionaire de bluetooth.
+BlueZ est incompatible avec blueman (sudo apt-get remove blueman)</p>
+</div>
+</div>
+</div>
+<div class="openblock">
+<div class="title">Le plugin fonctionne bien: que puis je faire avec ?</div>
+<div class="content">
+<div class="paragraph">
+<p>Les valeurs d&#8217;humidité, de fertilité, de luminosité et de temperatures sont accesible depuis des scenarios.</p>
+</div>
+<div class="paragraph">
+<p>Il est possible de lire ces valeurs, de les comparer à un seuil et d&#8217;alerter en cas de dépassement du seuil, par exemple pour arroser une plante.</p>
+</div>
+<div class="paragraph">
+<p>Les alertes peuvent etre données par du 'text to speech' (plugin playTTS par exemple), par notification sur smartphone (plugin pushbullet), par SMS &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>Les seuils peuvent etre trouvés en utilisant la base de plantes de Xiaomi ou celle de Parrot à defaut un seuil entre 14 et 16 semble convenir à une majorité de plantes d&#8217;interieur.</p>
+</div>
+</div>
+</div>
 <hr>
 </div>
 </div>
@@ -703,10 +729,28 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </ul>
 </div>
 <div class="paragraph">
+<p>Version 1.2: 5 janvier 2017</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>multiple corrections orthographiques</p>
+</li>
+<li>
+<p>migration de la recuperation des données vers le script python</p>
+</li>
+<li>
+<p>amélioration de la FAQ</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
 <p>Versions suivantes :</p>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="ulist">
 <ul>
 <li>
@@ -735,15 +779,17 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 </li>
 </ul>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="paragraph">
 <p>Cette liste de questions provient essentiellement de vos questions sur le fil de discussion MiFlora du forum.</p>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
 <p>&#8230;&#8203;</p>
+</div>
+</div>
 </div>
 </div>
 </div>

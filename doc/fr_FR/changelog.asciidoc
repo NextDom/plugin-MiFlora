@@ -28,6 +28,12 @@ Version 1.1: 11 décembre 2016
 --
 * Utilisation du paramètre hci et sec-level pour le firmware 2.6.6 et 2.7.0. (modif du script python)
 
+Version 1.2: 5 janvier 2017
+--
+* multiple corrections orthographiques
+* migration de la recuperation des données vers le script python
+* amélioration de la FAQ
+
 Versions suivantes :
 --
 * Ajouter le test des config : hci et sec-level doivent etre rempli

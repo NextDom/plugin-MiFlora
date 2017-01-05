@@ -30,3 +30,18 @@ Il faut prendre un dongle BLE sans faute. Le problème avec le razberry c'est se
 --
 Bien sur, le code est sur GitHub : rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests.
 --
+.gatttool est instable et se bloque sur RPI
+--
+Il y a beaucoup de configuration qui peuvent génèrer ce problème. Avec Pixel il faut faire attention d'avoir un seul gestionaire de bluetooth.
+BlueZ est incompatible avec blueman (sudo apt-get remove blueman)
+--
+.Le plugin fonctionne bien: que puis je faire avec ?
+--
+Les valeurs d'humidité, de fertilité, de luminosité et de temperatures sont accesible depuis des scenarios.
+
+Il est possible de lire ces valeurs, de les comparer à un seuil et d'alerter en cas de dépassement du seuil, par exemple pour arroser une plante.
+
+Les alertes peuvent etre données par du 'text to speech' (plugin playTTS par exemple), par notification sur smartphone (plugin pushbullet), par SMS ...
+
+Les seuils peuvent etre trouvés en utilisant la base de plantes de Xiaomi ou celle de Parrot à defaut un seuil entre 14 et 16 semble convenir à une majorité de plantes d'interieur.
+--
