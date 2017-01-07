@@ -34,6 +34,10 @@ Version 1.2: 5 janvier 2017
 * migration de la recuperation des données vers le script python
 * amélioration de la FAQ
 
+Version 1.2.1: 7 janvier 2017
+--
+* fix des températures négatives (pull request de frederic34)
+
 Versions suivantes :
 --
 * Ajouter le test des config : hci et sec-level doivent etre rempli
