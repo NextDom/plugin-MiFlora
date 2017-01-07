@@ -452,7 +452,11 @@ class MiFlora extends eqLogic
         $MiFloraData = explode(": ", $MiFloraData);
         // log::add('MiFlora', 'debug', 'MiFloraDataExplode:'.$MiFloraData[1]);
         $MiFloraData = explode(" ", $MiFloraData[1]);
-        $temperature = hexdec($MiFloraData[1] . $MiFloraData[0]) / 10;
+        if (hexdec($MiFloraData[1])>128) {
+            $temperature = -((65536-hexdec($MiFloraData[1] . $MiFloraData[0])) / 10);
+        } else {
+            $temperature = hexdec($MiFloraData[1] . $MiFloraData[0]) / 10;
+        }
         $moisture = hexdec($MiFloraData[7]);
         $fertility = hexdec($MiFloraData[8]);
         $lux = hexdec($MiFloraData[4] . $MiFloraData[3]);
