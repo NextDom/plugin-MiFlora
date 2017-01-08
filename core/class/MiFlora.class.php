@@ -471,10 +471,10 @@ class MiFlora extends eqLogic
 
         // store into Jeedom DB
         if ($temperature == 0 && $moisture == 0 && $fertility == 0 && $lux == 0) {
-            log::add('MiFlora', 'error', 'Toutes les mesures a 0, erreur de connection Mi Flora');
+            log::add('MiFlora', 'error', 'Toutes les mesures a 0 pour '.$macAdd.', erreur de connection Mi Flora');
         } else {
             if ($temperature > 100) {
-                log::add('MiFlora', 'error', 'Temperature >100 erreur de connection Bluetooth');
+                log::add('MiFlora', 'error', 'Temperature >100 pour '.$macAdd.', erreur de connection Bluetooth');
             } else {
                 $cmd = $this->getCmd(null, 'temperature');
                 if (is_object($cmd)) {
@@ -508,7 +508,7 @@ class MiFlora extends eqLogic
         // store into Jeedom DB
         if ($battery == 0) {
             // pas de retry pour ce type d info, on peut perdre une ou deux mesures
-            log::add('MiFlora', 'info', 'Battery=0,  erreur probable de connection Mi Flora');
+            log::add('MiFlora', 'info', 'Battery=0, pour '.$macAdd.' ,erreur probable de connection Mi Flora');
         } else {
             $this->batteryStatus($battery);
             if ($battery != $this->getConfiguration('batteryStatus')) {
@@ -523,7 +523,7 @@ class MiFlora extends eqLogic
             }
         }
         if ($MiFloraName == '') {
-            log::add('MiFlora', 'info', 'MiFloraName vide,  erreur probable de connection Mi Flora');
+            log::add('MiFlora', 'info', 'MiFloraName vide pour '.$macAdd.', erreur probable de connection Mi Flora');
         } else {
             if ($MiFloraName != $this->getConfiguration('plant_name')) {
                 log::add('MiFlora', 'info', $macAdd . ' Store MiFloraName:' . $MiFloraName);
