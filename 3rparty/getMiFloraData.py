@@ -122,7 +122,7 @@ FloraDebug=sys.argv[3]
 adpater=sys.argv[4]
 security=sys.argv[5]
 
-if firmware == "2.6.6" or firmware == "2.7.0":
+if firmware == "2.6.6" or firmware == "2.7.0" or firmware == "2.8.6":
     write_ble(macAdd,handlewr,"A01F",adpater,security,3)
 resultFlora=read_ble(macAdd,handlerd,adpater,security,FloraDebug)
 
