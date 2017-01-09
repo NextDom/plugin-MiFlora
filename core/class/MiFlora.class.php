@@ -57,7 +57,7 @@ class MiFlora extends eqLogic
                 $macAdd = $mi_flora->getConfiguration('macAdd');
                 log::add('MiFlora', 'debug', 'mi flora mac add:' . $macAdd);
                 $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
-                // recupere le niveau de la batterie deux  fois par jour a x h
+                // recupere le niveau de la batterie deux  fois par jour a 12 h
                 // log::add('MiFlora', 'debug', 'date:'.date("h"));
                 if (date("h") == 12 || $FirmwareVersion == '') {
                     $MiFloraBatteryAndFirmwareVersion = '';
@@ -71,31 +71,33 @@ class MiFlora extends eqLogic
                 }
                 $tryGetData = 0;
                 $MiFloraData = '';
-                while ($MiFloraData == '') {
+                $loopcondition=true;
+                while ($loopcondition) {
                     if ($tryGetData > 3) { // stop after 4 try
                         break;
                     }
                     if ($tryGetData > 0) {
-                        log::add('MiFlora', 'debug', 'mi flora data is empty, trying again, nb retry:' . $tryGetData);
+                        log::add('MiFlora', 'info', 'mi flora data for '.$macAdd.' is empty or null, trying again, nb retry:' . $tryGetData);
                     }
 
                     log::add('MiFlora', 'debug', 'mi flora FirmwareVersion:' . $FirmwareVersion);
 
                     $mi_flora->getMesure($macAdd, $MiFloraData,$FirmwareVersion,$adapter,$seclvl);
-                    log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
+                    log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
                     $tryGetData++;
-                    if ($MiFloraData == '') {
+                    $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
+                    // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
+                    if ($MiFloraData == '' or ($temperature==0 and $moisture == 0 and $fertility ==0 and $lux==0)) {
                         // wait 5 s hopping it'll be better ...
+                        log::add('MiFlora','debug','wait 5 s hopping it ll be better ...');
                         sleep(5);
+                    } else {
+                      $loopcondition=false;
                     }
                 }
                 if ($MiFloraData == '') {
                     log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop');
                 } else {
-                    $temperature = -1;
-                    $moisture = -1;
-                    $fertility = -1;
-                    $lux = -1;
                     $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
                     $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
                     $mi_flora->refreshWidget();
