@@ -85,6 +85,10 @@ class MiFlora extends eqLogic
                     $mi_flora->getMesure($macAdd, $MiFloraData,$FirmwareVersion,$adapter,$seclvl);
                     log::add('MiFlora', 'debug', 'mi flora data:'.$MiFloraData.':');
                     $tryGetData++;
+                    // TODO
+                    // traiter ces reponses en erreur
+                    // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
+                    // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
                     $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
                     // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
                     if ($MiFloraData == '' or ($temperature==0 and $moisture == 0 and $fertility ==0 and $lux==0)) {
@@ -459,6 +463,16 @@ class MiFlora extends eqLogic
         } else {
             $temperature = hexdec($MiFloraData[1] . $MiFloraData[0]) / 10;
         }
+        // traite cette erreur:
+        // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
+        if ($temperature==-1749.4){
+          log::add('MiFlora', 'info', $macAdd . 'Temperature:' . $temperature .' Lu: aa bb cc dd ... Mise de toutes les valeurs a 0 pour forcer un retry');
+          $temperature=0;
+          $moisture=0;
+          $fertility=0;
+          $lux=0;
+        }
+        else {
         $moisture = hexdec($MiFloraData[7]);
         $fertility = hexdec($MiFloraData[8]);
         $lux = hexdec($MiFloraData[4] . $MiFloraData[3]);
@@ -466,6 +480,7 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
         log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
         log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
+        }
     }
 
     public function updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux)
@@ -476,7 +491,7 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'error', 'Toutes les mesures a 0 pour '.$macAdd.', erreur de connection Mi Flora');
         } else {
             if ($temperature > 100 || $temperature < -50) {
-                log::add('MiFlora', 'error', 'Temperature hors plage pour '.$macAdd.', erreur de connection Bluetooth');
+                log::add('MiFlora', 'error', 'Temperature hors plage ('.$temperature .') pour '.$macAdd.', erreur de connection Bluetooth');
             } else {
                 $cmd = $this->getCmd(null, 'temperature');
                 if (is_object($cmd)) {

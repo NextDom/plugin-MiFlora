@@ -12,3 +12,5 @@ resources/install.py
 resources/install.sh
 
 .remote-sync.json
+
+resources/install.txt
