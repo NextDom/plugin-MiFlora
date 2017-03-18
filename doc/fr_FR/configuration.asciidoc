@@ -43,3 +43,6 @@ Il faut installer le Bluetooth et s'assurer que *gatttool --device=hci0 -b _macA
 *hci :* permet de choisir le dongle Bluetooth pour ceux qui en ont plusieurs.
 
 *niveau de sécurité :* permet de choisir le niveau de sécurité Bluetooth, *high* semble bien dans la majorité des cas, cependant changer le niveau de sécurité semble résoudre certains problèmes de connexions.
+
+=== Mode debug
+* Le mode debug permet de lancer en permanence le recuperation des données MiFlora. Il convient de limiter son utilisation au debug.

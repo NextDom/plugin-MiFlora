@@ -434,6 +434,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_utilisation_en_déporté">2.2. Utilisation en déporté</a></li>
 <li><a href="#_pré_requis">2.3. Pré-requis</a></li>
 <li><a href="#_configuration_avancée">2.4. Configuration avancée</a></li>
+<li><a href="#_mode_debug">2.5. Mode debug</a></li>
 </ul>
 </li>
 <li><a href="#_faq">3. FAQ</a></li>
@@ -543,6 +544,16 @@ Le plugin va alors se connecter en SSH à l&#8217;IP saisie précédemment et r�
 <div class="paragraph">
 <p><strong>niveau de sécurité :</strong> permet de choisir le niveau de sécurité Bluetooth, <strong>high</strong> semble bien dans la majorité des cas, cependant changer le niveau de sécurité semble résoudre certains problèmes de connexions.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_mode_debug">2.5. Mode debug</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Le mode debug permet de lancer en permanence le recuperation des données MiFlora. Il convient de limiter son utilisation au debug.</p>
+</li>
+</ul>
+</div>
 <hr>
 </div>
 </div>
@@ -560,18 +571,18 @@ Il faut installer le Bluetooth et s&#8217;assurer que gatttool -b macAddMiFlora 
 </div>
 </div>
 <div class="openblock">
-<div class="title">Est ce que ce plugin monopolise le Bluetooth ?</div>
-<div class="content">
-<div class="paragraph">
-<p>Non pas du tout, il a besoin du Bluetooth pour chaque relevé, Cd. question suivante pour plus de détails sur le nombre de relevés par jour.</p>
-</div>
-</div>
-</div>
-<div class="openblock">
 <div class="title">Est ce que ce plugin est compatible avec le plugin FlowerPower ?</div>
 <div class="content">
 <div class="paragraph">
 <p>Oui, validé par Nechry.</p>
+</div>
+</div>
+</div>
+<div class="openblock">
+<div class="title">Est ce que ce plugin monopolise le Bluetooth ?</div>
+<div class="content">
+<div class="paragraph">
+<p>Non pas du tout, il a besoin du Bluetooth pour chaque relevé, cf question suivante pour plus de détails sur le nombre de relevés par jour.</p>
 </div>
 </div>
 </div>
@@ -581,7 +592,10 @@ Il faut installer le Bluetooth et s&#8217;assurer que gatttool -b macAddMiFlora 
 <div class="paragraph">
 <p>C&#8217;est défini dans la configuration globale du plugin, pour tous les objets : de toutes les heures à toutes les 12 heures.
 J&#8217;utilise le modulo de l&#8217;heure actuelle avec la fréquence saisie en paramètre.<br>
-Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi).</p>
+Attention: en mode debug, les données sont recuperés en permanence independament de la configuration.</p>
+</div>
+<div class="paragraph">
+<p>Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi.</p>
 </div>
 </div>
 </div>
@@ -589,7 +603,7 @@ Les informations statiques (batterie, nom de l appareil, version du firmware) so
 <div class="title">Avec quelle version de firmware ce plugin est-il compatible ?</div>
 <div class="content">
 <div class="paragraph">
-<p>Il est compatible avec les versions 2.6.2, 2.6.6 et 2.7.0 depuis la version 1.0</p>
+<p>Il est compatible avec toutes les versions connues à ce jour (2.9.2) depuis la version 1.0 du plugin.</p>
 </div>
 </div>
 </div>
@@ -642,22 +656,124 @@ BlueZ est incompatible avec blueman (sudo apt-get remove blueman)</p>
 <h2 id="_change_log">4. Change log</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Versions 0.1 &#8230;&#8203; 0.7: 24 Novembre 2016 - 2 Décembre 2016</p>
+<p>Version 1.2.4: 18 Mars 2017</p>
 </div>
 <div class="openblock">
 <div class="content">
 <div class="ulist">
 <ul>
 <li>
-<p>Version initiale du plugin.</p>
+<p>Inversions du change log pour plus de lisibilite</p>
+</li>
+<li>
+<p>Gestion du firmware 2.9.2 - inversion du test seul 2.6.2 est geré avec l&#8217;ancienne methode</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 1.2.3: 16 Janvier en Beta</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Amelioration de la gestion des erreurs de lecture</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 1.2.2:</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>Fix bug script python</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 1.2.1: 7 janvier 2017</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>fix des températures négatives (pull request de frederic34)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 1.2: 5 janvier 2017</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>multiple corrections orthographiques</p>
+</li>
+<li>
+<p>migration de la recuperation des données vers le script python</p>
+</li>
+<li>
+<p>amélioration de la FAQ</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 1.1: 11 décembre 2016</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Utilisation du paramètre hci et sec-level pour le firmware 2.6.6 et 2.7.0. (modif du script python)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 1.0.1: 11 décembre 2016</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>Fix bug pour les nouveaux firmware en mode local</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Version 1.0 : 10 décembre 2016</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Support du firmware 2.6.6 et 2.7.0 en mode local et déporté</p>
+</li>
+<li>
+<p>Choix du no de hci dans la config, très utile si le hci0 est affecté à un plugin exclusif ou s&#8217;il ne gère pas le Bluetooth BLE</p>
+</li>
+<li>
+<p>Choix du niveau de sécurité Bluetooth afin de résoudre les problèmes de certains dongles qui ne gèrent pas le niveau high</p>
+</li>
+<li>
+<p>le hci et niveau de sécurité n&#8217;est pas pris en compte pour le firmaware 2.6.6 et 2.7.0. (modif du script python pas encore testées)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
 <p>Version 0.8 : 9 décembre 2016</p>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="ulist">
 <ul>
 <li>
@@ -684,92 +800,26 @@ BlueZ est incompatible avec blueman (sudo apt-get remove blueman)</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Version 1.0 : 10 décembre 2016</p>
+<p>Versions 0.1 &#8230;&#8203; 0.7: 24 Novembre 2016 - 2 Décembre 2016</p>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Version initiale du plugin.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Idées pour les versions suivantes :</p>
 </div>
 <div class="openblock">
 <div class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>Support du firmware 2.6.6 et 2.7.0 en mode local et déporté</p>
-</li>
-<li>
-<p>Choix du no de hci dans la config, très utile si le hci0 est affecté à un plugin exclusif ou s&#8217;il ne gère pas le Bluetooth BLE</p>
-</li>
-<li>
-<p>Choix du niveau de sécurité Bluetooth afin de résoudre les problèmes de certains dongles qui ne gèrent pas le niveau high</p>
-</li>
-<li>
-<p>le hci et niveau de sécurité n&#8217;est pas pris en compte pour le firmaware 2.6.6 et 2.7.0. (modif du script python pas encore testées)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Version 1.0.1: 11 décembre 2016</p>
-</div>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Fix bug pour les nouveaux firmware en mode local</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Version 1.1: 11 décembre 2016</p>
-</div>
-<div class="openblock">
-<div class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>Utilisation du paramètre hci et sec-level pour le firmware 2.6.6 et 2.7.0. (modif du script python)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Version 1.2: 5 janvier 2017</p>
-</div>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>multiple corrections orthographiques</p>
-</li>
-<li>
-<p>migration de la recuperation des données vers le script python</p>
-</li>
-<li>
-<p>amélioration de la FAQ</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Version 1.2.1: 7 janvier 2017</p>
-</div>
-<div class="openblock">
-<div class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>fix des températures négatives (pull request de frederic34)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Versions suivantes :</p>
-</div>
-</div>
-</div>
 <div class="ulist">
 <ul>
 <li>
 <p>Ajouter le test des config : hci et sec-level doivent etre rempli</p>
-</li>
-<li>
-<p>Test de la version du firmware et log d&#8217;une erreur si elle n&#8217;est pas supportée</p>
 </li>
 <li>
 <p>Changer l&#8217;icône pour être plus homogène avec Jeedom</p>
@@ -791,22 +841,24 @@ BlueZ est incompatible avec blueman (sudo apt-get remove blueman)</p>
 </li>
 </ul>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="paragraph">
 <p>Cette liste de questions provient essentiellement de vos questions sur le fil de discussion MiFlora du forum.</p>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
 <p>&#8230;&#8203;</p>
 </div>
 </div>
 </div>
 </div>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-09 08:35:26 CET
+Last updated 2017-03-18 21:51:45 CET
 </div>
 </div>
 </body>
