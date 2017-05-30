@@ -1,3 +1,8 @@
+Version 1.2.5: 31 Mai 2017
+--
+* Fix d'un bug sur la fertilité (recuperation des 2 bytes au lieu d'un seul)
+* Changement de l'icone pour respecter la charte Jeedom
+
 Version 1.2.4: 18 Mars 2017
 --
 * Inversions du change log pour plus de lisibilite
@@ -53,7 +58,6 @@ Versions 0.1 ... 0.7: 24 Novembre 2016 - 2 Décembre 2016
 Idées pour les versions suivantes :
 --
 * Ajouter le test des config : hci et sec-level doivent etre rempli
-* Changer l'icône pour être plus homogène avec Jeedom
 * Choix du log erreur ou info en cas de problème de connexion au bout de 4 essais
 * Tester que la macadd est <> entre les Équipements (erreur de copie colle)
 * Tester l'état du Bluetooth et le redémarrer en cas de problème (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l'erreur connect error: Connection refused (111)
