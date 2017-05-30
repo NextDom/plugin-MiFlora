@@ -3,7 +3,6 @@
     <id>MiFlora</id>
     <name>MiFlora</name>
     <description>Plugin pour lire les infos des MiFlora</description>
-    <icon>icon nature-drops1</icon>
     <licence>AGPL</licence>
     <author>René Jullien</author>
     <installation></installation>
