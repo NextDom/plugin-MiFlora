@@ -473,13 +473,13 @@ class MiFlora extends eqLogic
           $lux=0;
         }
         else {
-        $moisture = hexdec($MiFloraData[7]);
-        $fertility = hexdec($MiFloraData[8]);
-        $lux = hexdec($MiFloraData[4] . $MiFloraData[3]);
-        log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
-        log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
-        log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
-        log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
+          $moisture = hexdec($MiFloraData[7]);
+          $fertility = hexdec($MiFloraData[9] . $MiFloraData[8]);
+          $lux = hexdec($MiFloraData[4] . $MiFloraData[3]);
+          log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
+          log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
+          log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
+          log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
         }
     }
 
