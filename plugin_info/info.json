@@ -5,6 +5,7 @@
 	"licence" : "AGPL",
 	"author" : "Rene",
 	"require" : "2.4",
-  "version" : "1.2.5",
-  "category" : "nature"
-}
+  "version" : "2.0.0",
+  "category" : "nature",
+	"changelog" : "https://jeedom.github.io/plugin-MiFlora/FR/changelog",
+	"documentation" : "https://jeedom.github.io/plugin-MiFlora/FR"
