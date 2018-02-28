@@ -1,4 +1,8 @@
 # Changelog
+### Version 2.0.0
+
+* Migration de la doc au format markup et integration dans le template Jeedom-Plugins-Extra
+
 ### Version 1.2.5: 31 Mai 2017
 
 * Fix d'un bug sur la fertilité (recuperation des 2 bytes au lieu d'un seul)
