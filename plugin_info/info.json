@@ -7,6 +7,6 @@
 	"require" : "2.4",
   "version" : "2.0.0",
   "category" : "nature",
-	"changelog" : "https://jeedom.github.io/plugin-MiFlora/FR/changelog",
-	"documentation" : "https://jeedom.github.io/plugin-MiFlora/FR"
+	"changelog" : "https://rjullien.github.io/plugin-MiFlora/#_change_log",
+	"documentation" : "https://rjullien.github.io/plugin-MiFlora"
 }
