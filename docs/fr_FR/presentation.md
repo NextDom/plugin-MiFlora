@@ -12,3 +12,7 @@ Retrouvez le sur le Market Jeedom [ici](https://www.jeedom.com/market/index.php?
 # Prévisualisation
 
 ![scrennshot1](../images/MiFlora-Screenshot1.png)
+
+# Forum
+
+Lien vers le forum [ici](https://www.jeedom.com/forum/viewtopic.php?t=22870)

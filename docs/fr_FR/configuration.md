@@ -1,7 +1,5 @@
 # Configuration
 
-### Configuration du plugin
-
 La partie configuration du plugin permet :
 
 * de choisir la fréquence de relevés des informations du MiFlora, de toutes les heures à toutes les 12 heures,
