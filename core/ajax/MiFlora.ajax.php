@@ -23,7 +23,7 @@ try {
     if (!isConnect('admin')) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
-    
+
     // action qui permet d'obtenir l'ensemble des eqLogic
     if (init('action') == 'getAll') {
         $eqLogics = eqLogic::byType('MiFlora');
@@ -41,7 +41,7 @@ try {
         $params = init('params');
         ajax::success(MiFlora::saveStack($params));
     }
-    
+
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
