@@ -22,12 +22,11 @@ LOGGER = logging.getLogger(__name__)
 LOCK = Lock()
 
 def parse_data(data):
-        res = {}
-        print("MI_TEMPERATURE=",float(data[1] * 256 + data[0]) / 10)
-        print("MI_MOISTURE=",data[7])
-        print("MI_LIGHT=", data[4] * 256 + data[3])
-        print("MI_CONDUCTIVITY=", data[9] * 256 + data[8])
-        return data
+    print("MI_TEMPERATURE=",float(data[1] * 256 + data[0]) / 10)
+    print("MI_MOISTURE=",data[7])
+    print("MI_LIGHT=", data[4] * 256 + data[3])
+    print("MI_CONDUCTIVITY=", data[9] * 256 + data[8])
+    return data
 
 def write_ble(mac, handle, value, adpater="hci0", security="high", retries=3, timeout=20):
     """
