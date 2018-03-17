@@ -35,7 +35,7 @@ Le plugin va alors se connecter en SSH à l'IP saisie précédemment et récupé
 
 Aucun Jeedom n'est nécessaire sur l'équipement distant.
 
-### Pré-requis
+### Prérequis
 
 Il faut installer le Bluetooth et s'assurer que `gatttool --device=hci0 -b _macAddMiFlora_ --char-read -a 0x35 --sec-level=high` fonctionne sur l'appareil cible (selon le choix local ou déporté).
 
@@ -47,4 +47,4 @@ Il faut installer le Bluetooth et s'assurer que `gatttool --device=hci0 -b _macA
 
 ### Mode debug
 
-Le mode debug permet de lancer en permanence le recuperation des données MiFlora. Il convient de limiter son utilisation au debug.
+Le mode debug permet de lancer en permanence le récupération des données MiFlora. Il convient de limiter son utilisation au debug.
