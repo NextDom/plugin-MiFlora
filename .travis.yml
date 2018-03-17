@@ -1,6 +1,7 @@
 matrix:
   include:
-    - language: php 5.6
+    - language: php 
+      php: 5.6
       before_script:
         - find . -type f -name *.php | xargs -n1 php -l
       script: 
@@ -31,3 +32,4 @@ matrix:
         - ./tests/tools/setCustomMDWarnings.sh 
         - mdl -r $MDLWAR *.md docs/fr_FR/*.md
         - ./tests/tools/spellCheckMD.sh 
+
