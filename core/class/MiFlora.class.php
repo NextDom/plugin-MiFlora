@@ -283,7 +283,7 @@ class MiFlora extends eqLogic
               $commande="gatttool --adapter=".$adapter." -b " . $macAdd . " --char-read -a 0x35 --sec-level=".$seclvl;
               # $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             } else {
-              $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+              $commande="/usr/bin/python /tmp/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             }
 
             log::add('MiFlora', 'debug', 'connexion SSH ...'.$commande);
@@ -294,7 +294,7 @@ class MiFlora extends eqLogic
                     log::add('MiFlora', 'error', 'Authentification SSH KO');
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
-                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../3rparty/getMiFloraData.py', '/tmp/getMiFloraData.py', 0755);
+                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetMiFloraData.py', '/tmp/GetMiFloraData.py', 0755);
 
                     $gattresult = ssh2_exec($connection, $commande);
                     stream_set_blocking($gattresult, true);
@@ -312,9 +312,9 @@ class MiFlora extends eqLogic
             #  $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x35 --sec-level=high  2>&1 ';
             if ($FirmwareVersion=="2.6.2"){
               $command = "gatttool --adapter=".$adapter." -b " . $macAdd . '  --char-read -a 0x35 --sec-level='.$seclvl.' 2>&1 ';
-              # $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+              # $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             } else {
-              $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+              $command="/usr/bin/python ".dirname(__FILE__) . "/../../resources/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             }
             log::add('MiFlora', 'debug', 'command: ' . $command);
             $MiFloraData = exec($command);
