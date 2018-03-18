@@ -312,7 +312,7 @@ class MiFlora extends eqLogic
             #  $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x35 --sec-level=high  2>&1 ';
             if ($FirmwareVersion=="2.6.2"){
               $command = "gatttool --adapter=".$adapter." -b " . $macAdd . '  --char-read -a 0x35 --sec-level='.$seclvl.' 2>&1 ';
-              # $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+              # $command="/usr/bin/python ".dirname(__FILE__) . "/../../resources/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             } else {
               $command="/usr/bin/python ".dirname(__FILE__) . "/../../resources/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             }
@@ -569,7 +569,7 @@ class MiFlora extends eqLogic
 
 class MiFloraCmd extends cmd
 {
-    
+
     /*
      * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
       public function dontRemoveCmd() {
@@ -586,4 +586,3 @@ class MiFloraCmd extends cmd
         return true;
     }
 }
- 
