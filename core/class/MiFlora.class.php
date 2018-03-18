@@ -23,12 +23,6 @@ class MiFlora extends eqLogic
 {
     public static $_widgetPossibility = array('custom' => true);
 
-
-    /*     * *************************Attributs****************************** */
-
-
-    /*     * ***********************Methode static*************************** */
-
     /*
      * Fonction exécutée automatiquement toutes les minutes par Jeedom
      activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante */
@@ -38,7 +32,6 @@ class MiFlora extends eqLogic
             self::cronHourly();
         }
     }
-
 
     /*
      * Fonction exécutée automatiquement toutes les heures par Jeedom */
@@ -120,11 +113,6 @@ class MiFlora extends eqLogic
       }
      */
 
-
-    /*     * *********************Méthodes d'instance************************* */
-
-    /************************** Pile de mise à jour **************************/
-
     /* fonction permettant d'initialiser la pile
     * plugin: le nom de votre plugin
     * action: l'action qui sera utilisé dans le fichier ajax du pulgin
@@ -167,7 +155,7 @@ class MiFlora extends eqLogic
     public function preUpdate()
     {
         if (empty($this->getConfiguration('macAdd'))) {
-            throw new Exception(__('L\'adresse Mac doit être spécifiée', __FILE__));
+            throw new \Exception(__('L\'adresse Mac doit être spécifiée', __FILE__));
         }
     }
 
@@ -182,14 +170,13 @@ class MiFlora extends eqLogic
         $this->setConfiguration('plant_name', '');
     }
 
-    public function postInsert()
+    /*public function postInsert()
     {
     }
-
 
     public function postSave()
     {
-    }
+    }*/
 
 
     public function postUpdate()
@@ -252,7 +239,7 @@ class MiFlora extends eqLogic
         }
     }
 
-    public function preRemove()
+    /*public function preRemove()
     {
 
     }
@@ -260,7 +247,7 @@ class MiFlora extends eqLogic
     public function postRemove()
     {
 
-    }
+    }*/
 
     /*
      * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
@@ -296,7 +283,7 @@ class MiFlora extends eqLogic
               $commande="gatttool --adapter=".$adapter." -b " . $macAdd . " --char-read -a 0x35 --sec-level=".$seclvl;
               # $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             } else {
-              $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+              $commande="/usr/bin/python /tmp/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             }
 
             log::add('MiFlora', 'debug', 'connexion SSH ...'.$commande);
@@ -307,7 +294,7 @@ class MiFlora extends eqLogic
                     log::add('MiFlora', 'error', 'Authentification SSH KO');
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
-                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../3rparty/getMiFloraData.py', '/tmp/getMiFloraData.py', 0755);
+                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetMiFloraData.py', '/tmp/GetMiFloraData.py', 0755);
 
                     $gattresult = ssh2_exec($connection, $commande);
                     stream_set_blocking($gattresult, true);
@@ -325,9 +312,9 @@ class MiFlora extends eqLogic
             #  $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x35 --sec-level=high  2>&1 ';
             if ($FirmwareVersion=="2.6.2"){
               $command = "gatttool --adapter=".$adapter." -b " . $macAdd . '  --char-read -a 0x35 --sec-level='.$seclvl.' 2>&1 ';
-              # $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+              # $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             } else {
-              $command="/usr/bin/python ".dirname(__FILE__) . "/../../3rparty/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+              $command="/usr/bin/python ".dirname(__FILE__) . "/../../resources/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
             }
             log::add('MiFlora', 'debug', 'command: ' . $command);
             $MiFloraData = exec($command);
@@ -362,7 +349,6 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', 'port:' . $port);
             log::add('MiFlora', 'debug', 'user:' . $user);
             log::add('MiFlora', 'debug', 'pass:' . $pass);
-
 
             log::add('MiFlora', 'debug', 'connexion SSH ...');
             if (!$connection = ssh2_connect($ip, $port)) {
@@ -450,7 +436,6 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', $macAdd . ' miFloraName:' . $miFloraName);
     }
 
-
     public function traiteMesure($macAdd, $MiFloraData, &$temperature, &$moisture, &$fertility, &$lux)
     {
         // process data
@@ -471,8 +456,7 @@ class MiFlora extends eqLogic
           $moisture=0;
           $fertility=0;
           $lux=0;
-        }
-        else {
+        } else {
           $moisture = hexdec($MiFloraData[7]);
           $fertility = hexdec($MiFloraData[9] . $MiFloraData[8]);
           $lux = hexdec($MiFloraData[4] . $MiFloraData[3]);
@@ -585,14 +569,7 @@ class MiFlora extends eqLogic
 
 class MiFloraCmd extends cmd
 {
-    /*     * *************************Attributs****************************** */
-
-
-    /*     * ***********************Methode static*************************** */
-
-
-    /*     * *********************Methode d'instance************************* */
-
+    
     /*
      * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
       public function dontRemoveCmd() {
@@ -608,9 +585,5 @@ class MiFloraCmd extends cmd
         MiFlora::sendCommand($eqLogic->getId(), $this->getLogicalId(), $_options['message']);
         return true;
     }
-
-
-    /*     * **********************Getteur Setteur*************************** */
 }
-
-?>
+ 

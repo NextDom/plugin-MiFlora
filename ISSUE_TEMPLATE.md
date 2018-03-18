@@ -12,5 +12,5 @@
 
 ## Environnement:
 * **Version Jeedom**:
-* **Platform**:
+* **Plateforme**:
 * **Version du Plugin**:

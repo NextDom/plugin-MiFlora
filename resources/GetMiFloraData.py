@@ -21,7 +21,6 @@ import time
 logger = logging.getLogger(__name__)
 lock = Lock()
 
-
 def parse_data(data):
     """
     @param: data - result of gatttool
@@ -103,7 +102,7 @@ read_flora_debug=0, retries=3):
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
 
-        # except subprocess.TimeoutExpired:
+        #except subprocess.TimeoutExpired:
         #    print("Timeout while waiting for gatttool output")
 
         attempt += 1
