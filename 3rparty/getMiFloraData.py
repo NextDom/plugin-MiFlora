@@ -21,6 +21,7 @@ import time
 logger = logging.getLogger(__name__)
 lock = Lock()
 
+
 def parse_data(data):
     """
     @param: data - result of gatttool
@@ -31,7 +32,7 @@ def parse_data(data):
     print("MI_LIGHT=", data[4] * 256 + data[3])
     print("MI_CONDUCTIVITY=", data[9] * 256 + data[8])
     return data
-
+  
 # pylint: disable=too-many-arguments
 def write_ble(mac, handle, value, write_adpater="hci0", \
 write_security="high", retries=3):
@@ -102,7 +103,7 @@ read_flora_debug=0, retries=3):
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
 
-        #except subprocess.TimeoutExpired:
+        # except subprocess.TimeoutExpired:
         #    print("Timeout while waiting for gatttool output")
 
         attempt += 1
