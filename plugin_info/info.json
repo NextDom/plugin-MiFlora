@@ -1,12 +1,12 @@
 {
-  "id": "MiFlora",
-  "name": "MiFlora",
-  "description": "Plugin pour lire les infos des MiFlora",
-  "licence": "AGPL",
-  "author": "Rene",
-  "require": "2.4",
-  "version": "2.0.0",
-  "category": "nature",
-  "changelog": "https://jeedom-plugins-extra.github.io/plugin-MiFlora/fr_FR/#tocAnchor-1-7",
-  "documentation": "https://jeedom-plugins-extra.github.io/plugin-MiFlora/fr_FR"
+	"id" : "MiFlora",
+	"name" : "MiFlora",
+  "description" : "Plugin pour lire les infos des MiFlora",
+	"licence" : "AGPL",
+	"author" : "Rene",
+	"require" : "2.4",
+  "version" : "2.0.1",
+  "category" : "nature",
+	"changelog" : "https://jeedom-plugins-extra.github.io/plugin-MiFlora/fr_FR/#tocAnchor-1-7",
+	"documentation" : "https://jeedom-plugins-extra.github.io/plugin-MiFlora/fr_FR"
 }

@@ -95,3 +95,6 @@ error
 Connection
 refused
 info
+travis-ci
+lint
+warnings
