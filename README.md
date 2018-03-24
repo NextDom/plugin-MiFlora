@@ -1,3 +1,5 @@
+[![GitHub contributors](https://img.shields.io/github/contributors/Jeedom-Plugins-Extra/plugin-MiFlora.svg)]()
+
 ### Master: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora.svg?branch=master)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-MiFlora?branch=master)
 
 ### Develop: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora.svg?branch=Develop)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-MiFlora?branch=master)
@@ -19,6 +21,3 @@ Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de me
 # Documentation complète:
 
 [![Read the Docs](plugin_info/MiFlora_icon.png)](https://jeedom-plugins-extra.github.io/plugin-MiFlora)
-
-# test
-[![GitHub contributors](https://img.shields.io/github/contributors/Jeedom-Plugins-Extra/plugin-MiFlora.svg)]()
