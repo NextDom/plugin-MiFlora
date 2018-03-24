@@ -8,10 +8,13 @@ Plugin permettant de récupérer les informations des Xiaomi Plants ou MiFlora.
 
 Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de mesurer l’hygrométrie, la température, la lumière, l’engrais d’une plante. Nul besoin d’autre chose qu’une connexion Bluetooth, y compris via un appareil déporté.
 
+[![Read the Docs](docs/images/MiFlora-Screenshot1.png)](docs/images/MiFlora-Screenshot1.png)
 
 # Documentation du plugin:
 [![Read the Docs](https://img.shields.io/readthedocs/pip.svg)](docs/fr_FR/presentation.md) 
 [présentation](docs/fr_FR/presentation.md) [configuration](docs/fr_FR/configuration.md) [faq](docs/fr_FR/faq.md) [changelog](docs/fr_FR/changelog.md)
+
+
 
 # Documentation complète:
 
