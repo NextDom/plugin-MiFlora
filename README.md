@@ -1,4 +1,4 @@
-[![GitHub contributors](https://img.shields.io/github/contributors/Jeedom-Plugins-Extra/plugin-MiFlora.svg)]()
+[![GitHub contributors](https://img.shields.io/github/contributors/Jeedom-Plugins-Extra/plugin-MiFlora.svg)]() [![GitHub release](https://img.shields.io/github/release/Jeedom-Plugins-Extra/plugin-MiFlora.svg)]()
 
 ### Master: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora.svg?branch=master)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-MiFlora?branch=master)
 
