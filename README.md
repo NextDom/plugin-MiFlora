@@ -7,6 +7,13 @@
 # Develop
 [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora.svg?branch=Develop)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-MiFlora?branch=master)
 
+# Presentation:
+
+Plugin permettant de récupérer les informations des Xiaomi Plants ou MiFlora.
+
+Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de mesurer l’hygrométrie, la température, la lumière, l’engrais d’une plante. Nul besoin d’autre chose qu’une connexion Bluetooth, y compris via un appareil déporté.
+
+
 # Documentation complète:
 
 
