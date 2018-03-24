@@ -4,7 +4,7 @@
 
 ### Develop: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora.svg?branch=Develop)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-MiFlora?branch=master)
 
-# Presentation:
+# Présentation:
 
 Plugin permettant de récupérer les informations des Xiaomi Plants ou MiFlora.
 
