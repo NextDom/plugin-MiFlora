@@ -1,13 +1,16 @@
 # Changelog
 
-### Version 2.0.1
+### Version 2.0.2 - En cours de développement
+* Gestion du rafraichissement inferieur à une heure
+
+### Version 2.0.1: Mars 2018
 * Amélioration du code sans changement fonctionnel
   * Déplacement du script python dans ressources
   * mise en place de travis-ci
   * correction des warnings lint python
   * Correction de la documentation
   
-### Version 2.0.0
+### Version 2.0.0: Mars 2018
 
 * Migration de la documentation au format markdown et intégration dans le template Jeedom-Plugins-Extra
 

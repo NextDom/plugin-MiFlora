@@ -2,7 +2,7 @@
 
 La partie configuration du plugin permet :
 
-* de choisir la fréquence de relevés des informations du MiFlora, de toutes les heures à toutes les 12 heures,
+* de choisir la fréquence de relevés des informations du MiFlora, de toutes les 5, 10, 15, 30 minutes, toutes les heures, jusqu'à toutes les 12 heures,
 * de choisir le dongle/port Bluetooth (**_hci0_** en général, `hciconfig` permet de lister ceux disponibles sur votre système),
 * de choisir le niveau de sécurité de la communication Bluetooth (`high` sauf si ce n'est pas supporté par votre système),
 * de choisir entre un mode local et un mode déporté.
@@ -47,4 +47,5 @@ Il faut installer le Bluetooth et s'assurer que `gatttool --device=hci0 -b _macA
 
 ### Mode debug
 
-Le mode debug permet de lancer en permanence le récupération des données MiFlora. Il convient de limiter son utilisation au debug.
+Le mode debug permet de lancer en permanence (toutes les minutes), la récupération des données MiFlora. Il convient de limiter son utilisation au debug.
+Laisser le mode debug en permanence va affecter la durée de vie du support de stokage, spécialement les cartes SD et vider plus rapidement la pile de l'appareil.
