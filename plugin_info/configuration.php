@@ -35,22 +35,22 @@ if (!isConnect()) {
           <label class="col-lg-4 control-label">{{frequence de recuperation des données}}</label>
           <div class="col-lg-2">
               <select id="frequence" class="configKey form-control"  data-l1key="frequence" >
-              <option value="5mn">{{1/12.0}}</option>
-              <option value="10mn">{{1/6.0}}</option>
-              <option value="15mn">{{0.25}}</option>
-              <option value="30mn">{{0.5}}</option>
-              <option value="1h">{{1}}</option>
-              <option value="2h">{{2}}</option>
-              <option value="3h">{{3}}</option>
-              <option value="4h">{{4}}</option>
-              <option value="5h">{{5}}</option>
-              <option value="6h">{{6}}</option>
-              <option value="7h">{{7}}</option>
-              <option value="8h">{{8}}</option>
-              <option value="9h">{{9}}</option>
-              <option value="10h">{{10}}</option>
-              <option value="11h">{{11}}</option>
-              <option value="12h">{{12}}</option>
+                  <option value="1/12.0">{{5mn}}</option>
+                  <option value="1/6.0">{{10mn}}</option>
+                  <option value="0.25">{{15mn}}</option>
+                  <option value="0.5">{{30mn}}</option>
+                  <option value="1">{{1h}}</option>
+                  <option value="2">{{2h}}</option>
+                  <option value="3">{{3h}}</option>
+                  <option value="4">{{4h}}</option>
+                  <option value="5">{{5h}}</option>
+                  <option value="6">{{6h}}</option>
+                  <option value="7">{{7h}}</option>
+                  <option value="8">{{8h}}</option>
+                  <option value="9">{{9h}}</option>
+                  <option value="10">{{10h}}</option>
+                  <option value="11">{{11h}}</option>
+                  <option value="12">{{12h}}</option>
                 </select>
           </div>
         </div>
