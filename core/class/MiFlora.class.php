@@ -43,7 +43,7 @@ class MiFlora extends eqLogic
         $frequence = config::byKey('frequence', 'MiFlora');
         $debug     = log::getLogLevel('MiFlora') == 100;
         if ($frequence < 0 ){
-            if (date("i")%($frequence*60)) {
+            if (date("i")%round($frequence*60)) {
                 $processMiFlora=1;
             } else {
                 $processMiFlora=0;

@@ -35,8 +35,8 @@ if (!isConnect()) {
           <label class="col-lg-4 control-label">{{frequence de recuperation des données}}</label>
           <div class="col-lg-2">
               <select id="frequence" class="configKey form-control"  data-l1key="frequence" >
-                  <option value="1/12.0">{{5mn}}</option>
-                  <option value="1/6.0">{{10mn}}</option>
+                  <option value="0.08333333333">{{5mn}}</option>
+                  <option value="0.1666666667">{{10mn}}</option>
                   <option value="0.25">{{15mn}}</option>
                   <option value="0.5">{{30mn}}</option>
                   <option value="1">{{1h}}</option>
