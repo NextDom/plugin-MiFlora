@@ -1,7 +1,7 @@
 # Changelog
 
 ### Version 2.0.2 - En cours de développement
-* Gestion du rafraichissement inferieur à une heure
+* Gestion du rafraîchissement inférieur à une heure
 
 ### Version 2.0.1: Mars 2018
 * Amélioration du code sans changement fonctionnel

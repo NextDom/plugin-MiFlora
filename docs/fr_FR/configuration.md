@@ -48,4 +48,4 @@ Il faut installer le Bluetooth et s'assurer que `gatttool --device=hci0 -b _macA
 ### Mode debug
 
 Le mode debug permet de lancer en permanence (toutes les minutes), la récupération des données MiFlora. Il convient de limiter son utilisation au debug.
-Laisser le mode debug en permanence va affecter la durée de vie du support de stokage, spécialement les cartes SD et vider plus rapidement la pile de l'appareil.
+Laisser le mode debug en permanence va affecter la durée de vie du support de stockage, spécialement les cartes SD et vider plus rapidement la pile de l'appareil.
