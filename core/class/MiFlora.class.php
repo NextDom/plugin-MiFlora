@@ -42,7 +42,11 @@ class MiFlora extends eqLogic
     {
         $frequence = config::byKey('frequence', 'MiFlora');
         $debug     = log::getLogLevel('MiFlora') == 100;
-        if ($frequence < 0 ){
+        if ($frequence == 0){
+            $frequence=1; // default = 1 hour
+            $processMiFlora=1;
+            log::add('MiFlora', 'info', 'frequence = 0, defaut 1 heure :' . $frequence);
+        } elseif ($frequence < 1 ){
             if (date("i")%round($frequence*60)) {
                 $processMiFlora=1;
             } else {
@@ -54,7 +58,6 @@ class MiFlora extends eqLogic
         else {
             $processMiFlora=0;
         }
-        log::add('MiFlora', 'debug', 'frequence:' . $frequence . '; modulo heure courante % frequence:' . (date("h") % $frequence));
         if ($processMiFlora) {
             $adapter   = config::byKey('adapter', 'MiFlora');
             $seclvl    = config::byKey('seclvl', 'MiFlora');
