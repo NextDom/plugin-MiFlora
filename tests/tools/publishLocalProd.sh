@@ -8,7 +8,7 @@ TARGET_DIR="/home/pi"
 USER_ID=pi
 
 # Prod or Test
-TARGET_IP=$PROD_IP
+TARGET_IP=$TEST_IP
 # TARGET_IP=$TEST_IP
 JEEDOM_PLUGIN_PATH="/var/www/html/plugins/MiFlora"
 # Script

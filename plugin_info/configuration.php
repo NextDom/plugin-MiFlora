@@ -35,18 +35,22 @@ if (!isConnect()) {
           <label class="col-lg-4 control-label">{{frequence de recuperation des données}}</label>
           <div class="col-lg-2">
               <select id="frequence" class="configKey form-control"  data-l1key="frequence" >
-              <option value="1">{{1}}</option>
-              <option value="2">{{2}}</option>
-              <option value="3">{{3}}</option>
-              <option value="4">{{4}}</option>
-              <option value="5">{{5}}</option>
-              <option value="6">{{6}}</option>
-              <option value="7">{{7}}</option>
-              <option value="8">{{8}}</option>
-              <option value="9">{{9}}</option>
-              <option value="10">{{10}}</option>
-              <option value="11">{{11}}</option>
-              <option value="12">{{12}}</option>
+                  <option value="0.08333333333">{{5mn}}</option>
+                  <option value="0.1666666667">{{10mn}}</option>
+                  <option value="0.25">{{15mn}}</option>
+                  <option value="0.5">{{30mn}}</option>
+                  <option value="1">{{1h}}</option>
+                  <option value="2">{{2h}}</option>
+                  <option value="3">{{3h}}</option>
+                  <option value="4">{{4h}}</option>
+                  <option value="5">{{5h}}</option>
+                  <option value="6">{{6h}}</option>
+                  <option value="7">{{7h}}</option>
+                  <option value="8">{{8h}}</option>
+                  <option value="9">{{9h}}</option>
+                  <option value="10">{{10h}}</option>
+                  <option value="11">{{11h}}</option>
+                  <option value="12">{{12h}}</option>
                 </select>
           </div>
         </div>

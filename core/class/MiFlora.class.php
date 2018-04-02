@@ -30,7 +30,7 @@ class MiFlora extends eqLogic
 
     public static function cron()
     {
-        if (log::getLogLevel('MiFlora') == 100) {
+        if (log::getLogLevel('MiFlora') == 100 || (config::byKey('frequence', 'MiFlora')<1)) {
             self::cronHourly();
         }
     }
@@ -40,14 +40,29 @@ class MiFlora extends eqLogic
 
     public static function cronHourly()
     {
-        $debug     = log::getLogLevel('MiFlora') == 100;
         $frequence = config::byKey('frequence', 'MiFlora');
-        $adapter   = config::byKey('adapter', 'MiFlora');
-        $seclvl    = config::byKey('seclvl', 'MiFlora');
-        /* $adapter='hci0';
-          $seclvl='high'; */
-        log::add('MiFlora', 'debug', 'frequence:' . $frequence . '; modulo heure courante % frequence:' . (date("h") % $frequence));
-        if (!(date("h") % $frequence) || $debug) {
+        $debug     = log::getLogLevel('MiFlora') == 100;
+        if ($frequence == 0){
+            $frequence=1; // default = 1 hour
+            $processMiFlora=1;
+            log::add('MiFlora', 'info', 'frequence = 0, defaut 1 heure :' . $frequence);
+        } elseif ($frequence < 1 ){
+            if (date("i")%round($frequence*60)) {
+                $processMiFlora=1;
+            } else {
+                $processMiFlora=0;
+            }
+        } elseif (!(date("h") % $frequence) || $debug) {
+            $processMiFlora=1;
+        }
+        else {
+            $processMiFlora=0;
+        }
+        if ($processMiFlora) {
+            $adapter   = config::byKey('adapter', 'MiFlora');
+            $seclvl    = config::byKey('seclvl', 'MiFlora');
+            /* $adapter='hci0';
+              $seclvl='high'; */
             foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
                 //$mi_flora->refreshWidget();
                 $macAdd          = $mi_flora->getConfiguration('macAdd');
@@ -154,7 +169,7 @@ class MiFlora extends eqLogic
 
     /*public function preSave()
     {
-        
+
     }*/
 
     /* fonction appelé pendant la séquence de sauvegarde avant l'insertion
