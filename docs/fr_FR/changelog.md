@@ -1,7 +1,10 @@
 # Changelog
 
-### Version 2.0.3 - En cours de développement
+### Version 2.0.4 - En cours de développement
 * Gestion du rafraîchissement par objet
+
+### Version 2.0.3 - 6 Avril 2018
+* Suppression du lien PayP.. dans la documentation afin que le Plugin ne soit plus classé obsolète
 
 ## Version 2.0.2 - 2 Avril 2018
 * Gestion du rafraîchissement inférieur à une heure
