@@ -586,23 +586,3 @@ class MiFlora extends eqLogic
     }
 
 }
-
-class MiFloraCmd extends cmd
-{
-    /*
-     * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-      public function dontRemoveCmd() {
-      return true;
-      }
-     */
-
-    //    public function execute($_options = array()) {
-    public function execute($_options = null)
-    {
-        log::add('MiFlora', 'info', 'Commande recue : ' . $_options['message']);
-        $eqLogic = $this->getEqLogic();
-        MiFlora::sendCommand($eqLogic->getId(), $this->getLogicalId(), $_options['message']);
-        return true;
-    }
-
-}
