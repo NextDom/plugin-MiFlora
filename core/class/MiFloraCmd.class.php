@@ -29,7 +29,7 @@ class MiFloraCmd extends cmd
      */
 
     //    public function execute($_options = array()) {
-    public function execute($_options = null)
+    public function execute(array $_options = null)
     {
         log::add('MiFlora', 'info', 'Commande recue : ' . $_options['message']);
         $eqLogic = $this->getEqLogic();
