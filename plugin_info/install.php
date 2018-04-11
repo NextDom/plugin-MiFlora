@@ -45,18 +45,18 @@ function MiFlora_update() {
     foreach (eqLogic::byType('MiFlora') as $eqLogic) {
       $frequenceItem = $eqLogic->getConfiguration('frequence');
       if ($frequenceItem == ""){
-        $eqLogic->setConfiguration('frequence','0'); //default value in config::
+        $frequenceItem=0;
+        $eqLogic->setConfiguration('frequence',$frequenceItem); //default value in config::
       }
       $eqLogic->save();
-      log::add('MiFlora', 'info', '$frequenceItemInstall: '.$frequenceItem);
+      log::add('MiFlora', 'info', 'frequenceItem-Install: '.$frequenceItem);
 
     }
 
 }
-
 function MiFlora_remove() {
     log::add('MiFlora', 'info', 'config - remove started');
     // config::remove('frequence', 'MiFlora');
 }
 
-?>
+
