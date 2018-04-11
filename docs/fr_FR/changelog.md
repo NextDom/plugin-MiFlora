@@ -1,13 +1,22 @@
 # Changelog
 
-### Version 2.0.1
+### Version 2.0.4 - En cours de développement
+* Gestion du rafraîchissement par objet
+
+### Version 2.0.3 - 6 Avril 2018
+* Suppression du lien PayP.. dans la documentation afin que le Plugin ne soit plus classé obsolète
+
+## Version 2.0.2 - 2 Avril 2018
+* Gestion du rafraîchissement inférieur à une heure
+
+### Version 2.0.1: Mars 2018
 * Amélioration du code sans changement fonctionnel
   * Déplacement du script python dans ressources
   * mise en place de travis-ci
   * correction des warnings lint python
   * Correction de la documentation
   
-### Version 2.0.0
+### Version 2.0.0: Mars 2018
 
 * Migration de la documentation au format markdown et intégration dans le template Jeedom-Plugins-Extra
 
@@ -70,6 +79,8 @@
 
 ### Idées pour les versions suivantes :
 
+* Gérer d'autre marques que Xiaomi pour les plantes (Parrot)
+* Gérer plusieurs appareils déportés et les associer aux équipements afin d'augmenter la porté du Bluetooth en ajoutant plusieurs récepteurs
 * Ajouter le test des config : hci et sec-level doivent être rempli
 * Choix du log erreur ou info en cas de problème de connexion au bout de 4 essais
 * Tester que la macadd est <> entre les Équipements (erreur de copie colle)
