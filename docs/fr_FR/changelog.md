@@ -10,6 +10,7 @@
 * Gestion du rafraîchissement inférieur à une heure
 
 ### Version 2.0.1: Mars 2018
+
 * Amélioration du code sans changement fonctionnel
   * Déplacement du script python dans ressources
   * mise en place de travis-ci
