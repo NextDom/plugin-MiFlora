@@ -1,11 +1,11 @@
 # Changelog
 
-### Version 2.0.4 - 14 Avril 2018 version actuelle sur le Market en Beta
+### Version 2.0.4 - 14 Avril 2018 version actuelle sur le Market en Bêta
 * Gestion du rafraîchissement par objet:
     * Le rafraîchissement par objet vient en complément de celui global dans la configuration du plugin
     * Le rafraîchissement par objet a une valeur supplémentaire *défaut*, dans ce cas la valeur globale est prise en compte
     * Chaque MiFlora a sa fréquence de rafraîchissement qui remplace la valeur globale quand elle n'est pas a la valeur *défaut*
-    * En mode debug, tous les objets sont lus toutes les minutes indépendament de ces valeurs
+    * En mode debug, tous les objets sont lus toutes les minutes indépendamment de ces valeurs
 
 ### Version 2.0.3 - 6 Avril 2018
 * Suppression du lien PayPal dans la documentation afin que le Plugin ne soit plus classé obsolète
