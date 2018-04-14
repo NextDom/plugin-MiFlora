@@ -18,70 +18,115 @@
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once dirname(__FILE__) . '/MiFloraCmd.class.php';
+
 
 class MiFlora extends eqLogic
 {
-
     public static $_widgetPossibility = array('custom' => true);
 
-    /*
-     * Fonction exécutée automatiquement toutes les minutes par Jeedom
-      activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante */
+    public static function getFrequenceItem($mi_flora)
+    {
+        if (log::getLogLevel('MiFlora') == 100){ // si debug -> chaque minutes
+            $frequenceItem = 1/60;
+        } else {
+            $frequenceItem = $mi_flora->getConfiguration('frequence');
+            if ($frequenceItem == 0){
+                $frequenceItem=config::byKey('frequence', 'MiFlora');
+                if ($frequenceItem == 0){
+                    $frequenceItem=1; // Ne doit pas arriver, 1H par defaut si config a une mauvaise valeur
+                }
+            }
+        }
+        return $frequenceItem;
+    }
+
+   public static function isProcessMiFlora($frequenceMin){
+         if ((date("i") % (round($frequenceMin * 60))) == 0) {
+             $processMiFlora = 1;
+         } else {
+             $processMiFlora = 0;
+        }
+        // log::add('MiFlora', 'debug', 'frequence < 1 :' . $frequenceMin . ' round(frequenceMin*60):' . round($frequenceMin * 60) . ' date("i"):' . date("i") . ' $processMiFlora:' . $processMiFlora . ' (date("i") % (round($frequence * 60))):' . (date("i") % (round($frequenceMin * 60))));
+        return $processMiFlora;
+    }
+
+    public static function isMiFloraToBeProcessed(){
+        $frequenceItemMin=1000;
+        foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+            $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
+            $frequenceItemMin = min($frequenceItemMin,$frequenceItem);
+            //log::add('MiFlora', 'debug', '$frequenceItem: '.$frequenceItem);
+            //log::add('MiFlora', 'debug', '$frequenceItem*60.0: '.round($frequenceItem*60.0));
+            //log::add('MiFlora', 'debug', 'date: '.date("i").' - modulo: '.date("i")%round($frequenceItem*60));
+        }
+        return MiFlora::isProcessMiFlora($frequenceItemMin);
+
+    }
+
+/*
+ * Fonction exécutée automatiquement toutes les minutes par Jeedom
+  activer cette version pour tester toutes les minutes, garder ensuite la suivante: une mesure par heure me semble suffisante */
 
     public static function cron()
     {
-        if (log::getLogLevel('MiFlora') == 100 || (config::byKey('frequence', 'MiFlora')<1)) {
-            self::cronHourly();
+        $processMiFlora = self::isMiFloraToBeProcessed();
+        //log::add('MiFlora', 'info', 'process MiFlora ... '.$processMiFlora);
+        if ($processMiFlora == 1){
+            // log::add('MiFlora', 'info', 'start process MiFlora ...');
+            self::ProcessMiFlora();
+       } else{
+            // log::add('MiFlora', 'info', 'skip MiFlora ...');
         }
     }
 
     /*
      * Fonction exécutée automatiquement toutes les heures par Jeedom */
 
-    public static function cronHourly()
+ /*   public static function cronHourly()
     {
-        $frequence = config::byKey('frequence', 'MiFlora');
-        $debug     = log::getLogLevel('MiFlora') == 100;
-        if ($frequence == 0){
-            $frequence=1; // default = 1 hour
-            $processMiFlora=1;
-            log::add('MiFlora', 'info', 'frequence = 0, defaut 1 heure :' . $frequence);
-        } elseif ($frequence < 1 ){
-            if (date("i")%round($frequence*60)) {
-                $processMiFlora=1;
+        self::ProcessMiFlora();
+    }*/
+
+    public static function scanbluetooth()
+    {
+        log::remove('MiFlora_scanbluetooth');
+        $port = config::byKey('adapter', 'MiFlora', 0);
+        $cmd  = 'expect ' . dirname(__FILE__) . '/../../resources/bluetooth-scan.sh ' . $port;
+        $cmd  .= ' >> ' . log::getPathToLog('MiFlora_scanbluetooth') . ' 2>&1 &';
+        exec($cmd);
+    }
+
+    public static function ProcessMiFlora()
+    {
+        $adapter = config::byKey('adapter', 'MiFlora');
+        $seclvl = config::byKey('seclvl', 'MiFlora');
+        foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+            log::add('MiFlora', 'info', 'enter item per item:'.$mi_flora->getHumanName(false, false));
+            $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
+            if (MiFlora::isProcessMiFlora($frequenceItem) == 0){
+                log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false).' frequence toutes les '.round($frequenceItem*60)." minutes, next");
+                // Attn: min frequence = 12h a 0 et 12h --> ok pour batterie"
             } else {
-                $processMiFlora=0;
-            }
-        } elseif (!(date("h") % $frequence) || $debug) {
-            $processMiFlora=1;
-        }
-        else {
-            $processMiFlora=0;
-        }
-        if ($processMiFlora) {
-            $adapter   = config::byKey('adapter', 'MiFlora');
-            $seclvl    = config::byKey('seclvl', 'MiFlora');
-            /* $adapter='hci0';
-              $seclvl='high'; */
-            foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+                log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false).' frequence toutes les '.round($frequenceItem*60).' minutes, go');
                 //$mi_flora->refreshWidget();
-                $macAdd          = $mi_flora->getConfiguration('macAdd');
-                log::add('MiFlora', 'debug', 'mi flora mac add:' . $macAdd);
+                $macAdd = $mi_flora->getConfiguration('macAdd');
+                log::add('MiFlora', 'info', 'mi flora mac add:' . $macAdd);
                 $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
                 // recupere le niveau de la batterie deux  fois par jour a 12 h
                 // log::add('MiFlora', 'debug', 'date:'.date("h"));
-                if (date("h") == 12 || $FirmwareVersion == '') {
+                if (((date("h") == 12 && intval(date("i")) < 5)) || $FirmwareVersion == '') {
                     $MiFloraBatteryAndFirmwareVersion = '';
-                    $MiFloraNameString                = '';
-                    $MiFloraName                      = '';
-                    $battery                          = -1;
+                    $MiFloraNameString = '';
+                    $MiFloraName = '';
+                    $battery = -1;
                     $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl);
                     $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
                     $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
                     $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
                 }
-                $tryGetData    = 0;
-                $MiFloraData   = '';
+                $tryGetData = 0;
+                $MiFloraData = '';
                 $loopcondition = true;
                 while ($loopcondition) {
                     if ($tryGetData > 3) { // stop after 4 try
@@ -102,7 +147,7 @@ class MiFlora extends eqLogic
                     // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
                     $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
                     // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
-                    if ($MiFloraData == '' or ( $temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
+                    if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
                         // wait 5 s hopping it'll be better ...
                         log::add('MiFlora', 'debug', 'wait 5 s hopping it ll be better ...');
                         sleep(5);
@@ -119,6 +164,7 @@ class MiFlora extends eqLogic
                 }
             }
         }
+
     }
 
     /* */
@@ -190,6 +236,8 @@ class MiFlora extends eqLogic
         $this->setConfiguration('batteryStatus', '');
         $this->setConfiguration('firmware_version', '');
         $this->setConfiguration('plant_name', '');
+        $this->setConfiguration('frequence', '0');
+
     }
 
     /* public function postInsert()
@@ -501,22 +549,22 @@ class MiFlora extends eqLogic
                 if (is_object($cmd)) {
                     // $cmd->setCollectDate($date);
                     $cmd->event($temperature);
-                    log::add('MiFlora', 'debug', $macAdd . ' Store Temperature:' . $temperature);
+                    log::add('MiFlora', 'info', $macAdd . ' Store Temperature:' . $temperature);
                 }
                 $cmd = $this->getCmd(null, 'moisture');
                 if (is_object($cmd)) {
                     $cmd->event($moisture);
-                    log::add('MiFlora', 'debug', $macAdd . ' Store Moisture:' . $moisture);
+                    log::add('MiFlora', 'info', $macAdd . ' Store Moisture:' . $moisture);
                 }
                 $cmd = $this->getCmd(null, 'fertility');
                 if (is_object($cmd)) {
                     $cmd->event($fertility);
-                    log::add('MiFlora', 'debug', $macAdd . ' Store Fertility:' . $fertility);
+                    log::add('MiFlora', 'info', $macAdd . ' Store Fertility:' . $fertility);
                 }
                 $cmd = $this->getCmd(null, 'lux');
                 if (is_object($cmd)) {
                     $cmd->event($lux);
-                    log::add('MiFlora', 'debug', $macAdd . ' Store Lux:' . $lux);
+                    log::add('MiFlora', 'info', $macAdd . ' Store Lux:' . $lux);
                 }
             }
         }
@@ -586,3 +634,4 @@ class MiFlora extends eqLogic
     }
 
 }
+

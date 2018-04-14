@@ -29,7 +29,7 @@ function MiFlora_update() {
     log::add('MiFlora', 'info', 'config - update started');
 
     if (config::byKey('frequence', 'MiFlora') == ""){
-        config::save('frequence', '0', 'MiFlora');
+        config::save('frequence', '1', 'MiFlora');
     }
     if (config::byKey('maitreesclave', 'MiFlora') == "") {
         config::save('maitreesclave', 'local' ,'MiFlora');
