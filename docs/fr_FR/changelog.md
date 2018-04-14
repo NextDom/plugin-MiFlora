@@ -2,9 +2,9 @@
 
 ### Version 2.0.4 - 14 Avril 2018
 * Gestion du rafraîchissement par objet
-    * Le rafraîchissement par objet a une valeur supplémentaire *defaut*, dans ce ca la valeur globale est prise en compte
-    * Chaque MiFlora a sa frequence de rafraichissement
-    * En mode debug, tous les objects sont lus toutes les minutes
+    * Le rafraîchissement par objet a une valeur supplémentaire *défaut*, dans ce cas la valeur globale est prise en compte
+    * Chaque MiFlora a sa fréquence de rafraîchissement
+    * En mode debug, tous les objets sont lus toutes les minutes
 
 ### Version 2.0.3 - 6 Avril 2018
 * Suppression du lien PayPal dans la documentation afin que le Plugin ne soit plus classé obsolète
