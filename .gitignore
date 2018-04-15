@@ -18,3 +18,13 @@ resources/install.txt
 migration2team/flower.png
 
 migration2team/MiFlora_icon.png
+
+venv/*
+
+.idea/*
+
+core/class/MiFlora0.class.php
+
+core/class/MiFlora.class.master.php
+
+core/class/MiFlora.class.new.php
