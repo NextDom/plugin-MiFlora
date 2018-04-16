@@ -17,18 +17,46 @@
  */
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
-
+# how to test this file:
+# su --shell=/bin/bash - www-data -c "/usr/bin/php /var/www/html/core/class/../../core/php/jeePlugin.php plugin_id=MiFlora function=update callInstallFunction=1"
+# su --shell=/bin/bash - pi -c "/usr/bin/php /var/www/html/core/class/../../core/php/jeePlugin.php plugin_id=MiFlora function=update callInstallFunction=1"
 function MiFlora_install() {
-    
+    log::add('MiFlora', 'info', 'config - install started');
+    MiFlora_update() ;
 }
 
 function MiFlora_update() {
-    
+    log::add('MiFlora', 'info', 'config - update started');
+
+    if (config::byKey('frequence', 'MiFlora') == ""){
+        config::save('frequence', '1', 'MiFlora');
+    }
+    if (config::byKey('maitreesclave', 'MiFlora') == "") {
+        config::save('maitreesclave', 'local' ,'MiFlora');
+    }
+    if (config::byKey('adapter', 'MiFlora') == "") {
+        config::save('adapter', 'hci0', 'MiFlora');
+    }
+    if (config::byKey('seclvl', 'MiFlora') == "") {
+        config::save('seclvl', 'low', 'MiFlora');
+    }
+
+    // Set default values for each existing equipments
+    foreach (eqLogic::byType('MiFlora') as $eqLogic) {
+      $frequenceItem = $eqLogic->getConfiguration('frequence');
+      if ($frequenceItem == ""){
+        $frequenceItem=0;
+        $eqLogic->setConfiguration('frequence',$frequenceItem); //default value in config::
+      }
+      $eqLogic->save();
+      log::add('MiFlora', 'info', 'frequenceItem-Install: '.$frequenceItem);
+
+    }
+
 }
-
-
 function MiFlora_remove() {
-    
+    log::add('MiFlora', 'info', 'config - remove started');
+    // config::remove('frequence', 'MiFlora');
 }
 
-?>
+

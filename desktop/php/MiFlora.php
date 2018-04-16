@@ -57,7 +57,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
         <a class="btn btn-default eqLogicAction pull-right" data-action="configure"><i class="fa fa-cogs"></i> {{Configuration avancée}}</a>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
+            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Équipement}}</a></li>
             <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
         </ul>
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -93,9 +93,34 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{MiFlora bluetooth mac add}}</label>
+                            <label class="col-sm-3 control-label">{{MiFlora Bluetooth mac add}}</label>
                             <div class="col-sm-3">
                                 <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="macAdd" placeholder="MiFloraBTAdd"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{frequence de recuperation des données}}</label>
+                            <div class="col-sm-3">
+                                <select id="frequence" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="frequence" placeholder="frequence de rafraichissement">
+                                    <option selected value=0>{{default}}</option>
+                                    <option value=0.01666666667>{{1mn}}</option>
+                                    <option value=0.08333333333>{{5mn}}</option>
+                                    <option value=0.1666666667>{{10mn}}</option>
+                                    <option value=0.25>{{15mn}}</option>
+                                    <option value=0.5>{{30mn}}</option>
+                                    <option value=1>{{1h}}</option>
+                                    <option value=2>{{2h}}</option>
+                                    <option value=3>{{3h}}</option>
+                                    <option value=4>{{4h}}</option>
+                                    <option value=5>{{5h}}</option>
+                                    <option value=6>{{6h}}</option>
+                                    <option value=7>{{7h}}</option>
+                                    <option value=8>{{8h}}</option>
+                                    <option value=9>{{9h}}</option>
+                                    <option value=10>{{10h}}</option>
+                                    <option value=11>{{11h}}</option>
+                                    <option value=12>{{12h}}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
