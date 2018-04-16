@@ -57,7 +57,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
         <a class="btn btn-default eqLogicAction pull-right" data-action="configure"><i class="fa fa-cogs"></i> {{Configuration avancée}}</a>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
+            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Équipement}}</a></li>
             <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
         </ul>
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -93,7 +93,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{MiFlora bluetooth mac add}}</label>
+                            <label class="col-sm-3 control-label">{{MiFlora Bluetooth mac add}}</label>
                             <div class="col-sm-3">
                                 <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="macAdd" placeholder="MiFloraBTAdd"/>
                             </div>

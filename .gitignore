@@ -1,2 +1,20 @@
 
 *.php~
+
+3rparty/sshmifloa.py
+
+3rparty/test.php
+
+resources/hci.php
+
+resources/install.py
+
+resources/install.sh
+
+.remote-sync.json
+
+resources/install.txt
+
+migration2team/flower.png
+
+migration2team/MiFlora_icon.png

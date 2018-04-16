@@ -1,10 +1,12 @@
 {
 	"id" : "MiFlora",
-	"name" : "Mi Flora",
-        "description" : "Plugin pour lire les info des MiFlora",
+	"name" : "MiFlora",
+  "description" : "Plugin pour lire les infos des MiFlora",
 	"licence" : "AGPL",
 	"author" : "Rene",
 	"require" : "2.4",
-        "version" : "0.8",
-        "category" : "nature"
+  "version" : "2.0.2",
+  "category" : "nature",
+	"changelog" : "https://jeedom-plugins-extra.github.io/plugin-MiFlora/fr_FR/#tocAnchor-1-7",
+	"documentation" : "https://jeedom-plugins-extra.github.io/plugin-MiFlora/fr_FR"
 }

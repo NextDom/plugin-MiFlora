@@ -1,58 +1,61 @@
 <div class="eqLogic-widget eqLogic allowResize" style="height: #height#;width: #width#;border:#border#;border-radius:#border-radius#;
 background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="dashboard">
-    <center><a href="#eqLink#" style="font-size : 1.5em;#hideEqLogicName#">#name_display#</a></center><br />
-    <div class="row">
-        <div class="col-md-4 flower_temperature#id#">
-            <div style="text-align: center;"><i class="jeedom-thermo-moyen"></i></div>
-        </div>
-        <div class="col-md-8 flower_temperature#id#">
-            <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#temperature_id#">#temperature# °C</span>
-        </div>
+  <center><a href="#eqLink#" style="font-size : 1.5em;#hideEqLogicName#">#name_display#</a></center><br />
+  <div class="row">
+    <div class="col-md-4 flower_temperature#id#">
+      <div style="text-align: center;"><i class="jeedom-thermo-moyen"></i></div>
     </div>
-    <div class="row">
-        <div class="col-md-4 flower_moisture#id#">
-            <div style="text-align: center;"><i class="fa fa-tint"></i></div>
-        </div>
-        <div class="col-md-8 flower_moisture#id#">
-            <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#moisture_id#">#moisture# %</span>
-        </div>
+    <div class="col-md-8 flower_temperature#id#">
+      <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#temperature_id#">#temperature# °C</span>
     </div>
-    <div class="row">
-        <div class="col-md-4 flower_lux#id#">
-            <div style="text-align: center;"><i class="fa fa-sun-o"></i></div>
-        </div>
-        <div class="col-md-8 flower_lux#id#">
-            <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#lux_id#">#lux# lux</span>
-        </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 flower_moisture#id#">
+      <div style="text-align: center;"><i class="fa fa-tint"></i></div>
     </div>
-    <div class="row">
-        <div class="col-md-4 flower_fertility#id#">
-            <div style="text-align: center;"><i class="fa fa-flask"></i></div>
-        </div>
-        <div class="col-md-8 flower_fertility#id#">
-            <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#fertility_id#">#fertility# uS/cm</span>
-        </div>
+    <div class="col-md-8 flower_moisture#id#">
+      <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#moisture_id#">#moisture# %</span>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 flower_lux#id#">
+      <div style="text-align: center;"><i class="fa fa-sun-o"></i></div>
+    </div>
+    <div class="col-md-8 flower_lux#id#">
+      <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#lux_id#">#lux# lux</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 flower_fertility#id#">
+      <div style="text-align: center;"><i class="fa fa-flask"></i></div>
+    </div>
+    <div class="col-md-8 flower_fertility#id#">
+      <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#fertility_id#">#fertility# uS/cm</span>
+    </div>
+  </div>
 </div>
 <style>
-    div.flower_temperature#id# {
-        color: white;
-        font-weight: bold;
-        font-size: 1.2em;
-    }
-    div.flower_moisture#id# {
-        color: white;
-        font-weight: bold;
-        font-size: 1.2em;
-    }
-    div.flower_lux#id# {
-        color: white;
-        font-weight: bold;
-        font-size: 1.2em;
-    }
-    div.flower_fertility#id# {
-        color: white;
-        font-weight: bold;
-        font-size: 1.2em;
-    }
+  div.flower_temperature#id# {
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  div.flower_moisture#id# {
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  div.flower_lux#id# {
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  div.flower_fertility#id# {
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
 </style>
