@@ -17,6 +17,7 @@ import subprocess
 import logging
 import time
 import math
+import sys
 logger = logging.getLogger(__name__)
 lock = Lock()
 
@@ -25,6 +26,7 @@ lock = Lock()
 
 def write_ble(mac, handle, value, write_adpater="hci0",
               write_security="high", retries=3):
+
     """
     Read from a BLE address
 
@@ -33,7 +35,6 @@ def write_ble(mac, handle, value, write_adpater="hci0",
     @param: value - value to write to the handle
     @param: timeout - timeout in seconds
     """
-
     global lock  # pylint: disable=global-statement
     attempt = 0
     delay = 10
@@ -41,6 +42,7 @@ def write_ble(mac, handle, value, write_adpater="hci0",
         try:
             cmd = "gatttool --adapter={} --device={} --char-write-req -a {} -n {} \
             --sec-level={} ".format(write_adpater, mac, handle, value, write_security)
+            #print cmd
             #cmd = "gatttool --device={} --char-read -a {} 2>/dev/null".format(mac, handle)
             with lock:
                 result = subprocess.check_output(cmd, shell=True)
@@ -57,7 +59,6 @@ def write_ble(mac, handle, value, write_adpater="hci0",
             delay *= 2
 
     return None
-
 
 def read_ble(mac, handle, read_adpater="hci0", read_security="high",
              read_flora_debug=0, retries=3):
@@ -76,6 +77,7 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high",
         try:
             cmd = "gatttool --adapter={} --device={} --char-read -a {} \
             --sec-level={} 2>/dev/null".format(read_adpater, mac, handle, read_security)
+            #print cmd
             with lock:
                 result = subprocess.check_output(cmd,
                                                  shell=True)
@@ -114,17 +116,31 @@ def convert_temperature(rawValue):
 
 def convert_Lux(rawValue):
     rawValueInt = rawValue[1] * 255 + rawValue[0]
-    sunlight = 0.08640000000000001 * (192773.17000000001 * math.pow(rawValueInt, -1.0606619))
-    return round(sunlight * 10) / 10
+    sunlight = 54 * rawValueInt
+    return sunlight
 
 
-def convert_Soil(rawValue):
-    rawValueInt = rawValue[1] * 255 + rawValue[0]
-    soilMoisture = 11.4293 + (0.0000000010698 * math.pow(rawValueInt, 4.0) - 0.00000152538 *
-                              math.pow(rawValueInt, 3.0) + 0.000866976 * math.pow(rawValueInt, 2.0) - 0.169422 * rawValueInt)
-    soilMoisture = 100.0 * (0.0000045 * math.pow(soilMoisture, 3.0) - 0.00055 *
-                            math.pow(soilMoisture, 2.0) + 0.0292 * soilMoisture - 0.053)
-    return round(soilMoisture)
+def convert_SoilEC(rawValue):
+	rawValueInt = rawValue[1] * 255 + rawValue[0]
+	soil_EC = (rawValueInt * 3.3) / (pow(2, 11) - 1)
+	
+	return soil_EC
+
+def convert_SoilMoisture(rawValue):
+	
+	moisture = rawValue[0] * 1.0;
+	#moisture = (moisture * 3.3) / (pow(2, 11) - 1)
+
+	soilMoisture = 11.4293 + (0.0000000010698 * math.pow(moisture, 4.0) - 0.00000152538 * math.pow(moisture, 3.0) +  0.000866976 * math.pow(moisture, 2.0) - 0.169422 * moisture);
+
+	soilMoisture = 100.0 * (0.0000045 * math.pow(soilMoisture, 3.0) - 0.00055 * math.pow(soilMoisture, 2.0) + 0.0292 * soilMoisture - 0.053);
+
+	if soilMoisture < 0.0: 
+		soilMoisture = 0.0
+	elif soilMoisture > 60.0:
+		soilMoisture = 60.0
+
+	return round(soilMoisture, 1)
 
 
 def convert_Battery(rawValue):
@@ -143,6 +159,9 @@ def convert_2Bytes(rawValue):
     return rawValueInt
 
 
+print "Entering script"
+
+
 timeout = 20
 #mac_add = sys.argv[1]
 #adpater = sys.argv[2]
@@ -150,23 +169,33 @@ timeout = 20
 firmware = "2.6.0"
 flora_debug = "1"
 adpater = "hci0"
-security = "high"
-mac_add = "A0:14:3D:7D:77:26"
+security = "low"
+mac_add = sys.argv[1]
+
+print "Fetching :", mac_add
+
 
 # Gestion de la temperature de la terre
-handlerd = "0x002d"
+handlerd = "0x0034"
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 print "Soil Temperature brute:", result_flora
 # avec convert_temperature 21.5, app: 22/23 live
-temperature = convert_temperature(result_flora)
-print " -->Soil Temperature:", temperature
+temperature_terre = convert_temperature(result_flora)
+print " -->Soil Temperature:", temperature_terre
 
 # Gestion de la temperature de l'air
-handlerd = "0x0031"
+handlerd = "0x0037"
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 print "Air Temperature brute:", result_flora
-temperature = convert_temperature(result_flora)
-print " -->Air Temperature:", temperature
+temperature_air = convert_temperature(result_flora)
+print " -->Air Temperature:", temperature_air
+
+antoine = 8.07131 - (1730.63 / (233.426 + temperature_terre));
+last_pressure = math.pow(10, antoine - 2)
+# TODO: convert raw(0 - 1771) to 0 to 10(mS / cm)
+# avec convert_Soil: 19,4% avec cette formule, app: 20/21%
+
+print " -->Last Pressure:", last_pressure
 
 # Gestion des LUX
 handlerd = "0x0025"
@@ -176,30 +205,54 @@ print "Lux brute:", result_flora
 temperature = convert_Lux(result_flora)
 print " -->Lux:", temperature
 
-# Gestion de Soil EC (Hygrometrie je pense)
-handlerd = "0x0029"
-result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
-# TODO: convert raw(0 - 1771) to 0 to 10(mS / cm)
-# avec convert_Soil: 19,4% avec cette formule, app: 20/21%
-print "Soil EC brut:", result_flora
-soil = convert_Soil(result_flora)
-print " -->Soil EC:", soil
+# Gestion de Soil ElectricalConductivity 
+handlerd = "0x0031"
+soil_EC_brut = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Soil EC brut:", soil_EC_brut
+soilEC = convert_SoilEC(soil_EC_brut)
+print " -->Soil EC:", soilEC
 
-# Gestion de Soil VWC - (Engrais je pense)
-handlerd = "0x0035"
-result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
-print "Soil VWC brut: ", result_flora
-# 14.8 --> app: non mesurable
-Soil = convert_Soil(result_flora)
-print " -->Soil VWC:", Soil
+# Gestion de Soil Moisture
+handlerd = "0x003a"
+soil_moisture_brut = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Soil Moisture brut: ", soil_moisture_brut
+soil_moisture = convert_SoilMoisture(result_flora)
+print " -->relativeHumidity:", soil_moisture
+
+moisture = soil_moisture * last_pressure;
+print " -->Moisture:", moisture
+
 
 # Gestion de la batterie
-handlerd = "0x004c"
+# 0x004b
+handlerd = "0x004b"
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 print "Batterie brut: ", result_flora
 # 30 , app: courbe semble etre vers 35-37
 batterie = convert_Battery(result_flora)
-print " -->Batterie: ", batterie
+print " -->Batterie %: ", batterie
+
+handlerd = "0x0028"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Inconnu brut: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Battery(result_flora)
+print " -->Inconnu : ", resultat
+
+handlerd = "0x002b"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Inconnu brut: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Battery(result_flora)
+print " -->Inconnu : ", resultat
+
+handlerd = "0x002e"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Inconnu brut: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Battery(result_flora)
+print " -->Inconnu : ", resultat
+
 
 # Gestion du nom
 handlerd = "0x0003"
