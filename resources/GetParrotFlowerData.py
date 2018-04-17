@@ -115,8 +115,11 @@ def convert_temperature(rawValue):
 
 
 def convert_Lux(rawValue):
-    rawValueInt = rawValue[1] * 255 + rawValue[0]
-    sunlight = 54 * rawValueInt
+    rawValueInt = rawValue[0] * 1.0
+    if rawValueInt>0:
+    	sunlight = 0.08640000000000001 * (192773.17000000001 * math.pow(rawValueInt, -1.0606619))
+    else:
+    	sunlight = 0
     return sunlight
 
 
@@ -175,6 +178,10 @@ mac_add = sys.argv[1]
 print "Fetching :", mac_add
 
 
+print "============="
+print "Donnees de base :"
+print "============="
+
 # Gestion de la temperature de la terre
 handlerd = "0x0034"
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
@@ -194,23 +201,22 @@ antoine = 8.07131 - (1730.63 / (233.426 + temperature_terre));
 last_pressure = math.pow(10, antoine - 2)
 # TODO: convert raw(0 - 1771) to 0 to 10(mS / cm)
 # avec convert_Soil: 19,4% avec cette formule, app: 20/21%
-
-print " -->Last Pressure:", last_pressure
+#print " -->Last Pressure:", last_pressure
 
 # Gestion des LUX
 handlerd = "0x0025"
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 print "Lux brute:", result_flora
 # 0.1 app: 0 moyenne 976 (semble bien etre la version live)
-temperature = convert_Lux(result_flora)
-print " -->Lux:", temperature
+lux = convert_Lux(result_flora)
+print " -->Lux:", lux
 
 # Gestion de Soil ElectricalConductivity 
 handlerd = "0x0031"
 soil_EC_brut = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 print "Soil EC brut:", soil_EC_brut
 soilEC = convert_SoilEC(soil_EC_brut)
-print " -->Soil EC:", soilEC
+print " -->Soil EC:", soilEC, " (comment utiliser ?)"
 
 # Gestion de Soil Moisture
 handlerd = "0x003a"
@@ -219,8 +225,8 @@ print "Soil Moisture brut: ", soil_moisture_brut
 soil_moisture = convert_SoilMoisture(result_flora)
 print " -->relativeHumidity:", soil_moisture
 
-moisture = soil_moisture * last_pressure;
-print " -->Moisture:", moisture
+#moisture = soil_moisture * last_pressure;
+#print " -->Moisture:", moisture
 
 
 # Gestion de la batterie
@@ -232,6 +238,43 @@ print "Batterie brut: ", result_flora
 batterie = convert_Battery(result_flora)
 print " -->Batterie %: ", batterie
 
+
+print "============="
+print "Donnees de watering :"
+print "============="
+
+
+# Water Tank Level
+# 0x008b
+handlerd = "0x008b"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Water Tank Level Brut: ", result_flora
+batterie = convert_Battery(result_flora)
+print " -->Water Tank Level: ", batterie
+
+# Watering Mode
+handlerd = "0x0090"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Watering Mode: ", result_flora
+batterie = convert_Battery(result_flora)
+print " -->Watering Mode: ", batterie
+
+
+# Watering Status
+handlerd = "0x009a"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Watering Status: ", result_flora
+batterie = convert_Battery(result_flora)
+print " -->Watering Status: ", batterie
+
+
+print "============="
+print "Autres donnees :"
+print "============="
+
+
+
+"""
 handlerd = "0x0028"
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 print "Inconnu brut: ", result_flora
@@ -254,9 +297,82 @@ resultat = convert_Battery(result_flora)
 print " -->Inconnu : ", resultat
 
 
+handlerd = "0x0016"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Serial Number: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Name(result_flora)
+print " -->Serial Number : ", resultat.encode('utf-8')
+
+handlerd = "0x0012"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "System ID: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Battery(result_flora)
+print " -->System ID : ", resultat
+
+
+handlerd = "0x0005"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Appereance: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Battery(result_flora)
+print " -->Appereance : ", resultat
+
+
+# Livemeasure Period
+handlerd = "0x003d"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Live measure Period Brut: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Battery(result_flora)
+print " -->Live measure Period : ", resultat
+
+# Led state, value is 1 or 0
+handlerd = "0x003f"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "LED state: ", result_flora
+resultat = convert_Battery(result_flora)
+print " -->LED state : ", resultat
+
+# Calibrated VWC
+handlerd = "0x0041"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Calibrated VWC brut: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_Battery(result_flora)
+print " -->Calibrated VWC : ", resultat
+
+# Calibrated air temperature
+handlerd = "0x0044"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Calibrated air temperature: ", result_flora
+# 30 , app: courbe semble etre vers 35-37
+resultat = convert_temperature(result_flora)
+print " -->Calibrated air temperature : ", resultat
+
+"""
+
 # Gestion du nom
 handlerd = "0x0003"
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 print "Name brut: ", result_flora
 Name = convert_Name(result_flora)
 print " -->Name: ", Name
+
+# Gestion du nom
+handlerd = "0x0070"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Friendly Name brut: ", result_flora
+Name = convert_Name(result_flora)
+print " -->Friendly Name: ", Name
+
+"""
+# Couleur
+handlerd = "0x0072"
+result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
+print "Couleur brut: ", result_flora
+Name = convert_Name(result_flora)
+print " -->Couleur: ", Name
+
+"""
