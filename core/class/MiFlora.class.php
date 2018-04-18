@@ -80,7 +80,7 @@ class MiFlora extends eqLogic
     {
         if (log::getLogLevel('MiFlora') == 100){ // si debug -> chaque minutes
             log::add('MiFlora','debug', 'lance debug toute les minutes ');
-            cron5 ()  ;
+            self::cron5();
         }
     }
 
