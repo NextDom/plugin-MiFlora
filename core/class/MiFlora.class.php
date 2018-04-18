@@ -44,7 +44,7 @@ class MiFlora extends eqLogic
     public static function isProcessMiFlora($frequenceMin , $minutesStartCron ){
         if ( ($minutesStartCron % (round($frequenceMin * 60))) == 0) {
             if ($frequenceMin > 1) {
-                if ((date("H") % (round($frequenceMin))) == 0 and $minutesStartCron == "00") {
+                if ((date("H") % (round($frequenceMin))) == 0) {
                     $processMiFlora = 1;
                 } else {
                     $processMiFlora = 0;
@@ -90,6 +90,7 @@ class MiFlora extends eqLogic
 	public static function cron5()
     {
         $minutesStartCron = date("i") ;
+        log::add('MiFlora', 'info', 'traitement pour :'.$minutesStartCron) ;
         $processMiFlora = self::isMiFloraToBeProcessed($minutesStartCron);
         //log::add('MiFlora', 'info', 'process MiFlora ... '.$processMiFlora);
         if ($processMiFlora == 1){
@@ -124,7 +125,7 @@ class MiFlora extends eqLogic
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
             log::add('MiFlora', 'info', 'enter item per item:'.$mi_flora->getHumanName(false, false));
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
-            if (MiFlora::isProcessMiFlora($frequenceItem) == 0){
+            if (MiFlora::isProcessMiFlora($frequenceItem,$minutesStartCron) == 0){
                 log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false).' frequence toutes les '.round($frequenceItem*60)." minutes, next");
                 // Attn: min frequence = 12h a 0 et 12h --> ok pour batterie"
             } else {
