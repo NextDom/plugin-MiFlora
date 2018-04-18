@@ -103,7 +103,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <div class="col-sm-3">
                                 <select id="frequence" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="frequence" placeholder="frequence de rafraichissement">
                                     <option selected value=0>{{default}}</option>
-                                    <option value=0.01666666667>{{1mn}}</option>
                                     <option value=0.08333333333>{{5mn}}</option>
                                     <option value=0.1666666667>{{10mn}}</option>
                                     <option value=0.25>{{15mn}}</option>
