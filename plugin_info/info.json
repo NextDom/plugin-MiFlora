@@ -1,9 +1,10 @@
 {
 	"id" : "MiFlora",
 	"name" : "MiFlora",
-	"description" : "Plugin pour lire les infos des MiFlora",
-	"licence" : "AGPL",
-	"author" : "Rene",
+	"description" : "Ce plugin permet de gèrer les Xiaomi plants ou Mi Flora. Il nécéssite une connection bluetooth vers les mi flora.",
+	"usage": "Il gère la recuperation des infos de manière déportés par SSH.",
+	"licence" : "GPL2.0",
+	"author" : "Rene Jullien",
 	"require" : "2.4",
 	"version" : "2.0.4",
 	"category" : "nature",
