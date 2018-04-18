@@ -109,9 +109,9 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high",
 
 def convert_temperature(rawValue):
     rawValueInt = rawValue[1] * 255 + rawValue[0]
-    temperature = 0.00000003044 * pow(rawValueInt, 3.0) - 0.00008038 * pow(rawValueInt,
+    temperatureVal = 0.00000003044 * pow(rawValueInt, 3.0) - 0.00008038 * pow(rawValueInt,
                                                                            2.0) + rawValueInt * 0.1149 - 30.449999999999999
-    return round(temperature * 10) / 10
+    return round(temperatureVal * 10) / 10
 
 
 def convert_Lux(rawValue):
