@@ -1,9 +1,9 @@
 # Changelog
 
-## Version 2.0.5 - 18 Avril 2018
+### Version 2.0.5 - 18 Avril 2018
 * Correction d'un bug du rafraîchissement par objet
 
-## Version 2.0.4 - 14 Avril 2018
+### Version 2.0.4 - 14 Avril 2018
 * Gestion du rafraîchissement par objet:
     * Le rafraîchissement par objet vient en complément de celui global dans la configuration du plugin
     * Le rafraîchissement par objet a une valeur supplémentaire *défaut*, dans ce cas la valeur globale est prise en compte
@@ -17,7 +17,7 @@
 * Gestion du rafraîchissement global inférieur à une heure
 * Amélioration de la documentation ainsi que du Readme
 
-## Version 2.0.1: Mars 2018
+### Version 2.0.1: Mars 2018
 
 * Amélioration du code sans changement fonctionnel
   * Déplacement du script python dans ressources

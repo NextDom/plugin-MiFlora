@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 2.0.4 - April 14, 2018
+### Version 2.0.4 - April 14, 2018
 * Refresh management by object:
     * Refreshing by object complements the global one in the plugin configuration
     * Refreshing by object has an additional value *default*, in which case the global value is taken into account
@@ -14,7 +14,7 @@
 * Global refresh management less than one hour
 * Improved documentation and Readme
 
-## Version 2.0.1: March 2018
+### Version 2.0.1: March 2018
 
 * Code improvement without functional change
   * Moving the python script in resources
