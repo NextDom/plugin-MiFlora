@@ -1,51 +1,52 @@
 # Configuration
 
-La partie configuration du plugin permet :
+The configuration part of the plugin allows:
 
-* de choisir la fréquence de relevés des informations du MiFlora, de toutes les 5, 10, 15, 30 minutes, toutes les heures, jusqu'à toutes les 12 heures,
-* de choisir le dongle/port Bluetooth (**_hci0_** en général, `hciconfig` permet de lister ceux disponibles sur votre système),
-* de choisir le niveau de sécurité de la communication Bluetooth (`high` sauf si ce n'est pas supporté par votre système),
-* de choisir entre un mode local et un mode déporté.
+* to choose the frequency of MiFlora information readings every 5, 10, 15, 30 minutes and from every hour up to every 12 hours,
+* to choose the dongle / Bluetooth port (** _ hci0 _ ** in general, `hciconfig` allows to list those available on your system),
+* to choose the security level of the Bluetooth communication (`high` unless it is not supported by your system),
+* to choose between a local mode and a remote mode.
 
-Pour chaque équipement, il faut rentrer l'adresse Bluetooth de l'équipement.
+For each device, you must enter the Bluetooth address of the device.
 
-Il est possible de trouver celle-ci en utilisant les commandes :
+It is possible to find this one using the commands:
 
-```
+`` `
 bluetoothctl
 scan on
-```
+`` `
 
-Les adresses des MiFlora apparaissent comme ci-dessous:
-```
-[NEW] Device C4:7C:8D:xx:xx:xx Flower mate
-[NEW] Device C4:7C:8D:xx:xx:xx Flower care
+The MiFlora addresses appear as below:
+`` `
+[NEW] Device C4: 7C: 8D: xx: xx: xx Flower mate
+[NEW] Device C4: 7C: 8D: xx: xx: xx Flower care
 scan off
 quit
-```
+`` `
+The reading frequency of the data is by default that of the global configuration. It can be changed for each device.
 
-### Utilisation en déporté
+### Remote use
 
-Il est possible que Jeedom pilote un appareil déporté qui se chargera de la communication Bluetooth avec les MiFlora.
+It is possible that Jeedom pilots a remote device that will handle Bluetooth communication with MiFlora.
 
-Dans ce cas, il faut renseigner les paramètres de connexion SSH entre Jeedom et cet appareil déporté :
+In this case, you must enter the SSH connection parameters between Jeedom and this remote device:
 
-Le choix déporté active la partie configuration qui permet de saisir une adresse IP, un port, un nom d'utilisateur ainsi que le mot de passe associé pour l'appareil distant.
-Le plugin va alors se connecter en SSH à l'IP saisie précédemment et récupérer les informations du MiFlora en Bluetooth grâce à la commande `gatttools`
+Ticking the remote box activates the configuration section, which allows you to enter an IP address, a port, a user name and the associated password for the remote device.
+The plugin will then connect in SSH to the previously entered IP and retrieve the information of MiFlora in Bluetooth thanks to the command `gatttools`
 
-Aucun Jeedom n'est nécessaire sur l'équipement distant.
+No Jeedom is needed on the remote device.
 
-### Prérequis
+### Prerequisites
 
-Il faut installer le Bluetooth et s'assurer que `gatttool --device=hci0 -b _macAddMiFlora_ --char-read -a 0x35 --sec-level=high` fonctionne sur l'appareil cible (selon le choix local ou déporté).
+You have to install the Bluetooth and make sure that `gatttool --device = hci0 -b _macAddMiFlora_ --char-read -a 0x35 --sec-level = high` works on the target device (depending on local or remote choice) .
 
-### Configuration avancée
+### Advanced configuration
 
-**_hci :_** permet de choisir le dongle Bluetooth pour ceux qui en ont plusieurs.
+** _ hci: _ ** allows you to choose the Bluetooth dongle for those who have more than one.
 
-**_niveau de sécurité :_** permet de choisir le niveau de sécurité Bluetooth, `high` semble bien dans la majorité des cas, cependant changer le niveau de sécurité semble résoudre certains problèmes de connexions.
+** _ security level: _ ** allows to choose the level of Bluetooth security, `high` seems fine in the majority of cases, however changing the security level seems to solve some connection problems.
 
-### Mode debug
+### Debug mode
 
-Le mode debug permet de lancer en permanence (toutes les minutes), la récupération des données MiFlora. Il convient de limiter son utilisation au debug.
-Laisser le mode debug en permanence va affecter la durée de vie du support de stockage, spécialement les cartes SD et vider plus rapidement la pile de l'appareil.
+The debug mode is used to run constantly (every minute) the MiFlora data recovery. It should be limited to debugging.
+Leaving the debug mode permanently will affect the life of the storage medium, especially SD cards, and drain the battery of the device more quickly.
