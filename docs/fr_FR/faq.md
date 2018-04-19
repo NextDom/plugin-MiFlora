@@ -3,7 +3,7 @@
 ### Est-ce que ce plugin s'appuie sur des API tiers ?
 
 > Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
-Il faut installer le Bluetooth et s'assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.
+Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --char-read -a 0x35` fonctionne sur le device cible.
 
 ### Est ce que ce plugin est compatible avec le plugin FlowerPower ?
 
