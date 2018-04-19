@@ -6,7 +6,7 @@
 	"licence" : "GPL2.0",
 	"author" : "Rene Jullien",
 	"require" : "2.4",
-	"version" : "2.0.4",
+	"version" : "2.0.5",
 	"category" : "nature",
 	"changelog" : "https://jeedom-plugins-extra.github.io/plugin-MiFlora/#language#/#tocAnchor-1-7",
 	"documentation" : "https://jeedom-plugins-extra.github.io/plugin-MiFlora/#language#"

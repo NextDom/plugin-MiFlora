@@ -7,12 +7,12 @@ Xiaomi Plants are Xiaomi brand Bluetooth sticks for measuring the hygrometry, te
 
 # Market
 
-Find it on the Jeedom Market [here] (https://www.jeedom.com/market/index.php?v=d&p=market&type=plugin&&name=MiFlora)
+Find it on the Jeedom Market [here](https://www.jeedom.com/market/index.php?v=d&p=market&type=plugin&&name=MiFlora)
 
-# preview
+# Preview
 
 ![scrennshot1](../images/MiFlora-Screenshot1.png)
 
 # Forum
 
-Link to the forum [here] (https://www.jeedom.com/forum/viewtopic.php?t=22870)
+Link to the forum [here](https://www.jeedom.com/forum/viewtopic.php?t=22870)
