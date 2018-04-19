@@ -7,7 +7,7 @@ You must install Bluetooth and make sure that gatttool -b macAddMiFlora --char-r
 
 ### Is this plugin compatible with the FlowerPower plugin?
 
-Yes, validated by Nechry.
+> Yes, validated by Nechry.
 
 
 ### Does this plugin monopolize Bluetooth?

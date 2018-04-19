@@ -11,18 +11,18 @@ For each device, you must enter the Bluetooth address of the device.
 
 It is possible to find this one using the commands:
 
-`` `
+```
 bluetoothctl
 scan on
-`` `
+```
 
 The MiFlora addresses appear as below:
-`` `
+```
 [NEW] Device C4: 7C: 8D: xx: xx: xx Flower mate
 [NEW] Device C4: 7C: 8D: xx: xx: xx Flower care
 scan off
 quit
-`` `
+```
 The reading frequency of the data is by default that of the global configuration. It can be changed for each device.
 
 ### Remote use
