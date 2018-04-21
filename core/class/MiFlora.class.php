@@ -145,6 +145,12 @@ class MiFlora extends eqLogic
                     $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
                     $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
                     $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
+                    if($battery<getConfiguration('battery_danger_threshold')){
+                        log::add('MiFlora', 'error', 'Error: Batterie faible - '.$battery);
+
+                    } elseif ($battery<getConfiguration('battery_warning_threshold')) {
+                        log::add('MiFlora', 'error', 'Warning: Batterie faible - '.$battery);
+                    }
                 }
                 $tryGetData = 0;
                 $MiFloraData = '';
@@ -258,7 +264,8 @@ class MiFlora extends eqLogic
         $this->setConfiguration('firmware_version', '');
         $this->setConfiguration('plant_name', '');
         $this->setConfiguration('frequence', '0');
-
+        $this->setConfiguration('battery_danger_threshold','10');
+        $this->setConfiguration('battery_warning_threshold','15');
     }
 
     /* public function postInsert()

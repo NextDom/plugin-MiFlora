@@ -1,4 +1,7 @@
 # Changelog
+### Version 2.0.6 - 21 Avril 2018
+* Ajout de valeur par default pour l'alerte batterie faible'
+* Ajout d'une erreur des que le niveau de la batterie descend en dessous de la limite
 
 ### Version 2.0.5 - 18 Avril 2018
 * Correction d'un bug du rafraîchissement par objet

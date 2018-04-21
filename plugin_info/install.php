@@ -43,13 +43,21 @@ function MiFlora_update() {
 
     // Set default values for each existing equipments
     foreach (eqLogic::byType('MiFlora') as $eqLogic) {
-      $frequenceItem = $eqLogic->getConfiguration('frequence');
-      if ($frequenceItem == ""){
-        $frequenceItem=0;
-        $eqLogic->setConfiguration('frequence',$frequenceItem); //default value in config::
-      }
-      $eqLogic->save();
-      log::add('MiFlora', 'info', 'frequenceItem-Install: '.$frequenceItem);
+        $frequenceItem = $eqLogic->getConfiguration('frequence');
+        if ($frequenceItem == "") {
+            $frequenceItem = 0;
+            $eqLogic->setConfiguration('frequence', $frequenceItem); //default value in config::
+        }
+        if ($eqLogic->getConfiguration('battery_danger_threshold') == "") {
+            $eqLogic->setConfiguration('battery_danger_threshold', '10');
+            log::add('MiFlora', 'info', 'battery_danger_threshold-Install: 10');
+        }
+        if ($eqLogic->getConfiguration('battery_warning_threshold') == "") {
+            $eqLogic->setConfiguration('battery_warning_threshold', '15');
+            log::add('MiFlora', 'info', 'battery_warning_threshold-Install: 15');
+        }
+        $eqLogic->save();
+        log::add('MiFlora', 'info', 'frequenceItem-Install: ' . $frequenceItem);
 
     }
 
