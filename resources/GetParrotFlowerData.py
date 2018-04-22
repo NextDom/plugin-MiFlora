@@ -290,9 +290,9 @@ if flora_action == "all" or flora_action == "data":
     soil_moisture_brut = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
         print "Soil Moisture brut: ", soil_moisture_brut
-    soil_moisture = convert_SoilMoisture(result_flora)
+    soil_moisture = convert_SoilMoisture(soil_moisture_brut)
     if flora_debug == "1":
-        print " -->relativeHumidity:", soil_moisture
+        print " -->relativeHumidity-Soil Moisture brut:", soil_moisture
 
     # Gestion de Soil Moisture calibre
     if FlowerPowerOrPot == "0":
@@ -302,11 +302,11 @@ if flora_action == "all" or flora_action == "data":
 
     soil_moisture_brut_calibre = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print "Soil Moisture brut: ", soil_moisture_brut_calibre
+        print "Soil Moisture brut calibre: ", soil_moisture_brut_calibre
     #TODO Trouver formule conversion - 4 octets
-    soil_moisture_calibre = convert_SoilMoisture(result_flora)
+    soil_moisture_calibre = convert_SoilMoisture(soil_moisture_brut_calibre)
     if flora_debug == "1":
-        print " -->relativeHumidity:", soil_moisture_calibre
+        print " -->relativeHumidity-Soil Moisture brut calibre:", soil_moisture_calibre
 
 #moisture = soil_moisture * last_pressure;
 #print " -->Moisture:", moisture
@@ -481,10 +481,12 @@ if flora_debug == "1":
         print " -->Batterie %: ", batterie
     if flora_action == "data" or flora_action == "all":
         print " -->relativeHumidity:", soil_moisture
+        print " -->relativeHumidity calibre:", soil_moisture_calibre
         print " -->relativeHumidity RJ:", soil_moisture_RJ
-        print " -->Soil EC:", soilEC, " (comment utiliser ?)"
+        print " -->Soil EC:", soilEC
         print " -->Lux:", lux
         print " -->Air Temperature:", temperature_air
+        print " -->Air Temperature calibre:", temperature_air_calibre
         print " -->Soil Temperature:", temperature_terre
     if FlowerPowerOrPot == 1:
         if flora_action == "watering" or flora_action == "all":
