@@ -179,6 +179,10 @@ flora_debug=0
 FlowerPowerOrPot=0
 flora_action="all"
 mac_add = "A0:14:3D:7D:77:26"
+
+# test des valeurs calibres, ne marche pas encore, mettre a 1 pour tester
+flora_calibre="0"
+
 if len(sys.argv) >= 7:
     adpater = sys.argv[6]
 if len(sys.argv) >= 6:
@@ -225,7 +229,7 @@ if flora_action == "all" or flora_action == "data":
     else:
         handlerd = "0x0037"
 
-    result_flora = read_ble(mac_add, handlerd, adpater, security, )
+    result_flora = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
         print "Air Temperature brute:", result_flora
     temperature_air = convert_temperature(result_flora)
@@ -237,6 +241,20 @@ if flora_action == "all" or flora_action == "data":
     # TODO: convert raw(0 - 1771) to 0 to 10(mS / cm)
     # avec convert_Soil: 19,4% avec cette formule, app: 20/21%
     #print " -->Last Pressure:", last_pressure
+
+    # Gestion de la temperature de l'air calibre
+    if FlowerPowerOrPot == "0":
+        handlerd = "0x0043"
+    else:
+        handlerd = "0x0037" # TODO trouver le handle
+
+    result_flora = read_ble(mac_add, handlerd, adpater, security)
+    if flora_debug == "1":
+        print "Air Temperature brute calibre:", result_flora
+    # TODO trouver formule de conversion - 4 octets
+    temperature_air_calibre = convert_temperature(result_flora)
+    if flora_debug == "1":
+        print " -->Air Temperature calibre:", temperature_air_calibre
 
     # Gestion des LUX
     handlerd = "0x0025"
@@ -276,6 +294,19 @@ if flora_action == "all" or flora_action == "data":
     if flora_debug == "1":
         print " -->relativeHumidity:", soil_moisture
 
+    # Gestion de Soil Moisture calibre
+    if FlowerPowerOrPot == "0":
+        handlerd = "0x003f"
+    else:
+        handlerd = "0x003a" ## TODO trouver handle
+
+    soil_moisture_brut_calibre = read_ble(mac_add, handlerd, adpater, security)
+    if flora_debug == "1":
+        print "Soil Moisture brut: ", soil_moisture_brut_calibre
+    #TODO Trouver formule conversion - 4 octets
+    soil_moisture_calibre = convert_SoilMoisture(result_flora)
+    if flora_debug == "1":
+        print " -->relativeHumidity:", soil_moisture_calibre
 
 #moisture = soil_moisture * last_pressure;
 #print " -->Moisture:", moisture
@@ -462,6 +493,9 @@ if flora_debug == "1":
 if flora_debug == "0":
     if flora_action == "data":
         print "Soil_moisture:", soil_moisture_RJ, ",Fertility:", soilEC, ",Lux:", lux,",Air_Temperature:", temperature_air,",Soil_Temperature:", temperature_terre
+        if flora_calibre == "1":
+            print "soil_moisture_calibre:",soil_moisture_calibre,"temperature_air_calibre",temperature_air_calibre
+
     if flora_action ==  "static":
         print "Name: ", Name, ",Batterie: ", batterie
     if FlowerPowerOrPot == "0":
