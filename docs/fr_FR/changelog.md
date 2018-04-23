@@ -1,7 +1,12 @@
 # Changelog
-### Version 2.0.6 - 21 Avril 2018
-* Ajout de valeur par défault pour l'alerte batterie faible'
+
+### Version 2.0.7 - 21 Avril 2018 - Dev en cours
+* Ajout de valeur par défaut pour l'alerte batterie faible'
 * Ajout d'une erreur des que le niveau de la batterie descend en dessous de la limite
+* Gestion du Parrot flower dans le script Python pour intégration future dans le plugin
+
+### Version 2.0.6 - 23 Avril 2018 Beta
+* Correction du warning dans http.error
 
 ### Version 2.0.5 - 18 Avril 2018
 * Correction d'un bug du rafraîchissement par objet
