@@ -2,12 +2,12 @@
 
 ### Does this plugin rely on third-party APIs?
 
-> Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
-Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --char-read -a 0x35` fonctionne sur le device cible.
+> The plugin uses Bluetooth to retrieve information from MiFlora.
+You need to install Bluetooth and make sure that `gatttool -b macAddMiFlora --char-read -a 0x35` is running on the target device.
 
 ### Is this plugin compatible with the FlowerPower plugin?
 
-> Oui, validé par Nechry.
+> Yes, validated by Nechry.
 
 
 ### Does this plugin monopolize Bluetooth?
