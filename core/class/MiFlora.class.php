@@ -80,24 +80,24 @@ class MiFlora extends eqLogic
     {
         if (log::getLogLevel('MiFlora') == 100){ // si debug -> chaque minutes
             log::add('MiFlora','debug', 'lance debug toute les minutes ');
-            self::cron5();
+            self::cron15();
         }
     }
 
 
 
 
-	public static function cron5()
+	public static function cron15()
     {
         $minutesStartCron = date("i") ;
         log::add('MiFlora', 'info', 'traitement pour :'.$minutesStartCron) ;
         $processMiFlora = self::isMiFloraToBeProcessed($minutesStartCron);
         //log::add('MiFlora', 'info', 'process MiFlora ... '.$processMiFlora);
         if ($processMiFlora == 1){
-            // log::add('MiFlora', 'info', 'start process MiFlora ...');
+             log::add('MiFlora', 'info', 'start process MiFlora ...');
             self::ProcessMiFlora($minutesStartCron);
        } else{
-            // log::add('MiFlora', 'info', 'skip MiFlora ...');
+            log::add('MiFlora', 'info', 'skip MiFlora ...');
         }
     }
 
@@ -183,7 +183,8 @@ class MiFlora extends eqLogic
                     }
                 }
                 if ($MiFloraData == '') {
-                    log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop');
+                    log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour '.$mi_flora->getHumanName(false, false));
+                    message::add ('MiFlora', 'mi flora data is empty for '.$mi_flora->getHumanName(false, false) .' check module');
                 } else {
                     $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
                     $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
@@ -278,6 +279,18 @@ class MiFlora extends eqLogic
 
     public function postUpdate()
     {
+/*        $refresh = $this->getCmd(null, 'refresh');
+        if (!is_object($refresh)) {
+            $refresh = new networksCmd();
+            $refresh->setLogicalId('refresh');
+            $refresh->setIsVisible(1);
+            $refresh->setName(__('Rafraîchir', __FILE__));
+        }
+        $refresh->setType('action');
+        $refresh->setSubType('other');
+        $refresh->setEqLogic_id($this->getId());
+        $refresh->save();*/
+
         $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'temperature');
         if (!is_object($cmdlogic)) {
             $MiFloraCmd = new MiFloraCmd();
