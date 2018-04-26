@@ -279,6 +279,19 @@ class MiFlora extends eqLogic
 
     public function postUpdate()
     {
+        $lastrefresh = $this->getCmd(null, 'lastrefresh');
+        if (!is_object($lastrefresh)) {
+            $lastrefresh = new MiFloraCmd();
+            $lastrefresh->setLogicalId('lastrefresh');
+            $lastrefresh->setIsVisible(1);
+            $lastrefresh->setName(__('Dernier refresh', __FILE__));
+        }
+        $lastrefresh->setType('info');
+        $lastrefresh->setSubType('string');
+        $lastrefresh->setEventOnly(1);
+        $lastrefresh->setEqLogic_id($this->getId());
+        $lastrefresh->save();
+
         $refresh = $this->getCmd(null, 'refresh');
         if (!is_object($refresh)) {
             $refresh = new MiFloraCmd();
@@ -606,6 +619,13 @@ class MiFlora extends eqLogic
                 if (is_object($cmd)) {
                     $cmd->event($lux);
                     log::add('MiFlora', 'info', $macAdd . ' Store Lux:' . $lux);
+
+                }
+                $cmd = $this->getCmd(null, 'lastrefresh');
+                if (is_object($cmd)) {
+                    $lastrefresh=(date('H:i'));
+                    $cmd->event($lastrefresh);
+                    log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
                 }
             }
         }
