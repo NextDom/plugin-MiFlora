@@ -279,9 +279,9 @@ class MiFlora extends eqLogic
 
     public function postUpdate()
     {
-/*        $refresh = $this->getCmd(null, 'refresh');
+        $refresh = $this->getCmd(null, 'refresh');
         if (!is_object($refresh)) {
-            $refresh = new networksCmd();
+            $refresh = new MiFloraCmd();
             $refresh->setLogicalId('refresh');
             $refresh->setIsVisible(1);
             $refresh->setName(__('Rafraîchir', __FILE__));
@@ -289,7 +289,7 @@ class MiFlora extends eqLogic
         $refresh->setType('action');
         $refresh->setSubType('other');
         $refresh->setEqLogic_id($this->getId());
-        $refresh->save();*/
+        $refresh->save();
 
         $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'temperature');
         if (!is_object($cmdlogic)) {
@@ -662,6 +662,9 @@ class MiFlora extends eqLogic
         }
 
         log::add('MiFlora', 'debug', $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'miflora'))));
+
+        $refresh = $this->getCmd(null, 'refresh');
+        $replace['#refresh_id#'] = $refresh->getId();
 
         return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'MiFlora')));
     }

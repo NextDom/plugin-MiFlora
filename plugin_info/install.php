@@ -57,7 +57,22 @@ function MiFlora_update() {
             log::add('MiFlora', 'info', 'battery_warning_threshold-Install: 15');
         }
         $eqLogic->save();
-        log::add('MiFlora', 'info', 'frequenceItem-Install: ' . $frequenceItem);
+        log::add('MiFlora', 'info', 'frequenceItem-Install: ' .$eqLogic->getHumanName(false, false).": ". $frequenceItem);
+
+        ## Cree la commande refresh pour les objets existants
+        $refresh = $eqLogic->getCmd(null, 'refresh');
+        if (!is_object($refresh)) {
+            $refresh = new MiFloraCmd();
+            $refresh->setLogicalId('refresh');
+            $refresh->setIsVisible(1);
+            $refresh->setName(__('Rafraîchir', __FILE__));
+            $refresh->setType('action');
+            $refresh->setSubType('other');
+            refresh->setEqLogic_id($this->getId());
+            $refresh->save();
+            log::add('MiFlora', 'info', 'Refresh-Install: add ' . $eqLogic->getHumanName(false, false));
+        }
+
 
     }
 
