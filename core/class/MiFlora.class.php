@@ -145,10 +145,10 @@ class MiFlora extends eqLogic
                     $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
                     $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
                     $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
-                    if($battery<getConfiguration('battery_danger_threshold')){
+                    if($battery<$mi_flora->getConfiguration('battery_danger_threshold')){
                         log::add('MiFlora', 'error', 'Error: Batterie faible - '.$battery);
 
-                    } elseif ($battery<getConfiguration('battery_warning_threshold')) {
+                    } elseif ($battery<$mi_flora->getConfiguration('battery_warning_threshold')) {
                         log::add('MiFlora', 'error', 'Warning: Batterie faible - '.$battery);
                     }
                 }
