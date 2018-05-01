@@ -30,21 +30,21 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 </center>
                 <span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Ajouter}}</center></span>
             </div>
- 
+
             <div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
                 <center>
                     <i class="fa fa-wrench" style="font-size : 6em;color:#767676;"></i>
                 </center>
                 <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Configuration}}</center></span>
             </div>
-  
+
             <div class="cursor" id="bt_remoteMiFlora" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
                 <center>
                     <i class="fa fa-bluetooth" style="font-size : 6em;color:#767676;"></i>
                 </center>
                 <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Antennes}}</center></span>
             </div>
-  
+
               <div class="cursor" id="bt_healthMiFlora" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
          <center>
             <i class="fa fa-medkit" style="font-size : 6em;color:#767676;"></i>
@@ -141,7 +141,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 
                         <div class="form-group">
-                                <label class="col-sm-3 control-label help" data-help="{{Antenne qui prendra les infos)}}">{{Antenne}}</label>
+                                <label class="col-sm-3 control-label help" data-help="{{Antenne qui prendra les infos}}">{{Antenne}}</label>
                                 <div class="col-sm-3">
                                     <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="antenna">
                                         <option value="local">{{Local}}</option>

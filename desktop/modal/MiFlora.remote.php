@@ -41,7 +41,7 @@ sendVarToJS('plugin', $id);
 foreach ($remotes as $remote) {
 	echo '<div class="eqLogicDisplayCard cursor pull-left" data-remote_id="' . $remote->getId() . '" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo "<center>";
-	echo '<img class="lazy" src="plugins/MiFlora/3rdparty/antenna.png" height="105" width="95" />';
+	echo '<img class="lazy" src="plugins/MiFlora/plugin_info/antenna.png" height="105" width="95" />';
 	echo "</center>";
 	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02""><center>' . $remote->getRemoteName() . '</center></span>';
 	echo '</div>';
@@ -102,7 +102,7 @@ foreach ($remotes as $remote) {
 		$('.remoteThumbnailDisplay').hide();
 		$('.MiFloraRemoteAttr').value('');
 	});
-	
+
 	$('.eqLogicDisplayCard').on('click',function(){
 		displayMiFloraRemote($(this).attr('data-remote_id'));
 	});
@@ -133,7 +133,7 @@ foreach ($remotes as $remote) {
 			}
 		});
 	}
-	
+
 	function displayMiFloraRemoteComm(_id){
 		$('.li_MiFloraRemote').removeClass('active');
 		$('.li_MiFloraRemote[data-MiFloraRemote_id='+_id+']').addClass('active');
@@ -164,7 +164,7 @@ foreach ($remotes as $remote) {
 		displayMiFloraRemote($(this).attr('data-MiFloraRemote_id'));
 		$('.remoteThumbnailDisplay').hide();
 	});
-	
+
 	$('.returnAction').on('click',function(){
 		$('.MiFloraRemote').hide();
 		$('.li_MiFloraRemote').removeClass('active');
@@ -195,7 +195,7 @@ foreach ($remotes as $remote) {
 				$('#md_modal').dialog({title: "{{Gestion des antennes bluetooth}}"});
 				$('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=MiFlora.remote&id=MiFlora').dialog('open');
 				setTimeout(function() { displayMiFloraRemote(data.result.id) }, 200);
-				
+
 			}
 		});
 	});

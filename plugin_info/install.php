@@ -33,6 +33,21 @@ function MiFlora_update() {
     foreach (MiFlora::byType('MiFlora') as $miflora) {
         $miflora->save();
     }
+    if (config::byKey('maitreesclave', 'MiFlora') == "deporte"){
+        log::add('MiFlora', 'info', 'config - migrate existing remote collection to antenna');
+        // TODO creer une antenne avec les info suivante si elle n'existe pas
+        // config::byKey('addressip', 'MiFlora');
+        // config::byKey('portssh', 'MiFlora');
+        // config::byKey('user', 'MiFlora');
+        // config::byKey('password', 'MiFlora');
+        // $antenneAncienneMethode= New name
+        $antenneAncienneMethode = "local"; // replacer par new name
+    } else {
+        $antenneAncienneMethode = "local";
+    }
+
+    # TODO - after Beta - Sept 18
+    # Effacer maitreesclave, addressip, portssh, user, password
 
     if (config::byKey('frequence', 'MiFlora') == ""){
         config::save('frequence', '1', 'MiFlora');
@@ -60,7 +75,7 @@ function MiFlora_update() {
         log::add('MiFlora', 'info', 'frequenceItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' . $frequenceItem);
         $antenne = $eqLogic->getConfiguration('antenna');
         if ($antenne == "") {
-            $antenne = "local";
+            $antenne = $antenneAncienneMethode;
             $eqLogic->setConfiguration('antenna', $antenne); //default value in config::
         }
         $eqLogic->save();
