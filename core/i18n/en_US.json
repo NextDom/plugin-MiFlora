@@ -1,29 +1,29 @@
 {
   "plugins\/MiFlora\/plugin_info\/info.json": {
-    "Plugin pour lire les infos des MiFlora": "Plugin pour lire les infos des MiFlora"
+    "Plugin pour lire les infos des MiFlora": "Plugin to read MiFlora devices"
   },
   "plugins\/MiFlora\/plugin_info\/configuration.php": {
-    "�quipement local ou d�port� ?": "�quipement local ou d�port� ?",
+    "�quipement local ou d�port� ?": "Local or remote equipment?",
     "Local": "Local",
-    "D�port�": "D�port�",
+    "D�port�": "Remote",
     "Remote IP": "Remote IP",
-    "saisir l'adresse IP": "saisir l'adresse IP",
-    "Port SSH": "Port SSH",
-    "saisir le port SSH (22)": "saisir le port SSH (22)",
-    "User Id": "Id utilisateur",
-    "saisir le login": "saisir le login",
-    "Password": "Mot de passe",
-    "saisir le mot de passe": "saisir le mot de passe"
+    "saisir l'adresse IP": "enter the IP address",
+    "Port SSH": "SSH port",
+    "saisir le port SSH (22)": "enter the SSH port (22)",
+    "User Id": "User ID",
+    "saisir le login": "enter the login",
+    "Password": "Password",
+    "saisir le mot de passe": "enter the password"
   },
   "plugins\/MiFlora\/desktop\/php\/MiFlora.php": {
-    "Ajouter un MiFlora": "Ajouter un MiFlora",
-    "Mes MiFloras": "Mes MiFloras",
-    "Gestion": "Gestion",
-    "Ajouter": "Ajouter",
+    "Ajouter un MiFlora": "Add a MiFlora",
+    "Mes MiFloras": "My MiFloras",
+    "Gestion": "Management",
+    "Ajouter": "Add",
     "Configuration": "Configuration",
-    "Rechercher": "Rechercher"
+    "Rechercher": "Search"
   },
   "plugins\/MiFlora\/desktop\/js\/MiFlora.js": {
-    "Tester": "Tester"
+    "Tester": "Test"
   }
 }

@@ -23,6 +23,7 @@ Les adresses des MiFlora apparaissent comme ci-dessous:
 scan off
 quit
 ```
+La fréquence de lecture des données est par défaut celle de la configuration globale. Elle peut être modifié pour chaque équipement.
 
 ### Utilisation en déporté
 

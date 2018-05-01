@@ -1,54 +1,54 @@
 # FAQ
 
-### Est-ce que ce plugin s'appuie sur des API tiers ?
+### Does this plugin rely on third-party APIs?
 
-> Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
-Il faut installer le Bluetooth et s'assurer que gatttool -b macAddMiFlora --char-read -a 0x35 fonctionne sur le device cible.
+> The plugin uses Bluetooth to retrieve information from MiFlora.
+You must install Bluetooth and make sure that `gatttool -b macAddMiFlora --char-read -a 0x35` is running on the target device.
 
-### Est ce que ce plugin est compatible avec le plugin FlowerPower ?
+### Is this plugin compatible with the FlowerPower plugin?
 
-Oui, validé par Nechry.
-
-
-### Est ce que ce plugin monopolise le Bluetooth ?
-
-> Non pas du tout, il a besoin du Bluetooth pour chaque relevé, cf question suivante pour plus de détails sur le nombre de relevés par jour.
+> Yes, validated by Nechry.
 
 
-### Combien de fois par jour les mesures sont-elles récupérées ?
+### Does this plugin monopolize Bluetooth?
 
-> C'est défini dans la configuration globale du plugin, pour tous les objets : de toutes les heures à toutes les 12 heures.
-J'utilise le modulo de l'heure actuelle avec la fréquence saisie en paramètre. +
-Attention: en mode debug, les données sont récupérés en permanence indépendamment de la configuration.
-
-> Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi.
+> Not at all, he needs Bluetooth for each statement, see next question for more details on the number of readings per day.
 
 
-### Avec quelle version de firmware ce plugin est-il compatible ?
+### How many times a day are the measurements retrieved?
 
-> Il est compatible avec toutes les versions connues à ce jour (2.9.2) depuis la version 1.0 du plugin.
+> It is defined in the global configuration of the plugin, for all objects: from every hour to every 12 hours.
+I use the modulo of the current time with the frequency entered in parameter. +
+Warning: in debug mode, data is retrieved continuously regardless of the configuration.
+
+> The static information (battery, device name, firmware version) is retrieved every 12 hours: at midnight and noon.
 
 
-### Je possède un RPI3, J'ai dû désactiver le Bluetooth interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le Bluetooth interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le RPI3 ?
+### Which firmware version is this plugin compatible with?
 
-> Il faut prendre un dongle BLE sans faute. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
+> It is compatible with all versions known to date (2.9.2) since version 1.0 of the plugin.
 
 
-### Je souhaite contribuer à l'amélioration de ce plugin, est ce possible ?
+### I have a RPI3, I had to disable the internal Bluetooth to not have interference with the Zwave (razberry). Should I always keep the internal Bluetooth off to solve this problem? If not, does any BT USB stick fit the MiFlora and RPI3?
 
-> Bien sur, le code est sur GitHub : rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests.
+> You have to take a BLE dongle. The problem with the razberry is only if you use the internal controller.
 
-### gatttool est instable et se bloque sur RPI
 
-> Il y a beaucoup de configuration qui peuvent générer ce problème. Avec Pixel il faut faire attention d'avoir un seul gestionnaire de bluetooth.
-BlueZ est incompatible avec blueman (sudo apt-get remove blueman)
+### I wish to contribute to the improvement of this plugin, is it possible?
 
-### Le plugin fonctionne bien: que puis je faire avec ?
+> Of course, the code is on GitHub: rjullien / jeedom_MiFlora, you can submit pull requests.
 
-> Les valeurs d'humidité, de fertilité, de luminosité et de températures sont accessible depuis des scénarios.
+### gatttool is unstable and hangs on RPI
 
-> Il est possible de lire ces valeurs, de les comparer à un seuil et d'alerter en cas de dépassement du seuil, par exemple pour arroser une plante.
+> There is a lot of configuration that can cause this problem. With Pixel you have to be careful to have a single bluetooth manager.
+BlueZ is incompatible with blueman (sudo apt-get remove blueman)
 
-> Les alertes peuvent être données par du 'text to speech' (plugin playTTS par exemple), par notification sur smartphone (plugin pushbullet), par SMS ...
+### The plugin works well: what can I do with it?
 
-> Les seuils peuvent être trouvés en utilisant la base de plantes de Xiaomi ou celle de Parrot à défaut un seuil entre 14 et 16 semble convenir à une majorité de plantes d'intérieur.
+> Humidity, fertility, brightness and temperature values ​​are accessible from scenarios.
+
+> It is possible to read these values, to compare them to a threshold and to warn if the threshold is exceeded, for example to water a plant.
+
+> Alerts can be given by text to speech (plugin playTTS for example), by notification on smartphone (pushbullet plugin), by SMS ...
+
+> Thresholds can be found using Xiaomi's database or Parrot's database or a threshold between 14 and 16 seems suitable for a majority of houseplants.

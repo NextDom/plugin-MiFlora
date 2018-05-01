@@ -1,80 +1,97 @@
 # Changelog
 
-### Version 2.0.1
-* Amélioration du code sans changement fonctionnel
-  * Déplacement du script python dans ressources
-  * mise en place de travis-ci
-  * correction des warnings lint python
-  * Correction de la documentation
+### Version 2.0.4 - April 14, 2018
+* Refresh management by object:
+    * Refreshing by object complements the global one in the plugin configuration
+    * Refreshing by object has an additional value *default*, in which case the global value is taken into account
+    * Each MiFlora has its refresh rate which replaces the global value when it is not at the value *default*
+    * In debug mode, all objects are read every minute regardless of these values
 
-### Version 2.0.0
+### Version 2.0.3 - April 6, 2018
+* Deleting the PayPal link in the documentation so that the plugin is no longer obsolete
 
-* Migration de la documentation au format markdown et intégration dans le template Jeedom-Plugins-Extra
+### Version 2.0.2 - April 2, 2018
+* Global refresh management less than one hour
+* Improved documentation and Readme
 
-### Version 1.2.5: 31 Mai 2017
+### Version 2.0.1: March 2018
 
-* correction d'un bug sur la fertilité (récupération des 2 octets au lieu d'un seul)
-* Changement de l'icône pour respecter la charte Jeedom
+* Code improvement without functional change
+  * Moving the python script in resources
+  * setting up travis-ci
+  * lint python warnings fix
+  * Correction of the documentation
 
-### Version 1.2.4: 18 Mars 2017
+### Version 2.0.0: March 2018
 
-* Inversions du change log pour plus de lisibilité
-* Gestion du firmware 2.9.2 - inversion du test seul 2.6.2 est géré avec l'ancienne méthode
+* Migration of the documentation in markdown format and integration into the Jeedom-Plugins-Extra template
 
-### Version 1.2.3: 16 Janvier en Bêta
+### Version 1.2.5: May 31, 2017
 
-* Amélioration de la gestion des erreurs de lecture
+* fixed a bug on fertility (recovery of 2 bytes instead of one)
+* Changing the icon to match Jeedom chart
+
+### Version 1.2.4: March 18, 2017
+
+* Inversions of the change log for more readability
+* Firmware Management 2.9.2 - Inversion of Test Only 2.6.2 is managed with the old method
+
+### Version 1.2.3: January 16
+
+* Improved management of reading errors
 
 ### Version 1.2.2:
 
-* Correction du bug du script python
+* Fixed python script bug
 
-### Version 1.2.1: 7 janvier 2017
+### Version 1.2.1: January 7, 2017
 
-* Correction des températures négatives (pull request de frederic34)
+* Negative temperature correction (frederic34 pull request)
 
-### Version 1.2: 5 janvier 2017
+### Version 1.2: January 5, 2017
 
-* multiple corrections orthographiques
-* migration de la récupération des données vers le script python
-* amélioration de la FAQ
+* multiple spelling corrections
+* migration of data recovery to the python script
+* FAQ improvement
 
-### Version 1.1: 11 décembre 2016
+### Version 1.1: December 11, 2016
 
-* Utilisation du paramètre hci et sec-level pour le firmware 2.6.6 et 2.7.0. (modification du script python)
+* Use of the hci and sec-level parameter for firmware 2.6.6 and 2.7.0. (modification of the python script)
 
-### Version 1.0.1: 11 décembre 2016
+### Version 1.0.1: December 11, 2016
 
-* Correction du bug pour les nouveaux firmware en mode local
+* Fixed bug for new firmware in local mode
 
-### Version 1.0 : 10 décembre 2016
+### Version 1.0: December 10, 2016
 
-* Support du firmware 2.6.6 et 2.7.0 en mode local et déporté
-* Choix du no de hci dans la config, très utile si le hci0 est affecté à un plugin exclusif ou s'il ne gère pas le Bluetooth BLE
-* Choix du niveau de sécurité Bluetooth afin de résoudre les problèmes de certains dongles qui ne gèrent pas le niveau high
-* le hci et niveau de sécurité n'est pas pris en compte pour le firmaware 2.6.6 et 2.7.0. (modification du script python pas encore testées)
+* 2.6.6 and 2.7.0 firmware support in local and remote mode
+* Choice of the hci in the config, very useful if the hci0 is assigned to an exclusive plugin or if it does not manage the Bluetooth BLE
+* Choice of the Bluetooth security level to solve the problems of some dongles that do not manage the high level
+* the hci and security level is not taken into account for the firmware 2.6.6 and 2.7.0. (modification of the python script not yet tested)
 
-### Version 0.8 : 9 décembre 2016
+### Version 0.8: December 9, 2016
 
-* Affichage des items de Configuration en champ lecture seul.
-* Widget desktop et mobile dédié.
-* ajout de la date de dernière collecte
-* forcer la récupération du firmware s'il est vide
-* Le mode debug provoque une collection de données toutes les minutes, attention à ne pas le laisser en permanence surtout si vous êtes sur une carte SD
-* Définir les nouveaux équipements en visible et activés par défaut
-* Ajout de l'unité pour 'fertility', ce champ mesure en fait la conductivité ce qui permet de déduire la fertilité du sol
+* Display of Configuration items in read only field.
+* Desktop and mobile dedicated widget.
+* adding date of last collection
+* force the recovery of the firmware if it is empty
+* Debug mode causes a collection of data every minute, be careful not to leave it permanently especially if you are on an SD card
+* Set new devices visible and enabled by default
+* Addition of the unit for 'fertility', this field actually measures the conductivity which allows to deduce the fertility of the soil
 
-### Versions 0.1 ... 0.7: 24 Novembre 2016 - 2 Décembre 2016
+### Versions 0.1 ... 0.7: 24 November 2016 - 2 December 2016
 
-* Version initiale du plugin.
+* Initial version of the plugin.
 
-### Idées pour les versions suivantes :
+### Ideas for the following versions:
 
-* Ajouter le test des config : hci et sec-level doivent être rempli
-* Choix du log erreur ou info en cas de problème de connexion au bout de 4 essais
-* Tester que la macadd est <> entre les Équipements (erreur de copie colle)
-* Tester l'état du Bluetooth et le redémarrer en cas de problème (sudo hciconfig hci0 down,sudo hciconfig hci0 up) par exemple l'erreur connect error: Connection refused (111)
-* Provoquer une récupération des données tout de suite après l'ajout du matériel ? ou une commande pour forcer la mise à jour
-* Bouton pour détecter un nouveau MiFlora (éviter de trouver l'adresse à la main)
+* Manage other brands than Xiaomi for plants (Parrot)
+* Manage multiple remote devices and associate them with devices to increase the Bluetooth port by adding multiple receivers
+* Add the config test: hci and sec-level must be filled
+* Choice of error log or info in case of connection problem after 4 tests
+* Test that macadd is <> between Equipments (glue copy error)
+* Test the Bluetooth status and restart it if there is a problem (sudo hciconfig hci0 down, sudo hciconfig hci0 up) for example the error error error: Connection refused (111)
+* Cause data recovery right after adding the hardware? or a command to force the update
+* Button to detect a new MiFlora (avoid finding the address by hand)
 
-Cette liste de questions provient essentiellement de vos questions sur le fil de discussion MiFlora du forum.
+This list of questions comes primarily from your questions on the forum's MiFlora thread.

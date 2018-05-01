@@ -99,6 +99,30 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">{{frequence de recuperation des données}}</label>
+                            <div class="col-sm-3">
+                                <select id="frequence" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="frequence" placeholder="frequence de rafraichissement">
+                                    <option selected value=0>{{default}}</option>
+                                    <option value=0.08333333333>{{5mn}}</option>
+                                    <option value=0.1666666667>{{10mn}}</option>
+                                    <option value=0.25>{{15mn}}</option>
+                                    <option value=0.5>{{30mn}}</option>
+                                    <option value=1>{{1h}}</option>
+                                    <option value=2>{{2h}}</option>
+                                    <option value=3>{{3h}}</option>
+                                    <option value=4>{{4h}}</option>
+                                    <option value=5>{{5h}}</option>
+                                    <option value=6>{{6h}}</option>
+                                    <option value=7>{{7h}}</option>
+                                    <option value=8>{{8h}}</option>
+                                    <option value=9>{{9h}}</option>
+                                    <option value=10>{{10h}}</option>
+                                    <option value=11>{{11h}}</option>
+                                    <option value=12>{{12h}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">{{Nom de la plante}}</label>
                             <span class="col-sm-3 eqLogicAttr" data-l1key="configuration" data-l2key="plant_name"></span>
                         </div>
