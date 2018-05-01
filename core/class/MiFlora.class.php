@@ -185,7 +185,7 @@ class MiFlora extends eqLogic
                     $mi_flora->updateJeedom($macAdd, 0, 0, 0, 0);
                     log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour '.$mi_flora->getHumanName(false, false));
                     message::add ('MiFlora', 'mi flora data is empty for '.$mi_flora->getHumanName(false, false) .' check module');
-                    
+
                 } else {
                 	$mi_flora->setStatus ('OK',1);
                     $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
@@ -292,7 +292,7 @@ class MiFlora extends eqLogic
 	$refresh->setSubType('other');
 	$refresh->setEqLogic_id($this->getId());
 	$refresh->save();
-	
+
 	   $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'OK');
         if (!is_object($cmdlogic)) {
             $MiFloraCmd = new MiFloraCmd();
@@ -399,8 +399,8 @@ class MiFlora extends eqLogic
         //TODO: tester chaine error et gerer erreur
 
 
-        if ($antenne != "local") {
-            log::add('MiFlora','debug','access remote ');
+        if ($antenne != "local" && $antenne != "") { // Compatibilite avec installation existante
+            log::add('MiFlora','debug','access remote '."$antenne:".$antenne.":");
             $remote = MiFlora_remote::byId($antenne);
             log::add('MiFlora', 'debug', 'remote fin: ' );
 
@@ -480,7 +480,7 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', ' Getmesure adapter:' . $adapter);
         log::add('MiFlora', 'debug', ' Getmesure antenne:' . $antenne );
 
-        if ($antenne != "local") {
+        if ($antenne != "local" && $antenne != "") {
 
             $remote = MiFlora_remote::byId($antenne);
 
