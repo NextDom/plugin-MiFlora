@@ -46,17 +46,25 @@ function MiFlora_update() {
     if (config::byKey('seclvl', 'MiFlora') == "") {
         config::save('seclvl', 'low', 'MiFlora');
     }
+    if (config::byKey('battery_type', 'MiFlora') == "") {
+        config::save('battery_type', '1x3V CR2032', 'MiFlora');
+    }
 
     // Set default values for each existing equipments
     foreach (eqLogic::byType('MiFlora') as $eqLogic) {
-      $frequenceItem = $eqLogic->getConfiguration('frequence');
-      if ($frequenceItem == ""){
-        $frequenceItem=0;
-        $eqLogic->setConfiguration('frequence',$frequenceItem); //default value in config::
-      }
-      $eqLogic->save();
-      log::add('MiFlora', 'info', 'frequenceItem-Install: '.$frequenceItem);
-
+        $frequenceItem = $eqLogic->getConfiguration('frequence');
+        if ($frequenceItem == "") {
+            $frequenceItem = 0;
+            $eqLogic->setConfiguration('frequence', $frequenceItem); //default value in config::
+        }
+        log::add('MiFlora', 'info', 'frequenceItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' . $frequenceItem);
+        $antenne = $eqLogic->getConfiguration('antenna');
+        if ($antenne == "") {
+            $antenne = "local";
+            $eqLogic->setConfiguration('antenna', $antenne); //default value in config::
+        }
+        $eqLogic->save();
+        log::add('MiFlora', 'info', '$antenneItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' .$antenne);
     }
 
 }

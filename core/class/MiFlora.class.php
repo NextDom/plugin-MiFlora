@@ -399,8 +399,8 @@ class MiFlora extends eqLogic
         //TODO: tester chaine error et gerer erreur
 
 
-        if ($antenne != "local" && $antenne != "") { // Compatibilite avec installation existante
-            log::add('MiFlora', 'debug', 'access remote ' . "$antenne:" . $antenne . ":");
+        if ($antenne != "local") {
+            log::add('MiFlora', 'debug', 'access remote ');
             $remote = MiFlora_remote::byId($antenne);
             log::add('MiFlora', 'debug', 'remote fin: ');
 
@@ -480,7 +480,7 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', ' Getmesure adapter:' . $adapter);
         log::add('MiFlora', 'debug', ' Getmesure antenne:' . $antenne);
 
-        if ($antenne != "local" && $antenne != "") {
+        if ($antenne != "local") {
 
             $remote = MiFlora_remote::byId($antenne);
 
@@ -733,6 +733,34 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', 'Lecture : ' . $ip);
     }
 
+
+    public static function dependancy_info()
+    {
+        $return = array();
+        $return['log'] = 'MiFlora_update';
+        $return['progress_file'] = '/tmp/dependancy_MiFlora_in_progress';
+        $return['state'] = 'nok';
+        $sql = "SHOW TABLES LIKE 'MiFlora_remote'";
+        DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
+        foreach (MiFlora::byType('MiFlora') as $miflora) {
+            $return['state'] = 'ok';
+        }
+        return $return;
+    }
+
+
+    public static function dependancy_install()
+    {
+        log::remove('miflora_update');
+        $sql = file_get_contents(dirname(__FILE__) . '/../../plugin_info/install.sql');
+        DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
+        foreach (MiFlora::byType('MiFlora') as $miflora) {
+            $miflora->save();
+        }
+        log::add('MiFlora', 'info', 'fin dependances');
+
+
+    }
 }
 
 class MiFlora_remote
