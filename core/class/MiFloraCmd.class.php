@@ -36,16 +36,33 @@ class MiFloraCmd extends cmd
     public function execute($_options = null)
     {
         #TODO simplify following code based on wazeintime example
-     /*   if ($this->getLogicalId() == 'refresh') {
-            wazeintime::cron30($this->getEqlogic_id()); */
+     if ($this->getLogicalId() == 'refresh') {
+         // wazeintime::cron30($this->getEqlogic_id());
+         log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
+         $processBattery = 0;
+         log::add('MiFlora', 'debug', '$processBattery : ' . $processBattery);
+         $miflora = new MiFlora() ;
+         log::add('MiFlora', 'debug', '$processBattery2 : ' . $processBattery);
+         $eqLogic = $this->getEqLogic();
+         log::add('MiFlora', 'debug', '$processBattery3 : ' . $processBattery);
+         var_dump($eqLogic);
+         log::add('MiFlora', 'debug', '$processBattery4 : ' . $processBattery);
+         //log::add('MiFlora', 'debug', 'MiFlora : ' . $eqLogic);
 
+         MiFlora::processOneMiFlora($eqLogic,$processBattery);
+         log::add('MiFlora', 'debug', '$processBattery5: ' . $processBattery);
+         return true;
+     }
 
-     log::add('MiFlora', 'info', 'debut refresh ' . $_options['message']);
+     log::add('MiFlora', 'info', 'debut refresh ' . $_options['message'].' logicalId: '.$this->getLogicalId() );
       if ($this->getType() != 'action') {
 			return;
 		}
+
+		return true;
+
         $miflora = new MiFlora() ;
-    	log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message']);
+    	log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId() );
 		$eqLogic = $this->getEqLogic();
 		if ($this->getLogicalId() == 'refresh' ){
 	        $adapter = config::byKey('adapter', 'MiFlora');

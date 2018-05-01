@@ -80,7 +80,7 @@ class MiFlora extends eqLogic
     {
         if (log::getLogLevel('MiFlora') == 100){ // si debug -> chaque minutes
             log::add('MiFlora','debug', 'lance debug toute les minutes ');
-            self::cron15();
+            //self::cron15();
         }
     }
 
@@ -120,8 +120,6 @@ class MiFlora extends eqLogic
 
     public static function ProcessMiFlora($minutesStartCron)
     {
-        $adapter = config::byKey('adapter', 'MiFlora');
-        $seclvl = config::byKey('seclvl', 'MiFlora');
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
             log::add('MiFlora', 'info', 'enter item per item:'.$mi_flora->getHumanName(false, false));
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
@@ -129,70 +127,100 @@ class MiFlora extends eqLogic
                 log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false).' frequence toutes les '.round($frequenceItem*60)." minutes, next");
                 // Attn: min frequence = 12h a 0 et 12h --> ok pour batterie"
             } else {
-                log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false).' frequence toutes les '.round($frequenceItem*60).' minutes, go');
-                //$mi_flora->refreshWidget();
-                $macAdd = $mi_flora->getConfiguration('macAdd');
-                log::add('MiFlora', 'info', 'mi flora mac add:' . $macAdd);
-                $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
-                // recupere le niveau de la batterie deux  fois par jour a 12 h
-                // log::add('MiFlora', 'debug', 'date:'.date("h"));
+                log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' . round($frequenceItem * 60) . ' minutes, go');
                 if (((date("h") == 12 && intval($minutesStartCron) < 5)) || $FirmwareVersion == '') {
-                    $MiFloraBatteryAndFirmwareVersion = '';
-                    $MiFloraNameString = '';
-                    $MiFloraName = '';
-                    $battery = -1;
-                    $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl);
-                    $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
-                    $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
-                    $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
-                    if($battery<$mi_flora->getConfiguration('battery_danger_threshold')){
-                        log::add('MiFlora', 'error', 'Error: Batterie faible - '.$battery);
-
-                    } elseif ($battery<$mi_flora->getConfiguration('battery_warning_threshold')) {
-                        log::add('MiFlora', 'error', 'Warning: Batterie faible - '.$battery);
-                    }
-                }
-                $tryGetData = 0;
-                $MiFloraData = '';
-                $loopcondition = true;
-                while ($loopcondition) {
-                    if ($tryGetData > 3) { // stop after 4 try
-                        break;
-                    }
-                    if ($tryGetData > 0) {
-                        log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
-                    }
-
-                    log::add('MiFlora', 'debug', 'mi flora FirmwareVersion:' . $FirmwareVersion);
-
-                    $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl);
-                    log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
-                    $tryGetData++;
-                    // TODO
-                    // traiter ces reponses en erreur
-                    // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
-                    // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                    $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-                    // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
-                    if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
-                        // wait 5 s hopping it'll be better ...
-                        log::add('MiFlora', 'debug', 'wait 5 s hopping it ll be better ...');
-                        sleep(5);
-                    } else {
-                        $loopcondition = false;
-                    }
-                }
-                if ($MiFloraData == '') {
-                    log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour '.$mi_flora->getHumanName(false, false));
-                    message::add ('MiFlora', 'mi flora data is empty for '.$mi_flora->getHumanName(false, false) .' check module');
+                    $processBattery=1;
                 } else {
-                    $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-                    $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
-                    $mi_flora->refreshWidget();
+                    $processBattery=0;
                 }
+                self::processOneMiFlora($mi_flora,$processBattery);
             }
         }
 
+    }
+
+    /**
+     * @param $minutesStartCron
+     * @param $mi_flora
+     * @param $frequenceItem
+     * @param $adapter
+     * @param $seclvl
+     * @param $temperature
+     * @param $moisture
+     * @param $fertility
+     * @param $lux
+     */
+    public static function processOneMiFlora($mi_flora,$processBattery)
+    {
+        log::add('MiFlora', 'info', '$processBattery:' . $processBattery);
+        $adapter = config::byKey('adapter', 'MiFlora');
+        $seclvl = config::byKey('seclvl', 'MiFlora');
+        $macAdd = $mi_flora->getConfiguration('macAdd');
+        log::add('MiFlora', 'info', 'mi flora mac add:' . $macAdd);
+        $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
+        // recupere le niveau de la batterie deux  fois par jour a 12 h
+        // log::add('MiFlora', 'debug', 'date:'.date("h"));
+        if ($processBattery == 1) {
+            $MiFloraBatteryAndFirmwareVersion = '';
+            $MiFloraNameString = '';
+            $MiFloraName = '';
+            $battery = -1;
+            $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl);
+            $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
+            $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
+            $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
+            if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
+                log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery);
+
+            } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
+                log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery);
+            }
+        }
+        $tryGetData = 0;
+        $MiFloraData = '';
+        $loopcondition = true;
+        while ($loopcondition) {
+            if ($tryGetData > 3) { // stop after 4 try
+                break;
+            }
+            if ($tryGetData > 0) {
+                log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
+            }
+
+            log::add('MiFlora', 'debug', 'mi flora FirmwareVersion:' . $FirmwareVersion);
+
+            $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl);
+            log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
+            $tryGetData++;
+            // TODO
+            // traiter ces reponses en erreur
+            // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
+            // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+            log::add('MiFlora', 'debug','traite data');
+            $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
+            log::add('MiFlora', 'debug','data traitee');
+            // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
+            if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
+                // wait 5 s hopping it'll be better ...
+                log::add('MiFlora', 'debug', 'wait 5 s hopping it ll be better ...');
+                sleep(5);
+            } else {
+                $loopcondition = false;
+            }
+        }
+        if ($MiFloraData == '') {
+            log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour ' . $mi_flora->getHumanName(false, false));
+            message::add('MiFlora', 'mi flora data is empty for ' . $mi_flora->getHumanName(false, false) . ' check module');
+        } else {
+            //log::add('MiFlora', 'debug','re traite data');
+            //$mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
+            log::add('MiFlora', 'debug','update data');
+            $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
+            log::add('MiFlora', 'debug','refresh');
+            $mi_flora->refreshWidget();
+            log::add('MiFlora', 'debug','end refresh');
+        }
+        return true;
     }
 
     /* */
@@ -385,7 +413,9 @@ class MiFlora extends eqLogic
     {
         log::add('MiFlora', 'debug', 'macAdd:' . $macAdd);
         $MiFloraData = '';
-        // $MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
+        $MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
+        return;
+
         // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
         //TODO: tester chaine error et gerer erreur
 
@@ -623,7 +653,7 @@ class MiFlora extends eqLogic
                 }
                 $cmd = $this->getCmd(null, 'lastrefresh');
                 if (is_object($cmd)) {
-                    $lastrefresh=(date('H:i'));
+                    $lastrefresh=(date("t-m H:i"));
                     $cmd->event($lastrefresh);
                     log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
                 }
@@ -664,8 +694,11 @@ class MiFlora extends eqLogic
 
     public function toHtml($_version = 'dashboard')
     {
+        log::add('MiFlora', 'info', 'enter tohtml');
         $replace = $this->preToHtml($_version);
+
         if (!is_array($replace)) {
+            log::add('MiFlora', 'info', 'tohtml is_array:'.$replace);
             return $replace;
         }
         $version = jeedom::versionAlias($_version);
@@ -681,7 +714,7 @@ class MiFlora extends eqLogic
             }
         }
 
-        log::add('MiFlora', 'debug', $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'miflora'))));
+        log::add('MiFlora', 'info', 'toHtml:'.$this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'MiFlora'))));
 
         $refresh = $this->getCmd(null, 'refresh');
         $replace['#refresh_id#'] = $refresh->getId();
