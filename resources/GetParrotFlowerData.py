@@ -111,7 +111,7 @@ def convert_temperature(rawValue):
 
 
 def convert_Lux(rawValue):
-    rawValueInt = rawValue[0] * 1.0
+    rawValueInt = ((rawValue[1]*255)+rawValue[0]) * 1.0
     if rawValueInt>0:
     	sunlight = 0.08640000000000001 * (192773.17000000001 * math.pow(rawValueInt, -1.0606619))
     else:
