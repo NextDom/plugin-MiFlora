@@ -28,6 +28,12 @@ function MiFlora_install() {
 function MiFlora_update() {
     log::add('MiFlora', 'info', 'config - update started');
 
+    $sql = file_get_contents(dirname(__FILE__) . '/install.sql');
+    DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
+    foreach (MiFlora::byType('MiFlora') as $miflora) {
+        $miflora->save();
+    }
+
     if (config::byKey('frequence', 'MiFlora') == ""){
         config::save('frequence', '1', 'MiFlora');
     }

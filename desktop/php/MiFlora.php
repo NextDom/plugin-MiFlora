@@ -30,12 +30,27 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 </center>
                 <span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Ajouter}}</center></span>
             </div>
+ 
             <div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
                 <center>
                     <i class="fa fa-wrench" style="font-size : 6em;color:#767676;"></i>
                 </center>
                 <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Configuration}}</center></span>
             </div>
+  
+            <div class="cursor" id="bt_remoteMiFlora" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+                <center>
+                    <i class="fa fa-bluetooth" style="font-size : 6em;color:#767676;"></i>
+                </center>
+                <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Antennes}}</center></span>
+            </div>
+  
+              <div class="cursor" id="bt_healthMiFlora" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+         <center>
+            <i class="fa fa-medkit" style="font-size : 6em;color:#767676;"></i>
+             </center>
+            <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>
+             </div>
         </div>
         <legend><i class="fa fa-table"></i> {{Mes MiFloras}}</legend>
         <div class="eqLogicThumbnailContainer">
@@ -98,13 +113,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="macAdd" placeholder="MiFloraBTAdd"/>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{frequence de recuperation des données}}</label>
                             <div class="col-sm-3">
                                 <select id="frequence" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="frequence" placeholder="frequence de rafraichissement">
                                     <option selected value=0>{{default}}</option>
-                                    <option value=0.08333333333>{{5mn}}</option>
-                                    <option value=0.1666666667>{{10mn}}</option>
                                     <option value=0.25>{{15mn}}</option>
                                     <option value=0.5>{{30mn}}</option>
                                     <option value=1>{{1h}}</option>
@@ -122,6 +136,39 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </select>
                             </div>
                         </div>
+
+
+
+
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label help" data-help="{{Antenne qui prendra les infos)}}">{{Antenne}}</label>
+                                <div class="col-sm-3">
+                                    <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="antenna">
+                                        <option value="local">{{Local}}</option>
+                                        <?php
+                                        try{
+                                            $hasblea = plugin::byId('MiFlora');
+                                        } catch (Exception $e) {
+                                        }
+                                        if ($hasblea != '' && $hasblea->isActive()){
+                                            $remotes = MiFlora_remote::all();
+                                            foreach ($remotes as $remote) {
+                                                echo '<option value="' . $remote->getId() . '">{{Remote : ' . $remote->getRemoteName() .'}}</option>';
+                                            }
+                                        }
+                                        ?>
+
+                                    </select>
+                                </div>
+                                <div class="form-group refreshdelay" style="display:none">
+                                    <label class="col-sm-3 control-label help" data-help="{{Inutile de mettre des valeurs trop faible, si les valeurs sont identiques aux précédentes il n'y aura pas de mise à jour}}">{{Refresh des infos (en s)}}</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="delay" placeholder="Delai en secondes"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{Nom de la plante}}</label>
                             <span class="col-sm-3 eqLogicAttr" data-l1key="configuration" data-l2key="plant_name"></span>
