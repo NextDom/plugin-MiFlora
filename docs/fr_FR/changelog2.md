@@ -4,7 +4,7 @@
 * Gestion d'antennes déportés
    - Possibilité de créer des antennes
    - Possibilité pour chaque objet de spécifier par quelle antenne il va être lu
-   -  Attention 
+   -  Attention:
         - le plugin a maintenant des dépendances à lancer, elles sont utile uniquement pour gèrer la migration à la version 3.0.0 pour les utilisateurs actuels s'il n'utilisent pas le Market pour la mise à jour. Pour tous les autres cas, les dependances ne sont pas utile.
         - il peut être nécessaire de le désactiver puis de l’activer pour bien mettre a jours les nouveaux champs, les données sont conservées lors de ce processus.
 * Onglet santé permettant de voir de manière synthétique l'état des MiFlora.
