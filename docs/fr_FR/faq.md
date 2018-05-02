@@ -1,14 +1,14 @@
 # FAQ
 
+### Quelle est la différence entre MiFlora et BLEA
+> MiFlora ne gère que les plantes, BLEA est un plugin pour tous les objets Bluetooth LE, il est donc beaucoup plus complexe, 
+il necessite des dépendance, a un systeme de demon, il est adapté pour gérer une multitude de types d'objets Bluetooth LE 
+mais nécéssite plus de suivi et de maintenance, principalement les démons et dépendances lors des mise à jour
+
 ### Est-ce que ce plugin s'appuie sur des API tiers ?
 
 > Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
 Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --char-read -a 0x35` fonctionne sur le device cible.
-
-### Est ce que ce plugin est compatible avec le plugin FlowerPower ?
-
-> Oui, validé par Nechry.
-
 
 ### Est ce que ce plugin monopolise le Bluetooth ?
 
@@ -17,8 +17,10 @@ Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --cha
 
 ### Combien de fois par jour les mesures sont-elles récupérées ?
 
-> C'est défini dans la configuration globale du plugin, pour tous les objets : de toutes les heures à toutes les 12 heures.
-J'utilise le modulo de l'heure actuelle avec la fréquence saisie en paramètre. +
+> C'est défini dans la configuration globale du plugin, pour tous les objets : de toutes les 15 minutes à toutes les 12 heures.
+Il est possible de configurer une fréquence differente par MiFlora, `defaut` permet d'utiliser la frequence globale.
+
+>J'utilise le modulo de l'heure actuelle avec la fréquence saisie en paramètre. +
 Attention: en mode debug, les données sont récupérés en permanence indépendamment de la configuration.
 
 > Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi.
@@ -31,7 +33,7 @@ Attention: en mode debug, les données sont récupérés en permanence indépend
 
 ### Je possède un RPI3, J'ai dû désactiver le Bluetooth interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le Bluetooth interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le RPI3 ?
 
-> Il faut prendre un dongle BLE sans faute. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
+> Dans ce acs il faut prendre un dongle BLE. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
 
 
 ### Je souhaite contribuer à l'amélioration de ce plugin, est ce possible ?
@@ -52,3 +54,5 @@ BlueZ est incompatible avec blueman (sudo apt-get remove blueman)
 > Les alertes peuvent être données par du 'text to speech' (plugin playTTS par exemple), par notification sur smartphone (plugin pushbullet), par SMS ...
 
 > Les seuils peuvent être trouvés en utilisant la base de plantes de Xiaomi ou celle de Parrot à défaut un seuil entre 14 et 16 semble convenir à une majorité de plantes d'intérieur.
+
+> Il est aussi possible de reguler un arrosage automatique, MiFlora semble bien résiter aux intempéries
