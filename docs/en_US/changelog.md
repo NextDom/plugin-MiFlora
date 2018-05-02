@@ -1,10 +1,16 @@
 # Changelog
 
-### Version 2.0.4 - April 14, 2018
+### Version 2.0.6 - April 23, 2018 Beta
+* Correction of the warning in http.error
+
+### Version 2.0.5 - April 18, 2018
+* Fixed a refresh bug by object
+
+### Version 2.0.4 - 14 April 2018
 * Refresh management by object:
     * Refreshing by object complements the global one in the plugin configuration
-    * Refreshing by object has an additional value *default*, in which case the global value is taken into account
-    * Each MiFlora has its refresh rate which replaces the global value when it is not at the value *default*
+    * Refreshing by object has an additional value * default *, in which case the global value is taken into account
+    * Each MiFlora has its refresh rate which replaces the global value when it is not at the value * default *
     * In debug mode, all objects are read every minute regardless of these values
 
 ### Version 2.0.3 - April 6, 2018
@@ -29,14 +35,14 @@
 ### Version 1.2.5: May 31, 2017
 
 * fixed a bug on fertility (recovery of 2 bytes instead of one)
-* Changing the icon to match Jeedom chart
+* Changing the icon to respect the Jeedom chart
 
 ### Version 1.2.4: March 18, 2017
 
-* Inversions of the change log for more readability
+* Inversions of the exchange log for more readability
 * Firmware Management 2.9.2 - Inversion of Test Only 2.6.2 is managed with the old method
 
-### Version 1.2.3: January 16
+### Version 1.2.3: January 16 in Beta
 
 * Improved management of reading errors
 
@@ -75,7 +81,7 @@
 * Desktop and mobile dedicated widget.
 * adding date of last collection
 * force the recovery of the firmware if it is empty
-* Debug mode causes a collection of data every minute, be careful not to leave it permanently especially if you are on an SD card
+* The debug mode causes a collection of data every minute, be careful not to leave it permanently especially if you are on an SD card
 * Set new devices visible and enabled by default
 * Addition of the unit for 'fertility', this field actually measures the conductivity which allows to deduce the fertility of the soil
 
@@ -89,7 +95,7 @@
 * Manage multiple remote devices and associate them with devices to increase the Bluetooth port by adding multiple receivers
 * Add the config test: hci and sec-level must be filled
 * Choice of error log or info in case of connection problem after 4 tests
-* Test that macadd is <> between Equipments (glue copy error)
+* Test that the macadd is <> between devices (glue copy error)
 * Test the Bluetooth status and restart it if there is a problem (sudo hciconfig hci0 down, sudo hciconfig hci0 up) for example the error error error: Connection refused (111)
 * Cause data recovery right after adding the hardware? or a command to force the update
 * Button to detect a new MiFlora (avoid finding the address by hand)
