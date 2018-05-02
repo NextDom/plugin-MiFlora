@@ -2,7 +2,7 @@
 
 ### Quelle est la différence entre MiFlora et BLEA
 > MiFlora ne gère que les plantes, BLEA est un plugin pour tous les objets Bluetooth LE, il est donc beaucoup plus complexe, 
-il necessite des dépendance, a un systeme de demon, il est adapté pour gérer une multitude de types d'objets Bluetooth LE 
+il nécéssite des dépendances, a un systeme de démon, il est adapté pour gérer une multitude de types d'objets Bluetooth LE 
 mais nécéssite plus de suivi et de maintenance, principalement les démons et dépendances lors des mise à jour
 
 ### Est-ce que ce plugin s'appuie sur des API tiers ?
