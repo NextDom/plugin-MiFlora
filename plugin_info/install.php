@@ -71,15 +71,41 @@ function MiFlora_update() {
         if ($frequenceItem == "") {
             $frequenceItem = 0;
             $eqLogic->setConfiguration('frequence', $frequenceItem); //default value in config::
+            log::add('MiFlora', 'info', 'frequenceItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' . $frequenceItem);
         }
-        log::add('MiFlora', 'info', 'frequenceItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' . $frequenceItem);
+       
         $antenne = $eqLogic->getConfiguration('antenna');
         if ($antenne == "") {
             $antenne = $antenneAncienneMethode;
             $eqLogic->setConfiguration('antenna', $antenne); //default value in config::
+            log::add('MiFlora', 'info', '$antenneItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' .$antenne);
         }
+                
+        if ($eqLogic->getConfiguration('battery_danger_threshold') == "") {
+            $eqLogic->setConfiguration('battery_danger_threshold', '10');
+            log::add('MiFlora', 'info', 'battery_danger_threshold-Install: 10');
+        }
+        if ($eqLogic->getConfiguration('battery_warning_threshold') == "") {
+            $eqLogic->setConfiguration('battery_warning_threshold', '15');
+            log::add('MiFlora', 'info', 'battery_warning_threshold-Install: 15');
+        }
+
+        ## Cree la commande refresh pour les objets existants
+        $refresh = $eqLogic->getCmd(null, 'refresh');
+        if (!is_object($refresh)) {
+            $refresh = new MiFloraCmd();
+            $refresh->setLogicalId('refresh');
+            $refresh->setIsVisible(1);
+            $refresh->setName(__('Rafraîchir', __FILE__));
+            $refresh->setType('action');
+            $refresh->setSubType('other');
+            refresh->setEqLogic_id($this->getId());
+            $refresh->save();
+            log::add('MiFlora', 'info', 'Refresh-Install: add ' . $eqLogic->getHumanName(false, false));
+        }
+        
         $eqLogic->save();
-        log::add('MiFlora', 'info', '$antenneItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' .$antenne);
+
     }
 
 }

@@ -32,18 +32,39 @@ class MiFloraCmd extends cmd
      */
 
 
-    
+
     public function execute($_options = null)
     {
-        log::add('MiFlora', 'info', 'debut refresh ' . $_options['message']);
-        if ($this->getType() != 'action') {
-            return;
-        }
+        #TODO simplify following code based on wazeintime example
+        log::add('MiFlora', 'debug', 'execute - Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
+
+        if ($this->getLogicalId() == 'refreshko') {
+         // wazeintime::cron30($this->getEqlogic_id());
+         log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
+         $processBattery = 0;
+         log::add('MiFlora', 'debug', '$processBattery : ' . $processBattery);
+         $miflora = new MiFlora() ;
+         log::add('MiFlora', 'debug', '$processBattery2 : ' . $processBattery);
+         $eqLogic = $this->getEqLogic();
+         log::add('MiFlora', 'debug', '$processBattery3 : ' . $processBattery);
+         var_dump($eqLogic);
+         log::add('MiFlora', 'debug', '$processBattery4 : ' . $processBattery);
+         //log::add('MiFlora', 'debug', 'MiFlora : ' . $eqLogic);
+
+         MiFlora::processOneMiFlora($eqLogic,$processBattery);
+         log::add('MiFlora', 'debug', '$processBattery5: ' . $processBattery);
+         return true;
+     }
+
+     log::add('MiFlora', 'info', 'debut refresh ' . $_options['message'].' logicalId: '.$this->getLogicalId() );
+      if ($this->getType() != 'action') {
+			return;
+		}
         $miflora = new MiFlora();
-        log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message']);
-        $eqLogic = $this->getEqLogic();
-        if ($this->getLogicalId() == 'refresh') {
-            $adapter = config::byKey('adapter', 'MiFlora');
+    	log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId() );
+		$eqLogic = $this->getEqLogic();
+		if ($this->getLogicalId() == 'refresh') {
+	        $adapter = config::byKey('adapter', 'MiFlora');
             $seclvl = config::byKey('seclvl', 'MiFlora');
             $macAdd = $eqLogic->getConfiguration('macAdd');
             $antenne = $eqLogic->getConfiguration('antenna');
@@ -71,6 +92,7 @@ class MiFloraCmd extends cmd
                     log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
                 }
                 $miflora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne);
+                log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
                 $tryGetData++;
                 $miflora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
                 if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
