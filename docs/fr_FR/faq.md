@@ -33,12 +33,12 @@ Attention: en mode debug, les données sont récupérés en permanence indépend
 
 ### Je possède un RPI3, J'ai dû désactiver le Bluetooth interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le Bluetooth interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le RPI3 ?
 
-> Dans ce acs il faut prendre un dongle BLE. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
+> Dans ce cas il faut prendre un dongle BLE. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
 
 
 ### Je souhaite contribuer à l'amélioration de ce plugin, est ce possible ?
 
-> Bien sur, le code est sur GitHub : rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests.
+> Bien sur, le code est sur GitHub : rjullien/plugin-MiFlora, vous pouvez soumettre des pull requests.
 
 ### gatttool est instable et se bloque sur RPI
 
