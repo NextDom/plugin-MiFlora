@@ -73,14 +73,14 @@ function MiFlora_update() {
             $eqLogic->setConfiguration('frequence', $frequenceItem); //default value in config::
             log::add('MiFlora', 'info', 'frequenceItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' . $frequenceItem);
         }
-       
+
         $antenne = $eqLogic->getConfiguration('antenna');
         if ($antenne == "") {
             $antenne = $antenneAncienneMethode;
             $eqLogic->setConfiguration('antenna', $antenne); //default value in config::
             log::add('MiFlora', 'info', '$antenneItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' .$antenne);
         }
-                
+
         if ($eqLogic->getConfiguration('battery_danger_threshold') == "") {
             $eqLogic->setConfiguration('battery_danger_threshold', '10');
             log::add('MiFlora', 'info', 'battery_danger_threshold-Install: 10');
@@ -99,11 +99,11 @@ function MiFlora_update() {
             $refresh->setName(__('Rafraîchir', __FILE__));
             $refresh->setType('action');
             $refresh->setSubType('other');
-            refresh->setEqLogic_id($this->getId());
+            $refresh->setEqLogic_id($this->getId());
             $refresh->save();
             log::add('MiFlora', 'info', 'Refresh-Install: add ' . $eqLogic->getHumanName(false, false));
         }
-        
+
         $eqLogic->save();
 
     }
