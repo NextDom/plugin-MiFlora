@@ -15,21 +15,26 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+//require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once dirname(__FILE__) . '/../../core/class/MiFlora.class.php';
+
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
 $eqLogics = MiFlora::byType('MiFlora');
 ?>
 
-<table class="table table-condensed tablesorter" id="table_healthopenenocean">
+<table class="table table-condensed tablesorter" id="table_healthMiFlora">
 	<thead>
 		<tr>
 			<th>{{Image}}</th>
 			<th>{{Module}}</th>
 			<th>{{ID}}</th>
 			<th>{{Mac}}</th>
+            <th>{{Fréquence (mn)}}</th>
 			<th>{{Statut}}</th>
 			<th>{{Batterie}}</th>
+            <th>{{Antenne  }}</th>
 			<th>{{Dernière communication}}</th>
 			<th>{{Date création}}</th>
 		</tr>
@@ -46,6 +51,14 @@ foreach ($eqLogics as $eqLogic) {
  	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getId() . '</span></td>';
 
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('macAdd') . '</span></td>';
+
+	$frequence = round ($eqLogic->getConfiguration('frequence') * 60 ) ;
+    if ($frequence == 0) {
+        $frequence = 'Defaut' ;
+    }
+
+	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $frequence . '</span></td>' ;
+
 
 	$status = '<span class="label label-success" style="font-size : 1em;cursor:default;">{{OK}}</span>';
 	log::add('MiFlora', 'info', ' santé module ' . $eqLogic->getConfiguration('macAdd') .' etat : ' .$eqLogic->getStatus('OK'));
@@ -66,6 +79,14 @@ foreach ($eqLogics as $eqLogic) {
 	}
 	echo '<td>' . $battery_status . '</td>';
 
+    $antenne = $eqLogic->getConfiguration('antenna');
+    if ($antenne != 'local'){
+	    log::add('MiFlora', 'info', ' antenne avant ' . $antenne) ;
+        $remote = MiFlora_remote::byId($eqLogic->getConfiguration('antenna'));
+        $antenne = $remote->getRemoteName() ;
+        log::add('MiFlora', 'info', ' antenne apres ' . $antenne) ;
+    }
+    echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $antenne . '</span></td>' ;
 
 	echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
 
