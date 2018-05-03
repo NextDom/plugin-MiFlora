@@ -10,12 +10,12 @@ mais nécéssite plus de suivi et de maintenance, principalement les démons et 
 > Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
 Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --char-read -a 0x35` fonctionne sur le device cible.
 
-### Does this plugin monopolize Bluetooth?
+### Est ce que ce plugin monopolise le Bluetooth ?
 
-> Not at all, he needs Bluetooth for each statement, see next question for more details on the number of readings per day.
+> Non pas du tout, il a besoin du Bluetooth pour chaque relevé, cf question suivante pour plus de détails sur le nombre de relevés par jour.
 
 
-### How many times a day are the measurements retrieved?
+### Combien de fois par jour les mesures sont-elles récupérées ?
 
 > C'est défini dans la configuration globale du plugin, pour tous les objets : de toutes les 15 minutes à toutes les 12 heures.
 Il est possible de configurer une fréquence differente par MiFlora, `defaut` permet d'utiliser la frequence globale.
@@ -26,26 +26,26 @@ Attention: en mode debug, les données sont récupérés en permanence indépend
 > Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi.
 
 
-### Which firmware version is this plugin compatible with?
+### Avec quelle version de firmware ce plugin est-il compatible ?
 
-> It is compatible with all versions known to date (2.9.2) since version 1.0 of the plugin.
+> Il est compatible avec toutes les versions connues à ce jour (2.9.2) depuis la version 1.0 du plugin.
 
 
-### I have a RPI3, I had to disable the internal Bluetooth to not have interference with the Zwave (razberry). Should I always keep the internal Bluetooth off to solve this problem? If not, does any BT USB stick fit the MiFlora and RPI3?
+### Je possède un RPI3, J'ai dû désactiver le Bluetooth interne pour ne pas avoir d'interférence avec le Zwave (razberry). Est-ce qu'il faut toujours garder le Bluetooth interne désactivé pour résoudre ce souci ? Sinon est-ce que n'importe quelle clef USB BT fait l'affaire pour être compatible avec les MiFlora et le RPI3 ?
 
 > Dans ce acs il faut prendre un dongle BLE. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
 
 
-### I wish to contribute to the improvement of this plugin, is it possible?
+### Je souhaite contribuer à l'amélioration de ce plugin, est ce possible ?
 
-> Of course, the code is on GitHub: rjullien / jeedom_MiFlora, you can submit pull requests.
+> Bien sur, le code est sur GitHub : rjullien/jeedom_MiFlora, vous pouvez soumettre des pull requests.
 
-### gatttool is unstable and hangs on RPI
+### gatttool est instable et se bloque sur RPI
 
-> There is a lot of configuration that can cause this problem. With Pixel you have to be careful to have a single bluetooth manager.
-BlueZ is incompatible with blueman (sudo apt-get remove blueman)
+> Il y a beaucoup de configuration qui peuvent générer ce problème. Avec Pixel il faut faire attention d'avoir un seul gestionnaire de bluetooth.
+BlueZ est incompatible avec blueman (sudo apt-get remove blueman)
 
-### The plugin works well: what can I do with it?
+### Le plugin fonctionne bien: que puis je faire avec ?
 
 > Les valeurs d'humidité, de fertilité, de luminosité et de températures sont accessible depuis des scénarios.
 
