@@ -11,5 +11,5 @@
 * Ajout de valeurs par défaut pour l'alerte batterie faible.
 * Gestion du Parrot flower dans un script Python dédié pour intégration future dans le plugin.
 * Ajout de la fonctionnalité refresh et passage du minimum de 5 à 15 minutes.
-    - Cette fonctionnalité est utilisable depuis un scénario ou en clickant sur le widget en mode desktop.
+    - Cette fonctionnalité est utilisable depuis un scénario ou en cliquant sur le widget en mode desktop.
     - Attention de bien mettre une fréquence d'au moins 15 minutes pour vos objets existants.
