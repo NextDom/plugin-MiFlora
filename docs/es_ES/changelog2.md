@@ -1,15 +1,15 @@
 # Changelog
 
-### Version 3.0.0 - Mai 2018 - en cours de développement
-* Gestion d'antennes déportés
-   - Possibilité de créer des antennes
-   - Possibilité pour chaque objet de spécifier par quelle antenne il va être lu
-   -  Attention:
-        - le plugin a maintenant des dépendances à lancer, elles sont utile uniquement pour gèrer la migration à la version 3.0.0 pour les utilisateurs actuels s'il n'utilisent pas le Market pour la mise à jour. Pour tous les autres cas, les dependances ne sont pas utile.
-        - il peut être nécessaire de le désactiver puis de l’activer pour bien mettre a jours les nouveaux champs, les données sont conservées lors de ce processus.
-* Onglet santé permettant de voir de manière synthétique l'état des MiFlora.
-* Ajout de valeurs par défaut pour l'alerte batterie faible.
-* Gestion du Parrot flower dans un script Python dédié pour intégration future dans le plugin.
-* Ajout de la fonctionnalité refresh et passage du minimum de 5 à 15 minutes.
-    - Cette fonctionnalité est utilisable depuis un scénario ou en cliquant sur le widget en mode desktop.
-    - Attention de bien mettre une fréquence d'au moins 15 minutes pour vos objets existants.
+### Versión 3.0.0 - mayo de 2018 - en desarrollo
+* Gestión de antenas remotas
+   - Posibilidad de crear antenas
+   - Posibilidad de que cada objeto especifique por qué antena se leerá
+   -  Atención:
+        - el complemento ahora tiene dependencias para iniciarse, solo son útiles para administrar la migración a la versión 3.0.0 para los usuarios actuales si no usan Market para la actualización. Para todos los demás casos, las dependencias no son útiles.
+        - puede ser necesario desactivarlo y luego activarlo para actualizar los nuevos campos, los datos se conservan durante este proceso.
+* Pestaña de salud que permite ver de manera resumida el estado de MiFlora.
+* Agregar valores predeterminados para la alerta de batería baja.
+* Administre la flor Parrot en una secuencia de comandos de Python dedicada para una futura integración en el complemento.
+* Se agregó la funcionalidad de actualización y la transición de un mínimo de 5 a 15 minutos..
+    - Esta característica se puede usar desde un escenario o haciendo clic en el widget en modo de escritorio.
+    - Tenga cuidado de poner una frecuencia de al menos 15 minutos para sus objetos existentes.

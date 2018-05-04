@@ -1,14 +1,14 @@
 # FAQ
 
-### Quelle est la différence entre MiFlora et BLEA
-> MiFlora ne gère que les plantes, BLEA est un plugin pour tous les objets Bluetooth LE, il est donc beaucoup plus complexe, 
-il nécéssite des dépendances, a un systeme de démon, il est adapté pour gérer une multitude de types d'objets Bluetooth LE 
-mais nécéssite plus de suivi et de maintenance, principalement les démons et dépendances lors des mise à jour
+### What is the difference between MiFlora and BLEA
+> MiFlora only manages plants, BLEA is a plugin for all Bluetooth LE objects, so it is much more complex,
+it needs dependencies, has a daemon system, it is suitable to handle a multitude of Bluetooth LE object types
+but needs more monitoring and maintenance, mostly demons and dependencies when updating
 
-### Est-ce que ce plugin s'appuie sur des API tiers ?
+### Does this plugin rely on third-party APIs?
 
-> Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
-Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --char-read -a 0x35` fonctionne sur le device cible.
+> The plugin uses Bluetooth to retrieve information from MiFlora.
+You need to install Bluetooth and make sure that `gatttool -b macAddMiFlora --char-read -a 0x35` is running on the target device.
 
 ### Does this plugin monopolize Bluetooth?
 
@@ -17,13 +17,13 @@ Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --cha
 
 ### How many times a day are the measurements retrieved?
 
-> C'est défini dans la configuration globale du plugin, pour tous les objets : de toutes les 15 minutes à toutes les 12 heures.
-Il est possible de configurer une fréquence differente par MiFlora, `defaut` permet d'utiliser la frequence globale.
+> It is defined in the global configuration of the plugin, for all objects: every 15 minutes to every 12 hours.
+It is possible to configure a different frequency for each MiFlora, `default` allows to use the global frequency.
 
->J'utilise le modulo de l'heure actuelle avec la fréquence saisie en paramètre. +
-Attention: en mode debug, les données sont récupérés en permanence indépendamment de la configuration.
+> I use the modulo of the current time with the frequency entered in parameter. +
+Warning: in debug mode, data is retrieved continuously regardless of the configuration.
 
-> Les informations statiques (batterie, nom de l appareil, version du firmware) sont récupérées toutes les 12 heures : à minuit et midi.
+> The static information (battery, device name, firmware version) is retrieved every 12 hours: at midnight and noon.
 
 
 ### Which firmware version is this plugin compatible with?
@@ -33,12 +33,12 @@ Attention: en mode debug, les données sont récupérés en permanence indépend
 
 ### I have a RPI3, I had to disable the internal Bluetooth to not have interference with the Zwave (razberry). Should I always keep the internal Bluetooth off to solve this problem? If not, does any BT USB stick fit the MiFlora and RPI3?
 
-> Dans ce acs il faut prendre un dongle BLE. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
+> Dans ce cas il faut prendre un dongle BLE. Le problème avec le razberry c'est seulement si on utilise le contrôleur interne.
 
 
 ### I wish to contribute to the improvement of this plugin, is it possible?
 
-> Of course, the code is on GitHub: rjullien / jeedom_MiFlora, you can submit pull requests.
+> Bien sur, le code est sur GitHub : rjullien/plugin-MiFlora, vous pouvez soumettre des pull requests.
 
 ### gatttool is unstable and hangs on RPI
 
@@ -47,12 +47,12 @@ BlueZ is incompatible with blueman (sudo apt-get remove blueman)
 
 ### The plugin works well: what can I do with it?
 
-> Les valeurs d'humidité, de fertilité, de luminosité et de températures sont accessible depuis des scénarios.
+> Humidity, fertility, brightness and temperature values ​​are accessible from scenarios.
 
-> Il est possible de lire ces valeurs, de les comparer à un seuil et d'alerter en cas de dépassement du seuil, par exemple pour arroser une plante.
+> It is possible to read these values, to compare them to a threshold and to warn if the threshold is exceeded, for example to water a plant.
 
-> Les alertes peuvent être données par du 'text to speech' (plugin playTTS par exemple), par notification sur smartphone (plugin pushbullet), par SMS ...
+> Alerts can be given by text to speech (plugin playTTS for example), by notification on smartphone (pushbullet plugin), by SMS ...
 
-> Les seuils peuvent être trouvés en utilisant la base de plantes de Xiaomi ou celle de Parrot à défaut un seuil entre 14 et 16 semble convenir à une majorité de plantes d'intérieur.
+> Thresholds can be found using Xiaomi or Parrot database or a threshold between 14 and 16 seems to be suitable for a majority of houseplants.
 
-> Il est aussi possible de reguler un arrosage automatique, MiFlora semble bien résiter aux intempéries
+> It is also possible to regulate an automatic watering, MiFlora seems to be resistant to bad weather
