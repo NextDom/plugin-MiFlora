@@ -31,97 +31,20 @@ class MiFloraCmd extends cmd
       }
      */
 
-
-
     public function execute($_options = null)
     {
-        #TODO simplify following code based on wazeintime example
-        log::add('MiFlora', 'debug', 'execute - Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
-
-        if ($this->getLogicalId() == 'refreshko') {
-         // wazeintime::cron30($this->getEqlogic_id());
-         log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
-         $processBattery = 0;
-         log::add('MiFlora', 'debug', '$processBattery : ' . $processBattery);
-         $miflora = new MiFlora() ;
-         log::add('MiFlora', 'debug', '$processBattery2 : ' . $processBattery);
-         $eqLogic = $this->getEqLogic();
-         log::add('MiFlora', 'debug', '$processBattery3 : ' . $processBattery);
-         var_dump($eqLogic);
-         log::add('MiFlora', 'debug', '$processBattery4 : ' . $processBattery);
-         //log::add('MiFlora', 'debug', 'MiFlora : ' . $eqLogic);
-
-         MiFlora::processOneMiFlora($eqLogic,$processBattery);
-         log::add('MiFlora', 'debug', '$processBattery5: ' . $processBattery);
-         return true;
-     }
-
-     log::add('MiFlora', 'info', 'debut refresh ' . $_options['message'].' logicalId: '.$this->getLogicalId() );
-      if ($this->getType() != 'action') {
-			return;
-		}
-        $miflora = new MiFlora();
-    	log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId() );
-		$eqLogic = $this->getEqLogic();
-		if ($this->getLogicalId() == 'refresh') {
-	        $adapter = config::byKey('adapter', 'MiFlora');
-            $seclvl = config::byKey('seclvl', 'MiFlora');
-            $macAdd = $eqLogic->getConfiguration('macAdd');
-            $antenne = $eqLogic->getConfiguration('antenna');
-
-
-            log::add('MiFlora', 'info', 'refresh mi flora mac add:' . $macAdd, 'antene : ', $antenne);
-            $FirmwareVersion = $eqLogic->getConfiguration('firmware_version');
-            $MiFloraBatteryAndFirmwareVersion = '';
-            $MiFloraNameString = '';
-            $MiFloraName = '';
-            $battery = -1;
-            $miflora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl, $antenne);
-            $miflora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
-            $miflora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
-            log::add('MiFlora', 'debug', 'refresh  ' . $macAdd . ' , ' . $battery . ' , ' . $FirmwareVersion . ' , ' . $MiFloraName);
-            $eqLogic->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
-            $tryGetData = 0;
-            $MiFloraData = '';
-            $loopcondition = true;
-            while ($loopcondition) {
-                if ($tryGetData > 3) { // stop after 4 try
-                    break;
-                }
-                if ($tryGetData > 0) {
-                    log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
-                }
-                $miflora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne);
-                log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
-                $tryGetData++;
-                $miflora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-                if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
-                    // wait 10 s hopping it'll be better ...
-                    log::add('MiFlora', 'info', 'wait 10 s hopping it ll be better ...');
-                    sleep(10);
-                } else {
-                    $loopcondition = false;
-                }
-            }
-            if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
-                $eqLogic->updateJeedom($macAdd, 0, 0, 0, 0);
-                $eqLogic->setStatus('OK', 0);
-                message::add('MiFlora', 'refresh update failed check module ' . $macAdd);
-                log::add('MiFlora', 'debug', 'refresh error ' . $macAdd . ' , ' . $temperature . ' , ' . $moisture . ' , ' . $fertility . ' , ' . $lux);
-                log::add('MiFlora', 'warning', 'mi flora refresh data is empty, retried ' . $tryGetData . ' times, stop');
-
-            } else {
-                $eqLogic->setStatus('OK', 1);
-                log::add('MiFlora', 'debug', 'refresh ' . $macAdd . ' , ' . $temperature . ' , ' . $moisture . ' , ' . $fertility . ' , ' . $lux);
-                $eqLogic->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
-                $eqLogic->refreshWidget();
-                log::add('MiFlora', 'debug', 'fin de refresh ok ');
-            }
-
-
-            return true;
+        if ($this->getType() != 'action') {
+            return;
         }
-
+        if ($this->getLogicalId() == 'refresh') {
+         log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
+         $processBattery = 1;
+         $miflora = new MiFlora() ;
+         $eqLogic = $this->getEqLogic();
+         MiFlora::processOneMiFlora($eqLogic,$processBattery);
+         log::add('MiFlora', 'debug', 'fin de refresh ok ');
+         return true;
+        }
     }
 
 }

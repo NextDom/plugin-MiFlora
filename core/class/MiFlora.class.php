@@ -159,13 +159,12 @@ class MiFlora extends eqLogic
         $antenne = $mi_flora->getConfiguration('antenna');
         log::add('MiFlora', 'info', ' Process MiFlora  mac add:' . $macAdd . ' sur antenne : ' . $antenne);
 
-        $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
         // recupere le niveau de la batterie deux  fois par jour a 12 h
         // log::add('MiFlora', 'debug', 'date:'.date("h"));
         if ($processBattery == 1) {
-            $MiFloraBatteryAndFirmwareVersion = '';
+            //$MiFloraBatteryAndFirmwareVersion = '';
             $MiFloraNameString = '';
-            $MiFloraName = '';
+            // $MiFloraName = '';
             $battery = -1;
             $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl, $antenne);
             $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
@@ -181,6 +180,7 @@ class MiFlora extends eqLogic
 
         $tryGetData = 0;
         $MiFloraData = '';
+        $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
         $loopcondition = true;
         while ($loopcondition) {
             if ($tryGetData > 3) { // stop after 4 try
@@ -190,7 +190,7 @@ class MiFlora extends eqLogic
                 log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
             }
 
-            log::add('MiFlora', 'debug', ' ProcessmayMiFlora  FirmwareVersion:' . $FirmwareVersion . ' antenne ' . $antenne);
+            log::add('MiFlora', 'debug', ' ProcessMyMiFlora  FirmwareVersion:' . $FirmwareVersion . ' antenne ' . $antenne);
 
             $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne);
             log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
@@ -438,8 +438,7 @@ class MiFlora extends eqLogic
 
 
         $MiFloraData = '';
-        $MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
-        return;
+        // $MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
 
         // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
         //TODO: tester chaine error et gerer erreur
@@ -585,6 +584,7 @@ class MiFlora extends eqLogic
             // connect: Device or resource busy
             log::add('MiFlora', 'debug', 'local call static data');
             $command = 'gatttool --adapter=' . $adapter . ' -b ' . $macAdd . '  --char-read -a 0x38 --sec-level=' . $seclvl . ' 2>&1 ';
+            log::add('MiFlora', 'debug', '$command: ' .$command);
             $MiFloraBatteryAndFirmwareVersion = exec($command);
             log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion: ' . $MiFloraBatteryAndFirmwareVersion);
             if (strpos($MiFloraBatteryAndFirmwareVersion, 'read failed') !== false or strpos($MiFloraBatteryAndFirmwareVersion, 'connect') !== false) {
