@@ -39,31 +39,23 @@ function MiFlora_update() {
         if ($remote == "") {
           log::add('MiFlora', 'info', 'config - remote not created - migrate existing remote collection to antenna');
             $remoteA = new MiFlora_remote();
-            $remoteA->setId(2); // if migration --> id = 1
             $remoteA->setRemoteName('deporte'  );
             $remoteA->setConfiguration('remoteIp', config::byKey('addressip', 'MiFlora'));
             $remoteA->setConfiguration('remotePort',config::byKey('portssh', 'MiFlora'));
             $remoteA->setConfiguration('remoteUser',config::byKey('user', 'MiFlora'));
             $remoteA->setConfiguration('remotePassword',config::byKey('password', 'MiFlora'));
             $remoteA->setConfiguration('remoteDevice',config::byKey('adapter', 'MiFlora'));
-
-            // TODO: Trouver un moyen de sauver ce MiFlora_remote()
             $remoteA->save();
 
-
-            // DB::beginTransaction();
-            // DB::save($remoteA);
-            // DB::commit();
-
-            log::add('MiFlora', 'info', 'config - remote not created '. serialize($remoteA));
-
+           // log::add('MiFlora', 'info', 'config - remote not created '. serialize($remoteA));
 
             $antenneAncienneMethode = "deporte";
         } else {
             log::add('MiFlora', 'info', 'config - antenna exist');
             $antenneAncienneMethode = "local";
+            // $remote -> remove();
         }
-        log::add('MiFlora', 'info', 'config - migrate existing remote collection to antenna');
+        // log::add('MiFlora', 'info', 'config - migrate existing remote collection to antenna');
     } else {
         $antenneAncienneMethode = "local";
     }

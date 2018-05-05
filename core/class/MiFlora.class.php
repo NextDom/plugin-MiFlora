@@ -862,6 +862,29 @@ class MiFlora_remote
 
     /*     * *********************Methode d'instance************************* */
 
+    public function preSave() {
+        if (trim($this->getRemoteName()) == '') {
+            throw new Exception(__('Le nom de l antenne ne peut être vide'));
+        }
+        log::add('MiFlora','info','preSave');
+    }
+
+    public function preInsert() {
+        log::add('MiFlora','info','preInsert');
+    }
+    public function postInsert() {
+        log::add('MiFlora','info','postInsert');
+    }
+    public function preUpdate() {
+        log::add('MiFlora','info','preUpdate');
+    }
+    public function postUpdate() {
+        log::add('MiFlora','info','postUpdate');
+    }
+    public function postSave() {
+        log::add('MiFlora','info','postSave');
+    }
+
     public function save()
     {
         return DB::save($this);
