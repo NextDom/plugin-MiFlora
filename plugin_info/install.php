@@ -29,19 +29,41 @@ function MiFlora_update() {
     log::add('MiFlora', 'info', 'config - update started');
 
     $sql = file_get_contents(dirname(__FILE__) . '/install.sql');
+    log::add('MiFlora', 'info', 'sql - '.$sql);
     DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
     foreach (MiFlora::byType('MiFlora') as $miflora) {
         $miflora->save();
     }
     if (config::byKey('maitreesclave', 'MiFlora') == "deporte"){
+        $remote = MiFlora_remote::byRemoteName("deporte");
+        if ($remote == "") {
+          log::add('MiFlora', 'info', 'config - remote not created - migrate existing remote collection to antenna');
+            $remoteA = new MiFlora_remote();
+            $remoteA->setId(2); // if migration --> id = 1
+            $remoteA->setRemoteName('deporte'  );
+            $remoteA->setConfiguration('remoteIp', config::byKey('addressip', 'MiFlora'));
+            $remoteA->setConfiguration('remotePort',config::byKey('portssh', 'MiFlora'));
+            $remoteA->setConfiguration('remoteUser',config::byKey('user', 'MiFlora'));
+            $remoteA->setConfiguration('remotePassword',config::byKey('password', 'MiFlora'));
+            $remoteA->setConfiguration('remoteDevice',config::byKey('adapter', 'MiFlora'));
+
+            // TODO: Trouver un moyen de sauver ce MiFlora_remote()
+            $remoteA->save();
+
+
+            // DB::beginTransaction();
+            // DB::save($remoteA);
+            // DB::commit();
+
+            log::add('MiFlora', 'info', 'config - remote not created '. serialize($remoteA));
+
+
+            $antenneAncienneMethode = "deporte";
+        } else {
+            log::add('MiFlora', 'info', 'config - antenna exist');
+            $antenneAncienneMethode = "local";
+        }
         log::add('MiFlora', 'info', 'config - migrate existing remote collection to antenna');
-        // TODO creer une antenne avec les info suivante si elle n'existe pas
-        // config::byKey('addressip', 'MiFlora');
-        // config::byKey('portssh', 'MiFlora');
-        // config::byKey('user', 'MiFlora');
-        // config::byKey('password', 'MiFlora');
-        // $antenneAncienneMethode= New name
-        $antenneAncienneMethode = "local"; // replacer par new name
     } else {
         $antenneAncienneMethode = "local";
     }

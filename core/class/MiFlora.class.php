@@ -831,6 +831,17 @@ class MiFlora_remote
 
     /*     * ***********************Methode static*************************** */
 
+    public static function byRemoteName($_remoteName)
+    {
+        $values = array(
+            'remoteName' => $_remoteName,
+        );
+        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
+		FROM MiFlora_remote
+		WHERE remoteName=:remoteName';
+        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+    }
+
     public static function byId($_id)
     {
         $values = array(
