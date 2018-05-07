@@ -38,7 +38,7 @@ class MiFloraCmd extends cmd
         }
         if ($this->getLogicalId() == 'refresh') {
          log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
-         $processBattery = 1;
+         $processBattery = 0;
          $miflora = new MiFlora() ;
          $eqLogic = $this->getEqLogic();
          MiFlora::processOneMiFlora($eqLogic,$processBattery);
