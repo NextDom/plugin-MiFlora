@@ -14,6 +14,9 @@
     - Cette fonctionnalité est utilisable depuis un scénario ou en cliquant sur le widget en mode desktop.
     - Attention de bien mettre une fréquence d'au moins 15 minutes pour vos objets existants.
 
+### Version 2.0.6 & 2.0.5 - 7 Mai 2018
+* Mise a jour du lien pour la doc
+
 ### Version 2.0.6 - 23 Avril 2018 Beta
 * Correction du warning dans http.error
 
