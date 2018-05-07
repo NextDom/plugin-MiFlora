@@ -1,12 +1,41 @@
 # Changelog
 
-### Version 2.0.3 - En cours de développement
-* Gestion du rafraîchissement par objet
+### Version 3.0.0 - Mai 2018 - en cours de développement
+* Gestion d'antennes déportés
+   - Possibilité de créer des antennes
+   - Possibilité pour chaque objet de spécifier par quelle antenne il va être lu
+   -  Attention:
+        - le plugin a maintenant des dépendances à lancer, elles sont utile uniquement pour gèrer la migration à la version 3.0.0 pour les utilisateurs actuels s'il n'utilisent pas le Market pour la mise à jour. Pour tous les autres cas, les dependances ne sont pas utile.
+        - il peut être nécessaire de le désactiver puis de l’activer pour bien mettre a jours les nouveaux champs, les données sont conservées lors de ce processus.
+* Onglet santé permettant de voir de manière synthétique l'état des MiFlora.
+* Ajout de valeurs par défaut pour l'alerte batterie faible.
+* Gestion du Parrot flower dans un script Python dédié pour intégration future dans le plugin.
+* Ajout de la fonctionnalité refresh et passage du minimum de 5 à 15 minutes.
+    - Cette fonctionnalité est utilisable depuis un scénario ou en cliquant sur le widget en mode desktop.
+    - Attention de bien mettre une fréquence d'au moins 15 minutes pour vos objets existants.
 
-## Version 2.0.2 - 2 Avril 2018
-* Gestion du rafraîchissement inférieur à une heure
+### Version 2.0.6 - 23 Avril 2018 Beta
+* Correction du warning dans http.error
+
+### Version 2.0.5 - 18 Avril 2018
+* Correction d'un bug du rafraîchissement par objet
+
+### Version 2.0.4 - 14 Avril 2018
+* Gestion du rafraîchissement par objet:
+    * Le rafraîchissement par objet vient en complément de celui global dans la configuration du plugin
+    * Le rafraîchissement par objet a une valeur supplémentaire *défaut*, dans ce cas la valeur globale est prise en compte
+    * Chaque MiFlora a sa fréquence de rafraîchissement qui remplace la valeur globale quand elle n'est pas à la valeur *défaut*
+    * En mode debug, tous les objets sont lus toutes les minutes indépendamment de ces valeurs
+
+### Version 2.0.3 - 6 Avril 2018
+* Suppression du lien PayPal dans la documentation afin que le Plugin ne soit plus classé obsolète
+
+### Version 2.0.2 - 2 Avril 2018
+* Gestion du rafraîchissement global inférieur à une heure
+* Amélioration de la documentation ainsi que du Readme
 
 ### Version 2.0.1: Mars 2018
+
 * Amélioration du code sans changement fonctionnel
   * Déplacement du script python dans ressources
   * mise en place de travis-ci
