@@ -15,6 +15,7 @@
  */
 
 
+
 $("#table_cmd").sortable({
     axis: "y",
     cursor: "move",
@@ -24,7 +25,12 @@ $("#table_cmd").sortable({
     forcePlaceholderSize: true
 });
 
- $('#bt_healthMiFlora').on('click', function () {
+ $('#bt_scanMiFlora').on('click', function () {
+    $('#md_modal').dialog({title: "{{Scan MiFlora}}"});
+    $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=ScanMiflora').dialog('open');
+});
+
+$('#bt_healthMiFlora').on('click', function () {
     $('#md_modal').dialog({title: "{{Santé MiFlora}}"});
     $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=health').dialog('open');
 });
@@ -71,3 +77,5 @@ function addCmdToTable(_cmd) {
     }
     jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
+
+

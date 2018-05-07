@@ -25,7 +25,9 @@ try {
         throw new \Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
-    // action qui permet d'obtenir l'ensemble des eqLogic
+    ajax::init();
+
+     // action qui permet d'obtenir l'ensemble des eqLogic
     switch (init('action')) {
         case 'getAll':
             $eqLogics = eqLogic::byType('MiFlora');
@@ -69,6 +71,8 @@ try {
     }
 
     if (init('action') == 'remove_MiFloraRemote') {
+        $id = init('id') ;
+        log::add('MiFlora','info', 'remote  id ' . $id ) ;
         $MiFlora_remote = MiFlora_remote::byId(init('id'));
         log::add('MiFlora','debug', 'remote  remove' ) ;
         if (!is_object($MiFlora_remote)) {
@@ -84,6 +88,6 @@ try {
     /*     * *********Catch exeption*************** */
 }catch
     (\Exception $e) {
-        ajax::error(displayExeption($e), $e->getCode());
+        ajax::error(displayException($e), $e->getCode());
     }
 

@@ -65,6 +65,10 @@ class MiFlora extends eqLogic
         $frequenceItemMin = 1000;
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
+			if ($status = $mi_flora->getstatus('OK') == 0 ){
+			// force check si erreur de collete  precedente
+				return 1 ;
+			}
             $frequenceItemMin = min($frequenceItemMin, $frequenceItem);
             //log::add('MiFlora', 'info', '$frequenceItem: '.$frequenceItem);
             //log::add('MiFlora', 'info', '$frequenceItem*60.0: '.round($frequenceItem*60.0));
@@ -81,10 +85,24 @@ class MiFlora extends eqLogic
     public static function cron()
     {
         if (log::getLogLevel('MiFlora') == 100) { // si debug -> chaque minutes
-            log::add('MiFlora', 'debug', 'lance debug toute les minutes ');
-            self::cron15();
+            log::add('MiFlora', 'debug', 'lance debug rssi toutes les minutes ');
+            self::make_MiFlora_route () ;
         }
     }
+
+    public static function cronHourly()
+    {
+
+        //   decale de 8 minutes pour eviter les conflits de récupération
+
+        log::add('MiFlora', 'debug', 'lance recuperation des RSSI antennes ');
+
+        sleep (11*60);
+
+        self::make_MiFlora_route();
+
+     }
+
 
 
     public static function cron15()
@@ -101,13 +119,50 @@ class MiFlora extends eqLogic
         }
     }
 
-    /*
-     * Fonction exécutée automatiquement toutes les heures par Jeedom */
 
-    /*   public static function cronHourly()
-       {
-           self::ProcessMiFlora();
-       }*/
+    public static function Make_MiFlora_route () {
+        $rssi_value = self::get_MiFlora_rssi(30);
+
+        foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
+            log::add('MiFlora','debug','debut calcul rssi ' .$mi_flora->getHumanName(false, false)) ;
+            if ($mi_flora->getConfiguration('antenna') == 'Auto' ){
+                log::add('MiFlora','debug','on a trouver une antenne auto ' .  $mi_flora->getHumanName(false, false)) ;
+                // recherche la route la plus petite
+                $rssi = -1000 ;
+                foreach ($rssi_value as $i => $value){
+                    $dev_value = explode(';',$rssi_value[$i]) ;
+                    log::add('MiFlora','debug','valeur dev_value  ' .  ' mac  ' . strtolower($dev_value[2]) . 'a comparer a ' . strtolower ($mi_flora->getConfiguration('macAdd'))  ) ;
+                    if (strtolower($mi_flora->getConfiguration('macAdd') ) == strtolower($dev_value[2])){
+                        log::add('MiFlora','debug','debut verif mac add ' .$mi_flora->getConfiguration('macAdd') ) ;
+                        if ($dev_value[4] > $rssi){
+                            $rssi=$dev_value[4] ;
+                            if ($dev_value[1] != "local"){
+                                log::add('MiFlora','info','device ' . $mi_flora->getHumanName(false, false) .'Ancienne antenne '. $mi_flora->getConfiguration('real_antenna') . ' new configuration ' . ltrim($dev_value[0]) ) ;
+                                $mi_flora->setConfiguration('real_antenna',ltrim($dev_value[0]) );
+                            } else {
+                                log::add('MiFlora','info','device ' . $mi_flora->getHumanName(false, false) .'Ancienne antenne '. $mi_flora->getConfiguration('real_antenna') . ' new configuration local'  ) ;
+                                $mi_flora->setConfiguration('real_antenna',"local" );
+
+                            }
+
+
+                        }
+                    }
+                }
+                 if ($rssi == -1000 ) {
+                    log::add('MiFlora','warning','attention pas de rssi pour ' . $mi_flora->getHumanName(false, false));
+                 } else {
+                     log::add('MiFlora','info','mise a jour du  rssi pour ' . $mi_flora->getHumanName(false, false) . 'OK rssi ' .$rssi ."antenne " .$mi_flora->getConfiguration('real_antenna')) ;
+                    $mi_flora->save();
+                    // save new conf
+
+                 }
+
+            }
+
+        }
+    }
+
 
     public static function scanbluetooth()
     {
@@ -120,20 +175,38 @@ class MiFlora extends eqLogic
 
     public static function ProcessMiFlora($minutesStartCron)
     {
+        $adapter = config::byKey('adapter', 'MiFlora');
+        $seclvl = config::byKey('seclvl', 'MiFlora');
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
             log::add('MiFlora', 'info', 'enter item per item:' . $mi_flora->getHumanName(false, false));
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
-            if (MiFlora::isProcessMiFlora($frequenceItem, $minutesStartCron) == 0) {
-                log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' . round($frequenceItem * 60) . " minutes, next");
-                // Attn: min frequence = 12h a 0 et 12h --> ok pour batterie"
+			log::add('MiFlora','info', 'analyse de ' . $mi_flora->getHumanName(false, false) . 'frequence ' . $frequence .' status ' .$mi_flora->getStatus('OK'));
+            if ((MiFlora::isProcessMiFlora($frequenceItem, $minutesStartCron) == 0) && ( $mi_flora->getStatus('OK') == 1) ) {
+                log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' .  round($frequenceItem * 60) . " minutes, next");
             } else {
-                log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' . round($frequenceItem * 60) . ' minutes, go');
                 if (((date("h") == 12 && intval($minutesStartCron) < 5)) || $FirmwareVersion == '') {
                     $processBattery=1;
                 } else {
                     $processBattery=0;
                 }
+
+                if ($mi_flora->getStatus('OK') == 1){
+					log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' . round($frequenceItem * 60) . ' minutes, go');
+  				} else {
+					log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la précedente collecte  go');
+				}
+
+                //$mi_flora->refreshWidget();
+
+                $macAdd = $mi_flora->getConfiguration('macAdd');
+                $antenne = $mi_flora->getConfiguration('antenna');
+                if ($antenne == 'Auto') {
+                    $antenne =$mi_flora->getConfiguration('real_antenna');
+                }
+
                 self::processOneMiFlora($mi_flora,$processBattery);
+                // petite pause pour eviter engorgement (empirique mais remarqué si beaucoup de device )
+                sleep (7);
             }
         }
 
@@ -189,7 +262,6 @@ class MiFlora extends eqLogic
             if ($tryGetData > 0) {
                 log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
             }
-
             log::add('MiFlora', 'debug', ' ProcessMyMiFlora  FirmwareVersion:' . $FirmwareVersion . ' antenne ' . $antenne);
 
             $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne);
@@ -199,31 +271,28 @@ class MiFlora extends eqLogic
             // traiter ces reponses en erreur
             // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
             // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-            log::add('MiFlora', 'debug','traite data');
             $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-            log::add('MiFlora', 'debug','data traitee');
             // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
             if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
-                // wait 5 s hopping it'll be better ...
-                log::add('MiFlora', 'debug', 'wait 5 s hopping it ll be better ...');
-                sleep(5);
+                // wait  hopping it'll be better ...
+                log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
+                sleep(5 * $tryGetData);
             } else {
                 $loopcondition = false;
             }
         }
         if ($MiFloraData == '') {
             $mi_flora->setStatus('OK', 0);
-            log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour ' . $mi_flora->getHumanName(false, false));
+            $mi_flora->updateJeedom($macAdd, 0, 0, 0, 0);
+            log::add('MiFlora', 'error', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour ' . $mi_flora->getHumanName(false, false));
             message::add('MiFlora', 'mi flora data is empty for ' . $mi_flora->getHumanName(false, false) . ' check module');
+
         } else {
             $mi_flora->setStatus('OK', 1);
-            //log::add('MiFlora', 'debug','re traite data');
-            //$mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-            log::add('MiFlora', 'debug','update data');
+            // traiteMesure deja fait
+            // $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
             $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
-            log::add('MiFlora', 'debug','refresh widget');
             $mi_flora->refreshWidget();
-            log::add('MiFlora', 'debug','end refresh widget');
         }
         return true;
     }
@@ -253,6 +322,8 @@ class MiFlora extends eqLogic
      * Entrée:
      *      - $params: variable contenant les paramètres eqLogic
      */
+
+
 
     public function stackData($params)
     {
@@ -287,6 +358,15 @@ class MiFlora extends eqLogic
         if (empty($this->getConfiguration('macAdd'))) {
             throw new \Exception(__('L\'adresse Mac doit être spécifiée', __FILE__));
         }
+        if ($this->getConfiguration('antenna') != 'Auto') {
+            $this->setConfiguration ('real_antenna','local') ;
+            // TODO: Check if hardcode local ??? is it ok with auto migrtaion to deporte ?
+        }else {
+            if (empty($this->getConfiguration('real_antenna'))) {
+                $this->setConfiguration('real_antenna', '1');
+            }
+        }
+
     }
 
     public function preInsert()
@@ -300,15 +380,26 @@ class MiFlora extends eqLogic
         $this->setConfiguration('frequence', '0');
         $this->setConfiguration('battery_danger_threshold','10');
         $this->setConfiguration('battery_warning_threshold','15');
+        $this->setConfiguration('real_antenna', '1');
+
+
     }
 
     /* public function postInsert()
       {
-      }
+      }*/
 
       public function postSave()
       {
-      } */
+          if ($this->getConfiguration('antenna') != 'Auto') {
+              $this->setConfiguration ('real_antenna','local') ;
+              // TODO: Check if hardcode local ??? is it ok with auto migrtaion to deporte ?
+          }else {
+              if (empty($this->getConfiguration('real_antenna'))) {
+                  $this->setConfiguration('real_antenna', '1');
+              }
+          }
+      }
 
     public function postUpdate()
     {
@@ -429,6 +520,12 @@ class MiFlora extends eqLogic
 
     /*     * **********************Getteur Setteur*************************** */
 
+
+
+
+
+
+
     public function getMesure($macAdd, &$MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne)
     {
         log::add('MiFlora', 'debug', ' Getmesure macAdd:' . $macAdd);
@@ -439,12 +536,11 @@ class MiFlora extends eqLogic
 
         $MiFloraData = '';
         // $MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
-
         // $MiFloraData='Characteristic value/descriptor read failed: Internal application error: I/O';
         //TODO: tester chaine error et gerer erreur
 
 
-        if ($antenne != "local") {
+        if ($antenne != "local" ) {
             log::add('MiFlora', 'debug', 'access remote ');
             $remote = MiFlora_remote::byId($antenne);
             log::add('MiFlora', 'debug', 'remote fin: ');
@@ -584,7 +680,6 @@ class MiFlora extends eqLogic
             // connect: Device or resource busy
             log::add('MiFlora', 'debug', 'local call static data');
             $command = 'gatttool --adapter=' . $adapter . ' -b ' . $macAdd . '  --char-read -a 0x38 --sec-level=' . $seclvl . ' 2>&1 ';
-            log::add('MiFlora', 'debug', '$command: ' .$command);
             $MiFloraBatteryAndFirmwareVersion = exec($command);
             log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion: ' . $MiFloraBatteryAndFirmwareVersion);
             if (strpos($MiFloraBatteryAndFirmwareVersion, 'read failed') !== false or strpos($MiFloraBatteryAndFirmwareVersion, 'connect') !== false) {
@@ -706,7 +801,6 @@ class MiFlora extends eqLogic
                 if (is_object($cmd)) {
                     $cmd->event($lux);
                     log::add('MiFlora', 'info', $macAdd . ' Store Lux:' . $lux);
-
                 }
                 $cmd = $this->getCmd(null, 'lastrefresh');
                 if (is_object($cmd)) {
@@ -756,11 +850,8 @@ class MiFlora extends eqLogic
 
     public function toHtml($_version = 'dashboard')
     {
-        log::add('MiFlora', 'info', 'enter tohtml');
         $replace = $this->preToHtml($_version);
-
         if (!is_array($replace)) {
-            log::add('MiFlora', 'info', 'tohtml is_array:'.$replace);
             return $replace;
         }
         $version = jeedom::versionAlias($_version);
@@ -776,11 +867,9 @@ class MiFlora extends eqLogic
             }
         }
 
-        log::add('MiFlora', 'info', 'toHtml:'.$this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'MiFlora'))));
-
+        log::add('MiFlora', 'info', 'toHtml:'.$this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'miflora'))));
         $refresh = $this->getCmd(null, 'refresh');
         $replace['#refresh_id#'] = $refresh->getId();
-
         return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'miflora', 'MiFlora')));
     }
 
@@ -793,8 +882,7 @@ class MiFlora extends eqLogic
     }
 
 
-    public static function dependancy_info()
-    {
+    public static function dependancy_info() {
         $return = array();
         $return['log'] = 'MiFlora_update';
         $return['progress_file'] = '/tmp/dependancy_MiFlora_in_progress';
@@ -810,20 +898,111 @@ class MiFlora extends eqLogic
 
     public static function dependancy_install()
     {
-        log::remove('miflora_update');
+        log::remove('MiFlora_update');
         $sql = file_get_contents(dirname(__FILE__) . '/../../plugin_info/install.sql');
         DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
         foreach (MiFlora::byType('MiFlora') as $miflora) {
             $miflora->save();
         }
-        log::add('MiFlora', 'info', 'fin dependances');
+        log::add('MiFlora','info','fin dependances');
 
 
     }
+
+    public function get_local_rssi ($timeout)
+    {
+
+        $rssi = array("id;antenne;mac add;addrType;rssi;dev type");
+        $adapter = config::byKey('adapter', 'MiFlora', 0);
+        if (adapter != 'none') {
+            $command = "sudo /usr/bin/python ". dirname(__FILE__) . "/../../resources/MiFlora_rssi_scanner.py --device=" . $adapter . " --antenne=local --id=0 --timeout=" .$timeout;
+            log::add('MiFlora', 'debug', 'local command: ' . $command);
+            $rssiData = exec($command);
+            log::add('MiFlora', 'debug', 'commande result:' . $rssiData);
+            $tab_device = explode(',', $rssiData);
+            foreach ($tab_device as $i => $value) {
+                log::add('MiFlora', 'info', 'SSH result ligne : ' . $i . ' ' . $tab_device[$i]);
+                if ($tab_device[$i] != "") {
+                      $rssi[] = '' . $tab_device[$i];
+                }
+            }
+        }
+        return $rssi ;
+    }
+
+
+
+
+
+    public function get_MiFlora_rssi ($timeout) {
+
+ // recupere scan local
+
+        $rssi = self::get_local_rssi($timeout) ;
+
+        foreach (MiFlora_remote::all() as $remote) {
+
+            $ip = $remote->getConfiguration('remoteIp');
+            $port = $remote->getConfiguration('remotePort');
+            $user = $remote->getConfiguration('remoteUser');
+            $pass = $remote->getConfiguration('remotePassword');
+            $adapter = $remote->getConfiguration('remoteDevice');
+            $antenne = $remote->getRemoteName() ;
+ //           $localip = system( 'hostname -I');
+            $id= $remote->getId() ;
+
+            log::add('MiFlora', 'debug', 'ip: route' . $ip);
+            log::add('MiFlora', 'debug', 'port route:' . $port);
+            log::add('MiFlora', 'debug', 'user route:' . $user);
+            log::add('MiFlora', 'debug', 'pass route:' . $pass);
+            log::add('MiFlora', 'debug', 'dev route :' . $adapter);
+            log::add('MiFlora', 'debug', 'local id route :' . $id);
+
+
+            $commande = "sudo /usr/bin/python /tmp/MiFlora_rssi_scanner.py --device=" . $adapter  . " --antenne=" . $antenne ." --id=" . $id . " --timeout=" . $timeout ;
+
+            log::add('MiFlora','debug', 'Commande get rssi : ' .$commande) ;
+
+            if (!$connection = ssh2_connect($ip, $port)) {
+                log::add('MiFlora', 'error', 'connexion SSH KO');
+            } else {
+                if (!ssh2_auth_password($connection, $user, $pass)) {
+                    log::add('MiFlora', 'error', 'Authentification SSH KO');
+                } else {
+                    log::add('MiFlora', 'debug', 'Commande par SSH copy du fichier');
+                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/MiFlora_rssi_scanner.py', '/tmp/MiFlora_rssi_scanner.py', 0755);
+
+                    $rssiresult = ssh2_exec($connection, $commande);
+                    stream_set_blocking($rssiresult, true);
+                    $rssiData = stream_get_contents($rssiresult);
+                    log::add('MiFlora', 'debug', 'SSH result:' . $rssiData);
+
+                    $closesession = ssh2_exec($connection, 'exit');
+                    stream_set_blocking($closesession, true);
+                    stream_get_contents($closesession);
+                    # format rssi data
+                    $tab_device = explode(',',$rssiData) ;
+                    foreach ($tab_device as $i => $value){
+                        log::add('MiFlora', 'info', 'SSH result ligne : ' .$i .' ' . $tab_device[$i] );
+                        if ($tab_device[$i] != ""){
+                            $rssi[] = ''.$tab_device[$i] ;
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        return $rssi ;
+        }
+
+
+
+
 }
 
-class MiFlora_remote
-{
+class MiFlora_remote {
     /*     * *************************Attributs****************************** */
     private $id;
     private $remoteName;
@@ -842,8 +1021,7 @@ class MiFlora_remote
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public static function byId($_id)
-    {
+    public static function byId($_id) {
         $values = array(
             'id' => $_id,
         );
@@ -853,50 +1031,45 @@ class MiFlora_remote
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public static function all()
-    {
+    public static function all() {
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
 		FROM MiFlora_remote';
         return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
 
     /*     * *********************Methode d'instance************************* */
-
     public function preSave() {
-        if (trim($this->getRemoteName()) == '') {
-            throw new Exception(__('Le nom de l antenne ne peut être vide'));
+                if (trim($this->getRemoteName()) == '') {
+                        throw new Exception(__('Le nom de l antenne ne peut être vide'));
         }
-        log::add('MiFlora','info','preSave');
+       log::add('MiFlora','info','preSave');
     }
 
     public function preInsert() {
-        log::add('MiFlora','info','preInsert');
-    }
+            log::add('MiFlora','info','preInsert');
+       }
     public function postInsert() {
-        log::add('MiFlora','info','postInsert');
-    }
+            log::add('MiFlora','info','postInsert');
+        }
     public function preUpdate() {
-        log::add('MiFlora','info','preUpdate');
-    }
+            log::add('MiFlora','info','preUpdate');
+        }
     public function postUpdate() {
-        log::add('MiFlora','info','postUpdate');
-    }
+            log::add('MiFlora','info','postUpdate');
+        }
     public function postSave() {
-        log::add('MiFlora','info','postSave');
-    }
+            log::add('MiFlora','info','postSave');
+        }
 
-    public function save()
-    {
+    public function save() {
         return DB::save($this);
     }
 
-    public function remove()
-    {
+    public function remove() {
         return DB::remove($this);
     }
 
-    public function execCmd($_cmd)
-    {
+    public function execCmd($_cmd) {
         $ip = $this->getConfiguration('remoteIp');
         $port = $this->getConfiguration('remotePort');
         $user = $this->getConfiguration('remoteUser');
@@ -909,8 +1082,8 @@ class MiFlora_remote
                 log::add('MiFlora', 'error', 'Authentification SSH KO');
                 return;
             } else {
-                foreach ($_cmd as $cmd) {
-                    log::add('MiFlora', 'info', __('Commande par SSH ', __FILE__) . $cmd . __('sur ', __FILE__) . $ip);
+                foreach ($_cmd as $cmd){
+                    log::add('MiFlora', 'info', __('Commande par SSH ',__FILE__) . $cmd .  __('sur ',__FILE__) . $ip);
                     $execmd = "echo '" . $pass . "' | sudo -S " . $cmd;
                     $result = ssh2_exec($connection, $execmd);
                 }
@@ -924,37 +1097,36 @@ class MiFlora_remote
     }
 
 
+
+
     /*     * **********************Getteur Setteur*************************** */
 
-    public function getId()
-    {
+
+
+
+    public function getId() {
         return $this->id;
     }
 
-    public function setId($id)
-    {
+    public function setId($id) {
         $this->id = $id;
         return $this;
     }
 
-    public function getRemoteName()
-    {
+    public function getRemoteName() {
         return $this->remoteName;
     }
 
-    public function setRemoteName($name)
-    {
+    public function setRemoteName($name) {
         $this->remoteName = $name;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '')
-    {
+    public function getConfiguration($_key = '', $_default = '') {
         return utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value)
-    {
+    public function setConfiguration($_key, $_value) {
         $this->configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
         return $this;
     }

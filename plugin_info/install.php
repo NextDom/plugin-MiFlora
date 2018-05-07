@@ -37,7 +37,7 @@ function MiFlora_update() {
     if (config::byKey('maitreesclave', 'MiFlora') == "deporte"){
         $remote = MiFlora_remote::byRemoteName("deporte");
         if ($remote == "") {
-          log::add('MiFlora', 'info', 'config - remote not created - migrate existing remote collection to antenna');
+            log::add('MiFlora', 'info', 'config - remote not created - migrate existing remote collection to antenna');
             $remoteA = new MiFlora_remote();
             $remoteA->setRemoteName('deporte'  );
             $remoteA->setConfiguration('remoteIp', config::byKey('addressip', 'MiFlora'));
@@ -47,7 +47,7 @@ function MiFlora_update() {
             $remoteA->setConfiguration('remoteDevice',config::byKey('adapter', 'MiFlora'));
             $remoteA->save();
 
-           // log::add('MiFlora', 'info', 'config - remote not created '. serialize($remoteA));
+            // log::add('MiFlora', 'info', 'config - remote not created '. serialize($remoteA));
 
             $antenneAncienneMethode = "deporte";
         } else {
@@ -89,9 +89,14 @@ function MiFlora_update() {
         }
 
         $antenne = $eqLogic->getConfiguration('antenna');
+        $real_antenne = $eqLogic->getConfiguration('real_antenna');
         if ($antenne == "") {
             $antenne = $antenneAncienneMethode;
             $eqLogic->setConfiguration('antenna', $antenne); //default value in config::
+            log::add('MiFlora', 'info', '$antenneItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' .$antenne);
+        }
+        if ($real_antenne == "") {
+            $eqLogic->setConfiguration('real_antenna', 'local'); //default value in config::
             log::add('MiFlora', 'info', '$antenneItem-Install: '.$eqLogic->getHumanName(false, false) . ' : ' .$antenne);
         }
 
