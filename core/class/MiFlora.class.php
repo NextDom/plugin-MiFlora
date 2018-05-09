@@ -230,6 +230,9 @@ class MiFlora extends eqLogic
         $seclvl = config::byKey('seclvl', 'MiFlora');
         $macAdd = $mi_flora->getConfiguration('macAdd');
         $antenne = $mi_flora->getConfiguration('antenna');
+        if ($antenne == 'Auto') {
+            $antenne = $mi_flora->getConfiguration('real_antenna');
+        }
         log::add('MiFlora', 'info', ' Process MiFlora  mac add:' . $macAdd . ' sur antenne : ' . $antenne);
 
         // recupere le niveau de la batterie deux  fois par jour a 12 h
