@@ -8,7 +8,7 @@ inspired by #  https://github.com/open-homeautomation/miflora
 
 usage:
 cd [path plugin ou copy de ce script]/jeedom_MiFlora/3rparty
-/usr/bin/python ./getMiFloraData.py C4:7C:8D:60:E8:21 2.6.6 0 hci0 high
+/usr/bin/python ./getParrotFlowerData.py C4:7C:8D:60:E8:21 2.6.6 0 hci0 high
 """
 
 from threading import Lock
