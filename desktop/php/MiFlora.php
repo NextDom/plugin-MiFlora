@@ -146,9 +146,6 @@ $eqlogicss = eqLogic::byType($plugin->getId());
                             </div>
                         </div>
 
-
-
-
                         <div class="form-group">
                                 <label class="col-sm-3 control-label help" data-help="{{Antenne forcée)}}">{{Antenne}}</label>
                                 <div class="col-sm-3">
@@ -170,15 +167,14 @@ $eqlogicss = eqLogic::byType($plugin->getId());
 
                                     </select>
                                 </div>
-                                <div class="form-group refreshdelay" style="display:none">
-                                    <label class="col-sm-3 control-label help" data-help="{{Inutile de mettre des valeurs trop faible, si les valeurs sont identiques aux précédentes il n'y aura pas de mise à jour}}">{{Refresh des infos (en s)}}</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="delay" placeholder="Delai en secondes"/>
-                                    </div>
-                                </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label help" data-help="{{Humidité minimum pour la plante en cas de mini la commande hummin monte a 1 pour scenario}}">{{Humidité Minimum}}</label>
+                            <div class="col-sm-3">
+                                <input type="number" name="Humidité Minimum" min="5" max="90" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="HumMin" placeholder="Mum min"/>
                             </div>
-
+                        </div>
 
 
                         <div class="form-group">
