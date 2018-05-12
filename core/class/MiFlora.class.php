@@ -28,7 +28,8 @@ class MiFlora extends eqLogic
     public static function getFrequenceItem($mi_flora)
     {
         if (log::getLogLevel('MiFlora') == 100) { // si debug -> chaque minutes
-            $frequenceItem = 1 / 60;
+            $frequenceItem = 1 / 60 ;
+
         } else {
             $frequenceItem = $mi_flora->getConfiguration('frequence');
             if ($frequenceItem == 0) {
@@ -230,6 +231,9 @@ class MiFlora extends eqLogic
         $seclvl = config::byKey('seclvl', 'MiFlora');
         $macAdd = $mi_flora->getConfiguration('macAdd');
         $antenne = $mi_flora->getConfiguration('antenna');
+        if ($antenne == 'Auto'){
+            $antenne = $mi_flora->getConfiguration('real_antenna') ;
+        }
         log::add('MiFlora', 'info', ' Process MiFlora  mac add:' . $macAdd . ' sur antenne : ' . $antenne);
 
         // recupere le niveau de la batterie deux  fois par jour a 12 h
@@ -283,15 +287,36 @@ class MiFlora extends eqLogic
         }
         if ($MiFloraData == '') {
             $mi_flora->setStatus('OK', 0);
-            $mi_flora->updateJeedom($macAdd, 0, 0, 0, 0);
+  //          $mi_flora->updateJeedom($macAdd, 0, 0, 0, 0);
             log::add('MiFlora', 'error', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour ' . $mi_flora->getHumanName(false, false));
             message::add('MiFlora', 'mi flora data is empty for ' . $mi_flora->getHumanName(false, false) . ' check module');
 
         } else {
             $mi_flora->setStatus('OK', 1);
-            // traiteMesure deja fait
-            // $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-            $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
+
+
+            $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux );
+
+            // regarde si humidité minimum
+            $old_Hummin = $mi_flora->getstatus('HumMin') ;
+            $hum_min = $mi_flora->getConfiguration ('HumMin');
+            log::add('MiFlora','debug', 'humidité minimale en base ' .$hum_min . 'humidité precedente ' .$old_Hummin) ;
+            if ($moisture < $hum_min){
+                if ($old_Hummin != 1) {   // seulement si nouvelle valeur
+                    $mi_flora->setStatus('HumMin', 1);
+                    $mi_flora->update_min_hum_Jeedom (1) ;
+                    log::add('MiFlora','refresh value update') ;
+                }
+                log::add('MiFlora','debug', 'en dessous humidité minimale en base ' .$moisture) ;
+            } else {
+                if ($old_Hummin != 0) {
+                    $mi_flora->setStatus('HumMin',0);
+                    $mi_flora->update_min_hum_Jeedom (0) ;
+                    log::add('MiFlora','refresh value update') ;
+                }
+                log::add('MiFlora','debug', 'au dessus humidité minimale en base ' .$moisture) ;
+            }
+
             $mi_flora->refreshWidget();
         }
         return true;
@@ -363,7 +388,7 @@ class MiFlora extends eqLogic
             // TODO: Check if hardcode local ??? is it ok with auto migrtaion to deporte ?
         }else {
             if (empty($this->getConfiguration('real_antenna'))) {
-                $this->setConfiguration('real_antenna', '1');
+                $this->setConfiguration('real_antenna', 'local');
             }
         }
 
@@ -380,7 +405,7 @@ class MiFlora extends eqLogic
         $this->setConfiguration('frequence', '0');
         $this->setConfiguration('battery_danger_threshold','10');
         $this->setConfiguration('battery_warning_threshold','15');
-        $this->setConfiguration('real_antenna', '1');
+        $this->setConfiguration('real_antenna', 'local');
 
 
     }
@@ -413,16 +438,18 @@ class MiFlora extends eqLogic
         $lastrefresh->setType('info');
         $lastrefresh->setSubType('string');
         $lastrefresh->setEventOnly(1);
+     //   $lastrefresh->event(date("Y-m-j H:i"));
         $lastrefresh->setEqLogic_id($this->getId());
         $lastrefresh->save();
 
         $refresh = $this->getCmd(null, 'refresh');
-        if (!is_object($refresh)) {
+         if (!is_object($refresh)) {
             $refresh = new MiFloraCmd();
             $refresh->setLogicalId('refresh');
             $refresh->setIsVisible(1);
             $refresh->setName(__('Rafraîchir', __FILE__));
         }
+        $refresh->setIsVisible(1);
         $refresh->setType('action');
         $refresh->setSubType('other');
         $refresh->setEqLogic_id($this->getId());
@@ -439,7 +466,22 @@ class MiFlora extends eqLogic
             $MiFloraCmd->setType('info');
             $MiFloraCmd->setSubType('numeric');
             $MiFloraCmd->setUnite('');
-            $MiFloraCmd->setIsHistorized(1);
+            $MiFloraCmd->setIsHistorized(0);
+            $MiFloraCmd->save();
+        }
+
+        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'HumMin');
+        if (!is_object($cmdlogic)) {
+            $MiFloraCmd = new MiFloraCmd();
+            $MiFloraCmd->setName(__('HumMin', __FILE__));
+            $MiFloraCmd->setEqLogic_id($this->id);
+            $MiFloraCmd->setLogicalId('HumMin');
+            $MiFloraCmd->setConfiguration('data', 'HumMin');
+            $MiFloraCmd->setEqType('miflora');
+            $MiFloraCmd->setType('info');
+            $MiFloraCmd->setSubType('binary');
+            $MiFloraCmd->setUnite('');
+            $MiFloraCmd->setIsHistorized(0);
             $MiFloraCmd->save();
         }
 
@@ -758,10 +800,21 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
             log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
             log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
+
         }
     }
+    public function update_min_hum_Jeedom ($hum_min){
 
-    public function updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux)
+        $cmd = $this->getCmd(null, 'HumMin');
+        if (is_object($cmd)) {
+            $cmd->event($hum_min);
+            log::add('MiFlora', 'info', 'enregistrement Humiditée min '. $hum_min);
+        }
+
+
+
+    }
+    public function updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux )
     {
         // store into Jeedom DB
         if ($temperature == 0 && $moisture == 0 && $fertility == 0 && $lux == 0) {
@@ -804,7 +857,7 @@ class MiFlora extends eqLogic
                 }
                 $cmd = $this->getCmd(null, 'lastrefresh');
                 if (is_object($cmd)) {
-                    $lastrefresh=(date("t-m H:i"));
+                    $lastrefresh=(date("Y-m-j H:i"));
                     $cmd->event($lastrefresh);
                     log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
                 }
@@ -813,6 +866,7 @@ class MiFlora extends eqLogic
                     $cmd->event(1);
                     log::add('MiFlora', 'info', 'module present');
                 }
+
             }
         }
     }
