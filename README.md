@@ -20,5 +20,5 @@ Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de me
 
 # Documentation complète:
 
-[![Read the Docs](plugin_info/MiFlora_icon.png)](https://jeedom-plugins-extra.github.io/plugin-MiFlora)
+[![Read the Docs](plugin_info/MiFlora_icon.png)](https://jeedom-plugins-extra.github.io/plugin-MiFlora) [![Join the chat at https://gitter.im/NextDom/plugin-MiFlora](https://badges.gitter.im/NextDom/plugin-MiFlora.svg)](https://gitter.im/NextDom/plugin-MiFlora?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
