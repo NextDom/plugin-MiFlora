@@ -62,7 +62,7 @@ foreach ($remotes as $remote) {
 						<div class="form-group">
 							<label class="col-sm-2 control-label">{{Nom}}</label>
 							<div class="col-sm-3">
-                                <input type="text" class="bleaRemoteAttr form-control" data-l1key="id" style="display : none;" />
+                                <input type="text" class="MiFloraRemoteAttr form-control" data-l1key="id" style="display : none;" />
 								<input type="text" class="MiFloraRemoteAttr form-control" data-l1key="remoteName" placeholder="{{Nom de l'antenne}}"/>
 							</div>
 						</div>
