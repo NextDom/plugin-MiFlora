@@ -1,6 +1,7 @@
 
 
 import argparse
+import sys
 from bluepy.btle import Scanner, DefaultDelegate
 
 
@@ -45,21 +46,25 @@ else:
     print "device error (hci0 a hci3) \n"
 
 scanner = Scanner(index).withDelegate(ScanDelegate())
-scanner.clear()
-devices = scanner.scan(int(args.timeout))
 
-file= "/tmp/MiFlora_rssi_" + args.antenne + ".dat"
-#print "file : " + file
-file_out = open (file,"w")
+try:
+    devices = scanner.scan(int(args.timeout))
+except:
+    print("Erreur dans le scan le controleur est probablement occupe essayer un autre ")
+else:
+    file= "/tmp/MiFlora_rssi_" + args.antenne + ".dat"
+    #print "file : " + file
+    file_out = open (file,"w")
 
-for dev in devices:
-#    print "%s,%s,(%s),%d;" % (args.antenne,dev.addr, dev.addrType, dev.rssi)
-    for (adtype, desc, value) in dev.getScanData():
-        if (desc == "Complete Local Name") :
-            print "%s;%s;%s;%s;%d;%s," % (args.id,args.antenne, dev.addr, dev.addrType, dev.rssi,value)
-            file_out.write("%s;%s;%s;%s;%d;%s\n" % (args.id,args.antenne, dev.addr, dev.addrType, dev.rssi,value))
+    for dev in devices:
+    #    print "%s,%s,(%s),%d;" % (args.antenne,dev.addr, dev.addrType, dev.rssi)
+        for (adtype, desc, value) in dev.getScanData():
+            if (desc == "Complete Local Name") :
+                print "%s;%s;%s;%s;%d;%s," % (args.id,args.antenne, dev.addr, dev.addrType, dev.rssi,value)
+                file_out.write("%s;%s;%s;%s;%d;%s\n" % (args.id,args.antenne, dev.addr, dev.addrType, dev.rssi,value))
 
-file_out.close()
-
+    file_out.close()
+finally:
+    sys.exit();
 
 

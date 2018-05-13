@@ -300,23 +300,24 @@ class MiFlora extends eqLogic
             // regarde si humidité minimum
             $old_Hummin = $mi_flora->getstatus('HumMin') ;
             $hum_min = $mi_flora->getConfiguration ('HumMin');
-            log::add('MiFlora','debug', 'humidité minimale en base ' .$hum_min . 'humidité precedente ' .$old_Hummin) ;
-            if ($moisture < $hum_min){
-                if ($old_Hummin != 1) {   // seulement si nouvelle valeur
-                    $mi_flora->setStatus('HumMin', 1);
-                    $mi_flora->update_min_hum_Jeedom (1) ;
-                    log::add('MiFlora','refresh value update') ;
+            if ($hum_min != 0) {
+                log::add('MiFlora', 'debug', 'humidité minimale en base ' . $hum_min . 'humidité precedente ' . $old_Hummin);
+                if ($moisture < $hum_min) {
+                    if ($old_Hummin != 1) {   // seulement si nouvelle valeur
+                        $mi_flora->setStatus('HumMin', 1);
+                        $mi_flora->update_min_hum_Jeedom(1);
+                        log::add('MiFlora', 'refresh value update');
+                    }
+                    log::add('MiFlora', 'debug', 'en dessous humidité minimale en base ' . $moisture);
+                } else {
+                    if ($old_Hummin != 0) {
+                        $mi_flora->setStatus('HumMin', 0);
+                        $mi_flora->update_min_hum_Jeedom(0);
+                        log::add('MiFlora', 'refresh value update');
+                    }
+                    log::add('MiFlora', 'debug', 'au dessus humidité minimale en base ' . $moisture);
                 }
-                log::add('MiFlora','debug', 'en dessous humidité minimale en base ' .$moisture) ;
-            } else {
-                if ($old_Hummin != 0) {
-                    $mi_flora->setStatus('HumMin',0);
-                    $mi_flora->update_min_hum_Jeedom (0) ;
-                    log::add('MiFlora','refresh value update') ;
-                }
-                log::add('MiFlora','debug', 'au dessus humidité minimale en base ' .$moisture) ;
             }
-
             $mi_flora->refreshWidget();
         }
         return true;
@@ -482,6 +483,7 @@ class MiFlora extends eqLogic
             $MiFloraCmd->setSubType('binary');
             $MiFloraCmd->setUnite('');
             $MiFloraCmd->setIsHistorized(0);
+            $MiFloraCmd->event (0) ;
             $MiFloraCmd->save();
         }
 
@@ -1002,8 +1004,8 @@ class MiFlora extends eqLogic
             $pass = $remote->getConfiguration('remotePassword');
             $adapter = $remote->getConfiguration('remoteDevice');
             $antenne = $remote->getRemoteName() ;
- //           $localip = system( 'hostname -I');
-            $id= $remote->getId() ;
+            $ScanMode = $remote->getConfiguration ('ScanMode');
+            $id = $remote->getId() ;
 
             log::add('MiFlora', 'debug', 'ip: route' . $ip);
             log::add('MiFlora', 'debug', 'port route:' . $port);
@@ -1011,8 +1013,14 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', 'pass route:' . $pass);
             log::add('MiFlora', 'debug', 'dev route :' . $adapter);
             log::add('MiFlora', 'debug', 'local id route :' . $id);
+            log::add('MiFlora', 'debug', 'local Scan Mode :' . $ScanMode);
 
-
+            if ($ScanMode != 1){      //on saute si l antenne est definie comme a ne pas utiliser dans les scan ou auto
+                log::add('MiFlora','info','on saute antenne ' . $antenne ." scan mode a 0");
+                continue ;
+            }
+            log::add('MiFlora','info','on traite antenne ' . $antenne ." scan mode a 1");
+            
             $commande = "sudo /usr/bin/python /tmp/MiFlora_rssi_scanner.py --device=" . $adapter  . " --antenne=" . $antenne ." --id=" . $id . " --timeout=" . $timeout ;
 
             log::add('MiFlora','debug', 'Commande get rssi : ' .$commande) ;

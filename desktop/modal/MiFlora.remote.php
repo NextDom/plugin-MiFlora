@@ -92,8 +92,13 @@ foreach ($remotes as $remote) {
 								<input type="text" class="MiFloraRemoteAttr form-control" data-l1key="configuration" data-l2key="remoteDevice" placeholder="{{ex : hci0}}"/>
 							</div>
 						</div>
-
-						</fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-3">
+                                <label class="checkbox-inline"><input type="checkbox" class="MiFloraRemoteAttr" data-l1key="configuration" data-l2key="ScanMode" checked/>{{Mode auto et Scan }}</label>
+                               </div>
+                        </div>
+            		</fieldset>
 				</form>
 	</div>
 </div>
