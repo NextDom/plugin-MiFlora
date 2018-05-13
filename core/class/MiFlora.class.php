@@ -1020,7 +1020,7 @@ class MiFlora extends eqLogic
                 continue ;
             }
             log::add('MiFlora','info','on traite antenne ' . $antenne ." scan mode a 1");
-            
+
             $commande = "sudo /usr/bin/python /tmp/MiFlora_rssi_scanner.py --device=" . $adapter  . " --antenne=" . $antenne ." --id=" . $id . " --timeout=" . $timeout ;
 
             log::add('MiFlora','debug', 'Commande get rssi : ' .$commande) ;

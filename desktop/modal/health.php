@@ -36,6 +36,7 @@ $eqLogics = MiFlora::byType('MiFlora');
 			<th>{{Batterie}}</th>
             <th>{{Antenne  }}</th>
             <th>{{Antenne réelle}}</th>
+            <th>{{HumMin}}</th>
 			<th>{{Dernière communication}}</th>
 		</tr>
 	</thead>
@@ -102,7 +103,9 @@ $eqLogics = MiFlora::byType('MiFlora');
           echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">'  ."NA" . '</span></td>';
       }
 
-   	echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
+    echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">' . $eqLogic->getConfiguration('HumMin') . '</span></td>';
+
+    echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
 
 
 
