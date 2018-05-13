@@ -41,7 +41,9 @@ class MiFloraCmd extends cmd
          $processBattery = 0;
          $miflora = new MiFlora() ;
          $eqLogic = $this->getEqLogic();
-         MiFlora::processOneMiFlora($eqLogic,$processBattery);
+         $devicetype = $eqLogic->getConfiguration('devicetype');
+         log::add('MiFlora', 'debug', 'refresh - devicetype: ' . $devicetype);
+         MiFlora::processOneMiFlora($eqLogic,$processBattery,$devicetype);
          log::add('MiFlora', 'debug', 'fin de refresh ok ');
          return true;
         }

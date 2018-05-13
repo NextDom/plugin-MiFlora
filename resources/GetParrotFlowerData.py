@@ -564,10 +564,7 @@ if flora_debug == "1":
 
 if flora_debug == "0":
     if flora_action == "data":
-        print "{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", soilEC, ",\"Lux\":", DLI_calibre,",\"Air_Temperature\":", temperature_air_calibre,",\"Soil_Temperature\":", temperature_terre
-        if flora_calibre == "1":
-            print "\"soil_moisture_calibre\":",soil_moisture_calibre,"\"temperature_air_calibre\":",temperature_air_calibre
-        print("}")
+        print "{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", soilEC, ",\"Lux\":", DLI_calibre, ",\"Air_Temperature\":", temperature_air_calibre, ",\"Soil_Temperature\":", temperature_terre,"}"
 
     if flora_action ==  "static":
         print "Name: ", Name, ",Batterie: ", batterie
