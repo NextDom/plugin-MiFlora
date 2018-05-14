@@ -1051,7 +1051,7 @@ class MiFlora extends eqLogic
                 }
                 $cmd = $this->getCmd(null, 'lastrefresh');
                 if (is_object($cmd)) {
-                    $lastrefresh=(date("Y-m-j H:i"));
+                    $lastrefresh=(date("j-m H:i"));
                     $cmd->event($lastrefresh);
                     log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
                 }
@@ -1213,7 +1213,7 @@ class MiFlora extends eqLogic
                 continue ;
             }
             log::add('MiFlora','info','on traite antenne ' . $antenne ." scan mode a 1");
-            
+
             $commande = "sudo /usr/bin/python /tmp/MiFlora_rssi_scanner.py --device=" . $adapter  . " --antenne=" . $antenne ." --id=" . $id . " --timeout=" . $timeout ;
 
             log::add('MiFlora','debug', 'Commande get rssi : ' .$commande) ;
