@@ -27,7 +27,7 @@ La fréquence de lecture des données est par défaut celle de la configuration 
 
 ### Utilisation en déporté
 
-Il est possible que Jeedom pilote des appareils déportés qui se chargeront de la communication Bluetooth avec les MiFlora.
+Il est possible que Jeedom pilote un appareil déporté qui se chargera de la communication Bluetooth avec les MiFlora.
 
 Dans ce cas, il faut renseigner les paramètres de connexion SSH entre Jeedom et cet appareil déporté :
 

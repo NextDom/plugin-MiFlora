@@ -2,8 +2,8 @@
 
 ### Quelle est la différence entre MiFlora et BLEA
 > MiFlora ne gère que les plantes, BLEA est un plugin pour tous les objets Bluetooth LE, il est donc beaucoup plus complexe, 
-il nécessite des dépendances, a un système de démon, il est adapté pour gérer une multitude de types d'objets Bluetooth LE 
-mais nécessite plus de suivi et de maintenance, principalement les démons et dépendances lors des mise à jour
+il nécéssite des dépendances, a un systeme de démon, il est adapté pour gérer une multitude de types d'objets Bluetooth LE 
+mais nécéssite plus de suivi et de maintenance, principalement les démons et dépendances lors des mise à jour
 
 ### Est-ce que ce plugin s'appuie sur des API tiers ?
 
@@ -18,7 +18,7 @@ Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --cha
 ### Combien de fois par jour les mesures sont-elles récupérées ?
 
 > C'est défini dans la configuration globale du plugin, pour tous les objets : de toutes les 15 minutes à toutes les 12 heures.
-Il est possible de configurer une fréquence différente par MiFlora, `défaut` permet d'utiliser la fréquence globale.
+Il est possible de configurer une fréquence differente par MiFlora, `defaut` permet d'utiliser la frequence globale.
 
 >J'utilise le modulo de l'heure actuelle avec la fréquence saisie en paramètre. +
 Attention: en mode debug, les données sont récupérés en permanence indépendamment de la configuration.
@@ -55,4 +55,4 @@ BlueZ est incompatible avec blueman (sudo apt-get remove blueman)
 
 > Les seuils peuvent être trouvés en utilisant la base de plantes de Xiaomi ou celle de Parrot à défaut un seuil entre 14 et 16 semble convenir à une majorité de plantes d'intérieur.
 
-> Il est aussi possible de réguler un arrosage automatique, MiFlora semble bien résister aux intempéries
+> Il est aussi possible de reguler un arrosage automatique, MiFlora semble bien résiter aux intempéries
