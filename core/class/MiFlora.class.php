@@ -28,7 +28,8 @@ class MiFlora extends eqLogic
     public static function getFrequenceItem($mi_flora)
     {
         if (log::getLogLevel('MiFlora') == 100) { // si debug -> chaque minutes
-            $frequenceItem = 1 / 60;
+            $frequenceItem = 1 / 60 ;
+
         } else {
             $frequenceItem = $mi_flora->getConfiguration('frequence');
             if ($frequenceItem == 0) {
@@ -271,8 +272,8 @@ class MiFlora extends eqLogic
         $seclvl = config::byKey('seclvl', 'MiFlora');
         $macAdd = $mi_flora->getConfiguration('macAdd');
         $antenne = $mi_flora->getConfiguration('antenna');
-        if ($antenne == 'Auto') {
-            $antenne = $mi_flora->getConfiguration('real_antenna');
+        if ($antenne == 'Auto'){
+            $antenne = $mi_flora->getConfiguration('real_antenna') ;
         }
         log::add('MiFlora', 'info', ' Process MiFlora  mac add:' . $macAdd . ' sur antenne : ' . $antenne);
 
@@ -373,15 +374,37 @@ class MiFlora extends eqLogic
         }
         if ($MiFloraData == '') {
             $mi_flora->setStatus('OK', 0);
-            $mi_flora->updateJeedom($macAdd, 0, 0, 0, 0);
+  //          $mi_flora->updateJeedom($macAdd, 0, 0, 0, 0);
             log::add('MiFlora', 'error', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour ' . $mi_flora->getHumanName(false, false));
             message::add('MiFlora', 'mi flora data is empty for ' . $mi_flora->getHumanName(false, false) . ' check module');
 
         } else {
             $mi_flora->setStatus('OK', 1);
-            // traiteMesure deja fait
-            // $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-            $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux);
+
+
+            $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux );
+
+            // regarde si humidité minimum
+            $old_Hummin = $mi_flora->getstatus('HumMin') ;
+            $hum_min = $mi_flora->getConfiguration ('HumMin');
+            if ($hum_min != 0) {
+                log::add('MiFlora', 'debug', 'humidité minimale en base ' . $hum_min . 'humidité precedente ' . $old_Hummin);
+                if ($moisture < $hum_min) {
+                    if ($old_Hummin != 1) {   // seulement si nouvelle valeur
+                        $mi_flora->setStatus('HumMin', 1);
+                        $mi_flora->update_min_hum_Jeedom(1);
+                        log::add('MiFlora', 'refresh value update');
+                    }
+                    log::add('MiFlora', 'debug', 'en dessous humidité minimale en base ' . $moisture);
+                } else {
+                    if ($old_Hummin != 0) {
+                        $mi_flora->setStatus('HumMin', 0);
+                        $mi_flora->update_min_hum_Jeedom(0);
+                        log::add('MiFlora', 'refresh value update');
+                    }
+                    log::add('MiFlora', 'debug', 'au dessus humidité minimale en base ' . $moisture);
+                }
+            }
             $mi_flora->refreshWidget();
         }
         return true;
@@ -452,7 +475,7 @@ class MiFlora extends eqLogic
             $this->setConfiguration ('real_antenna','local') ;
         }else {
             if (empty($this->getConfiguration('real_antenna'))) {
-                $this->setConfiguration('real_antenna', '1');
+                $this->setConfiguration('real_antenna', 'local');
             }
         }
         log::add('MiFlora', 'info', 'devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
@@ -483,7 +506,7 @@ class MiFlora extends eqLogic
         $this->setConfiguration('frequence', '0');
         $this->setConfiguration('battery_danger_threshold','10');
         $this->setConfiguration('battery_warning_threshold','15');
-        $this->setConfiguration('real_antenna', '1');
+        $this->setConfiguration('real_antenna', 'local');
 
 
     }
@@ -523,16 +546,18 @@ class MiFlora extends eqLogic
         $lastrefresh->setType('info');
         $lastrefresh->setSubType('string');
         $lastrefresh->setEventOnly(1);
+     //   $lastrefresh->event(date("Y-m-j H:i"));
         $lastrefresh->setEqLogic_id($this->getId());
         $lastrefresh->save();
 
         $refresh = $this->getCmd(null, 'refresh');
-        if (!is_object($refresh)) {
+         if (!is_object($refresh)) {
             $refresh = new MiFloraCmd();
             $refresh->setLogicalId('refresh');
             $refresh->setIsVisible(1);
             $refresh->setName(__('Rafraîchir', __FILE__));
         }
+        $refresh->setIsVisible(1);
         $refresh->setType('action');
         $refresh->setSubType('other');
         $refresh->setEqLogic_id($this->getId());
@@ -549,7 +574,23 @@ class MiFlora extends eqLogic
             $MiFloraCmd->setType('info');
             $MiFloraCmd->setSubType('numeric');
             $MiFloraCmd->setUnite('');
-            $MiFloraCmd->setIsHistorized(1);
+            $MiFloraCmd->setIsHistorized(0);
+            $MiFloraCmd->save();
+        }
+
+        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'HumMin');
+        if (!is_object($cmdlogic)) {
+            $MiFloraCmd = new MiFloraCmd();
+            $MiFloraCmd->setName(__('HumMin', __FILE__));
+            $MiFloraCmd->setEqLogic_id($this->id);
+            $MiFloraCmd->setLogicalId('HumMin');
+            $MiFloraCmd->setConfiguration('data', 'HumMin');
+            $MiFloraCmd->setEqType('miflora');
+            $MiFloraCmd->setType('info');
+            $MiFloraCmd->setSubType('binary');
+            $MiFloraCmd->setUnite('');
+            $MiFloraCmd->setIsHistorized(0);
+            $MiFloraCmd->event (0) ;
             $MiFloraCmd->save();
         }
 
@@ -928,41 +969,46 @@ class MiFlora extends eqLogic
 
     public function traiteMesure($macAdd, $MiFloraData, &$temperature, &$moisture, &$fertility, &$lux, $devicetype)
     {
-        if ($devicetype == 'MiFlora') {
-            // process data
-            // log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
-            $MiFloraData = explode(": ", $MiFloraData);
-            // log::add('MiFlora', 'debug', 'MiFloraDataExplode:'.$MiFloraData[1]);
-            $MiFloraData = explode(" ", $MiFloraData[1]);
-            if (hexdec($MiFloraData[1]) > 128) {
-                $temperature = -((65536 - hexdec($MiFloraData[1] . $MiFloraData[0])) / 10);
-            } else {
-                $temperature = hexdec($MiFloraData[1] . $MiFloraData[0]) / 10;
-            }
-            // traite cette erreur:
-            // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
-            if ($temperature == -1749.4) {
-                log::add('MiFlora', 'info', $macAdd . 'Temperature:' . $temperature . ' Lu: aa bb cc dd ... Mise de toutes les valeurs a 0 pour forcer un retry');
-                $temperature = 0;
-                $moisture = 0;
-                $fertility = 0;
-                $lux = 0;
-            } else {
-                $moisture = hexdec($MiFloraData[7]);
-                $fertility = hexdec($MiFloraData[9] . $MiFloraData[8]);
-                $lux = hexdec($MiFloraData[4] . $MiFloraData[3]);
-                log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
-                log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
-                log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
-                log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
-            }
-        } else { // process Parrot
-            log::add('MiFlora', 'debug', Parrot - $macAdd . ' $MiFloraData:' . $MiFloraData);
-
+        // process data
+        // log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
+        $MiFloraData = explode(": ", $MiFloraData);
+        // log::add('MiFlora', 'debug', 'MiFloraDataExplode:'.$MiFloraData[1]);
+        $MiFloraData = explode(" ", $MiFloraData[1]);
+        if (hexdec($MiFloraData[1]) > 128) {
+            $temperature = -((65536 - hexdec($MiFloraData[1] . $MiFloraData[0])) / 10);
+        } else {
+            $temperature = hexdec($MiFloraData[1] . $MiFloraData[0]) / 10;
+        }
+        // traite cette erreur:
+        // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
+        if ($temperature == -1749.4) {
+            log::add('MiFlora', 'info', $macAdd . 'Temperature:' . $temperature . ' Lu: aa bb cc dd ... Mise de toutes les valeurs a 0 pour forcer un retry');
+            $temperature = 0;
+            $moisture = 0;
+            $fertility = 0;
+            $lux = 0;
+        } else {
+            $moisture = hexdec($MiFloraData[7]);
+            $fertility = hexdec($MiFloraData[9] . $MiFloraData[8]);
+            $lux = hexdec($MiFloraData[4] . $MiFloraData[3]);
+            log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
+            log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
+            log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
+            log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
         }
     }
+    public function update_min_hum_Jeedom ($hum_min){
 
-    public function updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux)
+        $cmd = $this->getCmd(null, 'HumMin');
+        if (is_object($cmd)) {
+            $cmd->event($hum_min);
+            log::add('MiFlora', 'info', 'enregistrement Humiditée min '. $hum_min);
+        }
+
+
+
+    }
+    public function updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux )
     {
         // store into Jeedom DB
         if ($temperature == 0 && $moisture == 0 && $fertility == 0 && $lux == 0) {
@@ -1005,7 +1051,7 @@ class MiFlora extends eqLogic
                 }
                 $cmd = $this->getCmd(null, 'lastrefresh');
                 if (is_object($cmd)) {
-                    $lastrefresh=(date("t-m H:i"));
+                    $lastrefresh=(date("Y-m-j H:i"));
                     $cmd->event($lastrefresh);
                     log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
                 }
@@ -1014,6 +1060,7 @@ class MiFlora extends eqLogic
                     $cmd->event(1);
                     log::add('MiFlora', 'info', 'module present');
                 }
+
             }
         }
     }
@@ -1150,8 +1197,8 @@ class MiFlora extends eqLogic
             $pass = $remote->getConfiguration('remotePassword');
             $adapter = $remote->getConfiguration('remoteDevice');
             $antenne = $remote->getRemoteName() ;
- //           $localip = system( 'hostname -I');
-            $id= $remote->getId() ;
+            $ScanMode = $remote->getConfiguration ('ScanMode');
+            $id = $remote->getId() ;
 
             log::add('MiFlora', 'debug', 'ip: route' . $ip);
             log::add('MiFlora', 'debug', 'port route:' . $port);
@@ -1159,8 +1206,14 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', 'pass route:' . $pass);
             log::add('MiFlora', 'debug', 'dev route :' . $adapter);
             log::add('MiFlora', 'debug', 'local id route :' . $id);
+            log::add('MiFlora', 'debug', 'local Scan Mode :' . $ScanMode);
 
-
+            if ($ScanMode != 1){      //on saute si l antenne est definie comme a ne pas utiliser dans les scan ou auto
+                log::add('MiFlora','info','on saute antenne ' . $antenne ." scan mode a 0");
+                continue ;
+            }
+            log::add('MiFlora','info','on traite antenne ' . $antenne ." scan mode a 1");
+            
             $commande = "sudo /usr/bin/python /tmp/MiFlora_rssi_scanner.py --device=" . $adapter  . " --antenne=" . $antenne ." --id=" . $id . " --timeout=" . $timeout ;
 
             log::add('MiFlora','debug', 'Commande get rssi : ' .$commande) ;

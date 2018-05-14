@@ -40,6 +40,8 @@ sendVarToJS('plugin', $id);
   <?php
 foreach ($remotes as $remote) {
 	echo '<div class="eqLogicDisplayCard cursor pull-left" data-remote_id="' . $remote->getId() . '" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+    echo '<div class="cursor li_MiFloraRemote" data-MiFloraRemote_id="' . $remote->getId() . '"></div>';
+
 	echo "<center>";
 	echo '<img class="lazy" src="plugins/MiFlora/plugin_info/antenna.png" height="105" width="95" />';
 	echo "</center>";
@@ -60,7 +62,7 @@ foreach ($remotes as $remote) {
 						<div class="form-group">
 							<label class="col-sm-2 control-label">{{Nom}}</label>
 							<div class="col-sm-3">
-								<input type="text" class="MiFloraRemoteAttr form-control" data-l1key="id" style="display : none;" />
+                                <input type="text" class="MiFloraRemoteAttr form-control" data-l1key="id" style="display : none;" />
 								<input type="text" class="MiFloraRemoteAttr form-control" data-l1key="remoteName" placeholder="{{Nom de l'antenne}}"/>
 							</div>
 						</div>
@@ -90,8 +92,13 @@ foreach ($remotes as $remote) {
 								<input type="text" class="MiFloraRemoteAttr form-control" data-l1key="configuration" data-l2key="remoteDevice" placeholder="{{ex : hci0}}"/>
 							</div>
 						</div>
-
-						</fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-3">
+                                <label class="checkbox-inline"><input type="checkbox" class="MiFloraRemoteAttr" data-l1key="configuration" data-l2key="ScanMode" checked/>{{Mode auto et Scan }}</label>
+                               </div>
+                        </div>
+            		</fieldset>
 				</form>
 	</div>
 </div>
