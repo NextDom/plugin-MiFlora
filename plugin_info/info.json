@@ -1,13 +1,16 @@
 {
-	"id" : "MiFlora",
-	"name" : "MiFlora",
-	"description" : "Ce plugin permet de gèrer les Xiaomi plants ou Mi Flora. Il nécéssite une connection bluetooth vers les mi flora.",
-	"usage": "Il gère la recuperation des infos de manière déportés par SSH.",
-	"licence" : "GPL2.0",
-	"author" : "Rene Jullien",
-	"require" : "2.4",
-	"version" : "2.0.6",
-	"category" : "nature",
-	"changelog" : "https://rjullien.github.io/plugin-MiFlora/#language#/#tocAnchor-1-7",
-	"documentation" : "https://rjullien.github.io/plugin-MiFlora/#language#"
+  "id": "MiFlora",
+  "name": "MiFlora",
+  "description": "Ce plugin permet de gèrer les Xiaomi plants ou Mi Flora. Il nécéssite une connection bluetooth vers les mi flora.",
+  "usage": "Il gère la recuperation des infos de manière déportés par SSH.",
+  "licence": "GPL2.0",
+  "author": "Rene Jullien",
+  "require": "2.4",
+  "version": "3.0.0",
+  "category": "nature",
+  "hasDependency": true,
+  "changelog": "https://rjullien.github.io/plugin-MiFlora/#language#/#tocAnchor-1-7",
+  "documentation": "https://rjullien.github.io/plugin-MiFlora/#language#"
 }
+
+

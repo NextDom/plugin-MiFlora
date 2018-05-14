@@ -1,5 +1,5 @@
 
-### Version 2.0.6 - 23 Avril 2018 Beta
+### Version 2.0.6 - 23 Avril 2018 Bêta
 * Correction du warning dans http.error
 
 ### Version 2.0.5 - 18 Avril 2018

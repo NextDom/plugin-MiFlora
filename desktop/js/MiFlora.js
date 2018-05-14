@@ -15,6 +15,7 @@
  */
 
 
+
 $("#table_cmd").sortable({
     axis: "y",
     cursor: "move",
@@ -23,6 +24,23 @@ $("#table_cmd").sortable({
     tolerance: "intersect",
     forcePlaceholderSize: true
 });
+
+ $('#bt_scanMiFlora').on('click', function () {
+    $('#md_modal').dialog({title: "{{Scan MiFlora}}"});
+    $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=ScanMiflora').dialog('open');
+});
+
+$('#bt_healthMiFlora').on('click', function () {
+    $('#md_modal').dialog({title: "{{Santé MiFlora}}"});
+    $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=health').dialog('open');
+});
+
+$('#bt_remoteMiFlora').on('click', function () {
+    $('#md_modal').dialog({title: "{{Gestion des antennes bluetooth}}"});
+    $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=MiFlora.remote&id=MiFlora').dialog('open');
+});
+
+
 /*
  * Fonction pour l'ajout de commande, appellé automatiquement par plugin.MiFlora
  */
@@ -59,3 +77,5 @@ function addCmdToTable(_cmd) {
     }
     jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
+
+
