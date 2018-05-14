@@ -36,6 +36,7 @@ $eqLogics = MiFlora::byType('MiFlora');
 			<th>{{Batterie}}</th>
             <th>{{Antenne  }}</th>
             <th>{{Antenne réelle}}</th>
+            <th>{{HumMin}}</th>
 			<th>{{Dernière communication}}</th>
 		</tr>
 	</thead>
@@ -98,11 +99,22 @@ $eqLogics = MiFlora::byType('MiFlora');
               $antenne = $real_antenne ;
           }
           echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">' . $antenne . '</span></td>' ;
-      }else{
+    }else{
           echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">'  ."NA" . '</span></td>';
-      }
+    }
 
-   	echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
+
+      $cmd = $eqLogic->getCmd(null, 'moisture');
+      $hum= $cmd->execCmd();
+      log::add('MiFlora','debug','health hum commande ' .$cmd->getHumanName() ."hum ".$hum) ;
+ 
+    if ($hum > $eqLogic->getConfiguration('HumMin')){
+        echo '<td><span class="label label-success" style="font-size : 1em;cursor:default;">' . $eqLogic->getConfiguration('HumMin') . '</span></td>';
+    }else{
+        echo '<td><span class="label label-danger" style="font-size : 1em;cursor:default;">' . $eqLogic->getConfiguration('HumMin') . '</span></td>';
+    }
+
+    echo '<td><span class="label label-info" style="font-size : 1em;cursor:default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
 
 
 
