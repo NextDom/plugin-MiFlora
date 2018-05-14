@@ -108,6 +108,10 @@ function MiFlora_update() {
             $eqLogic->setConfiguration('battery_warning_threshold', '15');
             log::add('MiFlora', 'info', 'battery_warning_threshold-Install: 15');
         }
+        if ($eqLogic->getConfiguration('devicetype') == "") {
+            $eqLogic->setConfiguration('devicetype', 'MiFlora');
+            log::add('MiFlora', 'info','set device type to MiFlora');
+        }
 
         ## Cree la commande refresh pour les objets existants
         $refresh = $eqLogic->getCmd(null, 'refresh');
