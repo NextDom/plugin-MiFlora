@@ -1,27 +1,27 @@
-#Santé
+# Santé
 Cet écran permet de visualiser l'état du plugin et des équipements
 
 il se présente de la façon suivante 
 
 ![remote1](../images/MiFlora_sante.png)
 
-##Image
+### Image
 L'icone sera grisé si l'équipement n'est pas activé (voir écran d ajout)
-##Module
+### Module
 Donne les informations sur l'équipement (objet et nom)
-##id
+### id
 Indique l'ID Jeedom interne
-##Mac
+### Mac
 Indique la mac adresse de l'équipement 
-##Fréquence mini
+### Fréquence mini
 indique la fréquence de collecte des données (permet de voir si l'équipement utilise la valeur par default ou une valeur specifique )
-##Status
+### Status
 en vert indique que la derniere collecte s'est bien déroulée en rouge indique qu'il y a eu une erreur lors du dernier essai de collecte 
-##Batterie
+### Batterie
 Donne l'état de la pile de l'équipement
-##Antenne
+### Antenne
 indique quelle antenne à été indiquée dans la configuration de l équipement (_local, Auto, nom de l'antenne deportée_)
-##Antenne réelle
+### Antenne réelle
 Indique si la configuration de l'antenne est à _Auto_ l'antenne la plus puissante qui a été trouvée et qui est utilisée
-##derniere collecte
+### derniere collecte
 Indique la date et l'heure de la derniere collecte de donnée
