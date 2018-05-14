@@ -338,7 +338,11 @@ class MiFlora extends eqLogic
                     $loopcondition = false;
                 }
             } else {
-                // split sur Soil_moisture:
+
+
+
+
+                    // split sur Soil_moisture:
                 $data = explode("Soil_moisture", $MiFloraData);
                 log::add('MiFlora','debug','process $MiFloraData '.$macAdd. ' -- data: '. serialize($data));
                 if (count($data) == 1) { //Name: pas dans le resultat
@@ -348,11 +352,18 @@ class MiFlora extends eqLogic
                     $resultsParrot = json_decode($MiFloraData); // TODO Virer les erreurs (device pas dispo)
                     log::add('MiFlora', 'debug', 'Parrot json ' . $macAdd . '  -- data: ' . serialize($resultsParrot));
 
-                    $temperature = $resultsParrot->{"Soil_Temperature"};
+                    $temperature = $resultsParrot->{"Air_Temperature"};
                     $moisture = $resultsParrot->{"Soil_moisture"};
                     $fertility = $resultsParrot->{"Fertility"};
                     $lux = $resultsParrot->{"Lux"};
-                    $loopcondition = false;
+                    // TODO - test tout a 0, retry
+                    if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
+                        // wait  hopping it'll be better ...
+                        log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
+                        sleep(5 * $tryGetData);
+                    } else {
+                        $loopcondition = false;
+                    }
                     log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
                     log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
                     log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
