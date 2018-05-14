@@ -86,8 +86,8 @@ class MiFlora extends eqLogic
     public static function cron()
     {
         if (log::getLogLevel('MiFlora') == 100) { // si debug -> chaque minutes
-            log::add('MiFlora', 'debug', 'lance debug rssi toutes les minutes ');
-            self::make_MiFlora_route () ;
+            //log::add('MiFlora', 'debug', 'lance debug rssi toutes les minutes ');
+            //self::make_MiFlora_route () ;
         }
     }
 
@@ -132,7 +132,7 @@ class MiFlora extends eqLogic
                 $rssi = -1000 ;
                 foreach ($rssi_value as $i => $value){
                     $dev_value = explode(';',$rssi_value[$i]) ;
-                    log::add('MiFlora','debug','valeur dev_value  ' .  ' mac  ' . strtolower($dev_value[2]) . 'a comparer a ' . strtolower ($mi_flora->getConfiguration('macAdd'))  ) ;
+                    log::add('MiFlora','debug','valeur dev_value  ' .  ' mac  ' . strtolower($dev_value[2]) . ' a comparer a ' . strtolower ($mi_flora->getConfiguration('macAdd'))  ) ;
                     if (strtolower($mi_flora->getConfiguration('macAdd') ) == strtolower($dev_value[2])){
                         log::add('MiFlora','debug','debut verif mac add ' .$mi_flora->getConfiguration('macAdd') ) ;
                         if ($dev_value[4] > $rssi){
@@ -171,6 +171,7 @@ class MiFlora extends eqLogic
         $port = config::byKey('adapter', 'MiFlora', 0);
         $cmd = 'expect ' . dirname(__FILE__) . '/../../resources/bluetooth-scan.sh ' . $port;
         $cmd .= ' >> ' . log::getPathToLog('MiFlora_scanbluetooth') . ' 2>&1 &';
+        log::add('MiFlora','debug','scanbluetooth cmd:' .$cmd);
         exec($cmd);
     }
 
@@ -205,12 +206,52 @@ class MiFlora extends eqLogic
                     $antenne =$mi_flora->getConfiguration('real_antenna');
                 }
 
-                self::processOneMiFlora($mi_flora,$processBattery);
+                $devicetype = $mi_flora->getConfiguration('devicetype');
+                if ($devicetype=="MiFlora" || $devicetype=="ParrotPot" || $devicetype=="ParrotFlower") {
+                    self::processOneMiFlora($mi_flora, $processBattery, $devicetype);
+                }
+                elseif ($devicetype=="Parrot") {
+                    log::add('MiFlora','debug','Parrot pot ou Parrot Flower detectParrotType');
+                    self::detectParrotType($mi_flora, $macAdd, $antenne, $adapter, $seclvl);
+                }
+                else{
+                    log::add('MiFlora','error','Objet non trouvé, ce n est ni un Parrot ni un MiFlora');
+                }
                 // petite pause pour eviter engorgement (empirique mais remarqué si beaucoup de device )
                 sleep (7);
             }
         }
 
+    }
+
+    public static function detectParrotType($mi_flora, $macAdd, $antenne, $adapter, $seclvl) {
+            // Device pas encore identifie (flower ou Pot)
+            // tenter les 2 et chercher le nom, si pas trouve erreur
+        // Undidentified Parrot device
+        // Try parrot flower
+        $devicetype = 'ParrotFlower';
+        $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraName, $adapter, $seclvl, $antenne, $devicetype);
+
+        $parrotname = substr($MiFloraName,0,12);
+        log::add('MiFlora','debug','$parrotname '.$parrotname);
+        if ($parrotname == 'Flower power'){
+            $mi_flora->setConfiguration('devicetype','ParrotFlower');
+            $mi_flora->save();
+            log::add('MiFlora','debug','setConfiguration ParrotFlower'.$parrotname);
+        } else {
+            // Try parrot pot
+            $devicetype = 'ParrotPot';
+            $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraName, $adapter, $seclvl, $antenne, $devicetype);
+
+            $parrotname = substr($MiFloraName, 0, 10);
+            log::add('MiFlora','debug','$parrotname 2 '.$parrotname);
+            if ($parrotname == 'Flower Pot') {
+                $mi_flora->setConfiguration('devicetype', 'ParrotPot');
+                $mi_flora->save();
+            } else{
+                log:add('MiFlora','error','Parrot objet non identifie'. $macAdd);
+            }
+        }
     }
 
     /**
@@ -224,7 +265,7 @@ class MiFlora extends eqLogic
      * @param $fertility
      * @param $lux
      */
-    public static function processOneMiFlora($mi_flora,$processBattery)
+    public static function processOneMiFlora($mi_flora,$processBattery, $devicetype)
     {
         log::add('MiFlora', 'info', '$processBattery:' . $processBattery);
         $adapter = config::byKey('adapter', 'MiFlora');
@@ -236,6 +277,11 @@ class MiFlora extends eqLogic
         }
         log::add('MiFlora', 'info', ' Process MiFlora  mac add:' . $macAdd . ' sur antenne : ' . $antenne);
 
+        log::add('MiFlora', 'debug', 'Parrot pot ou Parrot Flower detectParrotType'.$devicetype);
+        if ($devicetype == 'Parrot') {
+            log::add('MiFlora', 'debug', 'Parrot pot ou Parrot Flower detectParrotType');
+            self::detectParrotType($mi_flora, $macAdd, $antenne, $adapter, $seclvl);
+        }
         // recupere le niveau de la batterie deux  fois par jour a 12 h
         // log::add('MiFlora', 'debug', 'date:'.date("h"));
         if ($processBattery == 1) {
@@ -243,15 +289,21 @@ class MiFlora extends eqLogic
             $MiFloraNameString = '';
             // $MiFloraName = '';
             $battery = -1;
-            $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl, $antenne);
-            $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
-            $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
+            $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl, $antenne, $devicetype);
+            if ($devicetype == 'MiFlora') {
+                $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
+                $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
+            } else{
+                $FirmwareVersion='';
+                $battery=$MiFloraBatteryAndFirmwareVersion;
+                $MiFloraName=$MiFloraNameString;
+            }
             $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
             if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
-                log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery);
+                log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
 
             } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
-                log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery);
+                log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
             }
         }
 
@@ -268,21 +320,56 @@ class MiFlora extends eqLogic
             }
             log::add('MiFlora', 'debug', ' ProcessMyMiFlora  FirmwareVersion:' . $FirmwareVersion . ' antenne ' . $antenne);
 
-            $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne);
+            $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne, $devicetype);
             log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
             $tryGetData++;
-            // TODO
-            // traiter ces reponses en erreur
-            // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
-            // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-            $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux);
-            // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
-            if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
-                // wait  hopping it'll be better ...
-                log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
-                sleep(5 * $tryGetData);
+
+            if ($devicetype == 'MiFlora') {
+                // TODO
+                // traiter ces reponses en erreur
+                // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
+                // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux, $devicetype);
+                // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
+                if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
+                    // wait  hopping it'll be better ...
+                    log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
+                    sleep(5 * $tryGetData);
+                } else {
+                    $loopcondition = false;
+                }
             } else {
-                $loopcondition = false;
+
+
+
+
+                    // split sur Soil_moisture:
+                $data = explode("Soil_moisture", $MiFloraData);
+                log::add('MiFlora','debug','process $MiFloraData '.$macAdd. ' -- data: '. serialize($data));
+                if (count($data) == 1) { //Name: pas dans le resultat
+                    log::add('MiFlora', 'debug', 'Les donnees du Parrot n a pas ete trouve ' . $macAdd . '  -- data: ' . serialize($data));
+                    $MiFloraData='';
+                } else {
+                    $resultsParrot = json_decode($MiFloraData); // TODO Virer les erreurs (device pas dispo)
+                    log::add('MiFlora', 'debug', 'Parrot json ' . $macAdd . '  -- data: ' . serialize($resultsParrot));
+
+                    $temperature = $resultsParrot->{"Air_Temperature"};
+                    $moisture = $resultsParrot->{"Soil_moisture"};
+                    $fertility = $resultsParrot->{"Fertility"};
+                    $lux = $resultsParrot->{"Lux"};
+                    // TODO - test tout a 0, retry
+                    if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
+                        // wait  hopping it'll be better ...
+                        log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
+                        sleep(5 * $tryGetData);
+                    } else {
+                        $loopcondition = false;
+                    }
+                    log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
+                    log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
+                    log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
+                    log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
+                }
             }
         }
         if ($MiFloraData == '') {
@@ -386,10 +473,23 @@ class MiFlora extends eqLogic
         }
         if ($this->getConfiguration('antenna') != 'Auto') {
             $this->setConfiguration ('real_antenna','local') ;
-            // TODO: Check if hardcode local ??? is it ok with auto migrtaion to deporte ?
         }else {
             if (empty($this->getConfiguration('real_antenna'))) {
                 $this->setConfiguration('real_antenna', 'local');
+            }
+        }
+        log::add('MiFlora', 'info', 'devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
+        if ($this->getConfiguration('devicetype') == ''){
+            if (substr($this->getConfiguration('macAdd'), 0, 10) == 'C4:7C:8D:6') {
+                $this->setConfiguration('devicetype', 'MiFlora');
+                log::add('MiFlora', 'info', 'MiFlora - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
+
+            } elseif (substr($this->getConfiguration('macAdd'), 0, 8) == 'A0:14:3D') {
+                $this->setConfiguration('devicetype', 'Parrot');
+                log::add('MiFlora', 'info', 'Parrot - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- '.substr($this->getConfiguration('macAdd'), 0, 8));
+                // Je ne sais pas differencier les 2 Parrots, il faut chercher le nom et changer le type ensuite
+            } else {
+                log::add('MiFlora', 'error', 'Objet inconnu: ' . $this->getConfiguration('macAdd'));
             }
         }
 
@@ -419,11 +519,18 @@ class MiFlora extends eqLogic
       {
           if ($this->getConfiguration('antenna') != 'Auto') {
               $this->setConfiguration ('real_antenna','local') ;
-              // TODO: Check if hardcode local ??? is it ok with auto migrtaion to deporte ?
           }else {
               if (empty($this->getConfiguration('real_antenna'))) {
                   $this->setConfiguration('real_antenna', '1');
               }
+          }
+          if (substr($this->getConfiguration('macAdd'),0,10) == 'C4:7C:8D:6') {
+              $this->setConfiguration('devicetype', 'MiFlora');
+          } elseif (substr($this->getConfiguration('macAdd'),0,8) == 'A0:14:3D') {
+              $this->setConfiguration('devicetype', 'Parrot');
+              // Je ne sais pas differencier les 2 Parrots, il faut chercher le nom et changer le type ensuite
+          }else {
+              log::add('MiFlora','error', 'Objet inconnu: '.$this->getConfiguration('macAdd'));
           }
       }
 
@@ -570,12 +677,13 @@ class MiFlora extends eqLogic
 
 
 
-    public function getMesure($macAdd, &$MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne)
+    public function getMesure($macAdd, &$MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne, $devicetype)
     {
         log::add('MiFlora', 'debug', ' Getmesure macAdd:' . $macAdd);
         log::add('MiFlora', 'debug', ' Getmesure Firmware:' . $FirmwareVersion);
         log::add('MiFlora', 'debug', ' Getmesure adapter:' . $adapter);
         log::add('MiFlora', 'debug', ' Getmesure antenne:' . $antenne);
+        log::add('MiFlora', 'debug', ' Getmesure devicetype:' . $devicetype);
 
 
         $MiFloraData = '';
@@ -606,11 +714,21 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', 'pass:' . $pass);
             log::add('MiFlora', 'info', 'dev :' . $adapter);
 
-            if ($FirmwareVersion == "2.6.2") {
-                $commande = "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x35 --sec-level=" . $seclvl;
-                # $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
-            } else {
-                $commande = "/usr/bin/python /tmp/GetMiFloraData.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
+            if ($devicetype == 'MiFlora') {
+                if ($FirmwareVersion == "2.6.2") {
+                    $commande = "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x35 --sec-level=" . $seclvl;
+                    # $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+                } else {
+                    $commande = "/usr/bin/python /tmp/GetMiFloraData.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
+                }
+            } else{
+                if ($devicetype=='ParrotFlower'){
+                    $devicetypeNum=0;
+                } else{
+                    $devicetypeNum=1;
+                }
+                log::add('MiFlora','debug','$devicetypeNum'.$devicetypeNum,'$devicetype'.$devicetype);
+                $commande = "/usr/bin/python /tmp/GetParrotFlowerData.py " . $macAdd . " data " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
             }
 
             log::add('MiFlora', 'debug', 'connexion SSH ...' . $commande);
@@ -637,11 +755,20 @@ class MiFlora extends eqLogic
             //$MiFloraData='Characteristic value/descriptor: e1 00 00 8b 00 00 00 10 5d 00 00 00 00 00 00 00 \n';
             log::add('MiFlora', 'debug', 'local call');
             #  $command = 'gatttool -b ' . $macAdd . '  --char-read -a 0x35 --sec-level=high  2>&1 ';
-            if ($FirmwareVersion == "2.6.2") {
-                $command = "gatttool --adapter=" . $adapter . " -b " . $macAdd . '  --char-read -a 0x35 --sec-level=' . $seclvl . ' 2>&1 ';
-                # $command="/usr/bin/python ".dirname(__FILE__) . "/../../resources/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+            if ($devicetype == 'MiFlora') {
+                if ($FirmwareVersion == "2.6.2") {
+                    $command = "gatttool --adapter=" . $adapter . " -b " . $macAdd . '  --char-read -a 0x35 --sec-level=' . $seclvl . ' 2>&1 ';
+                    # $command="/usr/bin/python ".dirname(__FILE__) . "/../../resources/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
+                } else {
+                    $command = "/usr/bin/python " . dirname(__FILE__) . "/../../resources/GetMiFloraData.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
+                }
             } else {
-                $command = "/usr/bin/python " . dirname(__FILE__) . "/../../resources/GetMiFloraData.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
+                if ($devicetype=='ParrotFlower'){
+                    $devicetypeNum=0;
+                } else{
+                    $devicetypeNum=1;
+                }
+                $command = "/usr/bin/python " . dirname(__FILE__) . "/../../resources/GetParrotFlowerData.py " . $macAdd . " data " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
             }
             log::add('MiFlora', 'debug', 'command: ' . $command);
             $MiFloraData = exec($command);
@@ -653,7 +780,7 @@ class MiFlora extends eqLogic
         }
     }
 
-    public function getMiFloraStaticData($macAdd, &$MiFloraBatteryAndFirmwareVersion, &$MiFloraName, $adapter, $seclvl, $antenne)
+    public function getMiFloraStaticData($macAdd, &$MiFloraBatteryAndFirmwareVersion, &$MiFloraName, $adapter, $seclvl, $antenne, $devicetype)
     {
         $MiFloraBatteryAndFirmwareVersion = '';
         $MiFloraName = '';
@@ -664,6 +791,7 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', ' Getmesure Firmware:' . $FirmwareVersion);
         log::add('MiFlora', 'debug', ' Getmesure adapter:' . $adapter);
         log::add('MiFlora', 'debug', ' Getmesure antenne:' . $antenne);
+        log::add('MiFlora', 'debug', ' Getmesure devicetype:' . $devicetype);
 
         if ($antenne != "local") {
 
@@ -695,23 +823,60 @@ class MiFlora extends eqLogic
                     log::add('MiFlora', 'error', 'Authentification SSH KO');
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
-                    // get MiFlora Battery And Firmware Version
-                    //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x038
-                    //Characteristic value/descriptor: 64 10 32 2e 36 2e 32
-                    //battery:64 version 2.6.2
-                    $gattresult = ssh2_exec($connection, "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x038 --sec-level=" . $seclvl);
-                    stream_set_blocking($gattresult, true);
-                    $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);
-                    log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion:' . $MiFloraBatteryAndFirmwareVersion);
+                    if ($devicetype == 'MiFlora') {
+                        // get MiFlora Battery And Firmware Version
+                        //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x038
+                        //Characteristic value/descriptor: 64 10 32 2e 36 2e 32
+                        //battery:64 version 2.6.2
+                        $gattresult = ssh2_exec($connection, "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x038 --sec-level=" . $seclvl);
+                        stream_set_blocking($gattresult, true);
+                        $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);
+                        log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion:' . $MiFloraBatteryAndFirmwareVersion);
 
-                    // get MiFlora Name
-                    //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x03
-                    // Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 (Flower mate)
-                    $gattresult = ssh2_exec($connection, "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x03 --sec-level=" . $seclvl);
-                    stream_set_blocking($gattresult, true);
-                    $MiFloraName = stream_get_contents($gattresult);
-                    log::add('MiFlora', 'debug', 'MiFloraName:' . $MiFloraName);
+                        // get MiFlora Name
+                        //gatttool -b C4:7C:8D:61:BB:9A --char-read -a 0x03
+                        // Characteristic value/descriptor: 46 6c 6f 77 65 72 20 6d 61 74 65 (Flower mate)
+                        $gattresult = ssh2_exec($connection, "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x03 --sec-level=" . $seclvl);
+                        stream_set_blocking($gattresult, true);
+                        $MiFloraName = stream_get_contents($gattresult);
+                        log::add('MiFlora', 'debug', 'MiFloraName:' . $MiFloraName);
+                    } else{
+                        if ($devicetype=='ParrotFlower'){
+                            $devicetypeNum=0;
+                        } else{
+                            $devicetypeNum=1;
+                        }
+                        $commande = "/usr/bin/python /tmp/GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                        log::add('MiFlora', 'debug','$commande' . $commande);
+                        ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetParrotFlowerData.py', '/tmp/GetParrotFlowerData.py', 0755);
+                        $gattresult = ssh2_exec($connection, $commande);
+                        stream_set_blocking($gattresult, true);
+                        $MiFloraBatteryAndFirmwareVersion = stream_get_contents($gattresult);
+                        log::add('MiFlora', 'debug', 'MiFloraParrotBatteryAndName: ' . $MiFloraBatteryAndFirmwareVersion);
+                         //   print "Name: ", Name, ",Batterie: ", batterie
+                        $data = explode("Name:  ", $MiFloraBatteryAndFirmwareVersion);
+                        log::add('MiFlora','debug','process '.$macAdd. ' -- data: '. serialize($data));
+                        if (count($data) == 1) { //Name: pas dans le resultat
+                            log::add('MiFlora','debug','Le nom du Parrot n a pas ete trouve '.$macAdd. '  -- data: '. serialize($data));
+                            $MiFloraName='';
+                            $MiFloraBatteryAndFirmwareVersion='';
+                        } else {
+                            $data2 = explode(" ,Batterie:  ", $data[1]);
+                            log::add('MiFlora', 'debug', 'process ' . $macAdd . '  -- data2: ' . serialize($data2));
 
+                            if (count($data2) == 1) { //Name: pas dans le resultat
+                                log::add('MiFlora', 'debug', 'La batterie du Parrot n a pas ete trouve ' . $macAdd);
+                                $MiFloraBatteryAndFirmwareVersion = '';
+                                $MiFloraName = '';
+                            } else {
+                                $MiFloraBatteryAndFirmwareVersion = trim($data2[1]);
+                                $MiFloraName = $data2[0];
+                            }
+                        }
+
+                        log::add('MiFlora', 'debug', 'MiFloraParrotName: ' . $MiFloraName.'--');
+                        log::add('MiFlora', 'debug', 'MiFloraParrotBattery: ' . $MiFloraBatteryAndFirmwareVersion.'--');
+                    }
                     $closesession = ssh2_exec($connection, 'exit');
                     stream_set_blocking($closesession, true);
                     stream_get_contents($closesession);
@@ -723,19 +888,47 @@ class MiFlora extends eqLogic
             // connect error: Connection timed out
             // connect: Device or resource busy
             log::add('MiFlora', 'debug', 'local call static data');
-            $command = 'gatttool --adapter=' . $adapter . ' -b ' . $macAdd . '  --char-read -a 0x38 --sec-level=' . $seclvl . ' 2>&1 ';
-            $MiFloraBatteryAndFirmwareVersion = exec($command);
-            log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion: ' . $MiFloraBatteryAndFirmwareVersion);
-            if (strpos($MiFloraBatteryAndFirmwareVersion, 'read failed') !== false or strpos($MiFloraBatteryAndFirmwareVersion, 'connect') !== false) {
-                log::add('MiFlora', 'error', 'erreur: gatttool ne fonctionne pas - ' . $MiFloraBatteryAndFirmwareVersion);
-                $MiFloraBatteryAndFirmwareVersion = '';
-            }
-            $command = 'gatttool --adapter=' . $adapter . ' -b ' . $macAdd . '  --char-read -a 0x03 --sec-level=' . $seclvl . '  2>&1 ';
-            $MiFloraName = exec($command);
-            log::add('MiFlora', 'debug', 'MiFloraName: ' . $MiFloraName);
-            if (strpos($MiFloraName, 'read failed') !== false or strpos($MiFloraName, 'connect') !== false) {
-                log::add('MiFlora', 'error', 'erreur: gatttool ne fonctionne pas - ' . $MiFloraName);
-                $MiFloraName = '';
+            if ($devicetype == 'MiFlora') {
+                $command = 'gatttool --adapter=' . $adapter . ' -b ' . $macAdd . '  --char-read -a 0x38 --sec-level=' . $seclvl . ' 2>&1 ';
+                $MiFloraBatteryAndFirmwareVersion = exec($command);
+                log::add('MiFlora', 'debug', 'MiFloraBatteryAndFirmwareVersion: ' . $MiFloraBatteryAndFirmwareVersion);
+                if (strpos($MiFloraBatteryAndFirmwareVersion, 'read failed') !== false or strpos($MiFloraBatteryAndFirmwareVersion, 'connect') !== false) {
+                    log::add('MiFlora', 'error', 'erreur: gatttool ne fonctionne pas - ' . $MiFloraBatteryAndFirmwareVersion);
+                    $MiFloraBatteryAndFirmwareVersion = '';
+                }
+                $command = 'gatttool --adapter=' . $adapter . ' -b ' . $macAdd . '  --char-read -a 0x03 --sec-level=' . $seclvl . '  2>&1 ';
+                $MiFloraName = exec($command);
+                log::add('MiFlora', 'debug', 'MiFloraName: ' . $MiFloraName);
+                if (strpos($MiFloraName, 'read failed') !== false or strpos($MiFloraName, 'connect') !== false) {
+                    log::add('MiFlora', 'error', 'erreur: gatttool ne fonctionne pas - ' . $MiFloraName);
+                    $MiFloraName = '';
+                }
+            } else {
+                log::add('MiFlora','debug','Process Parrot TBD');
+                $command = "/usr/bin/python /tmp/GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                $MiFloraBatteryAndFirmwareVersion = exec($command);
+                $data = explode("Name:  ", $MiFloraBatteryAndFirmwareVersion);
+                log::add('MiFlora','debug','process '.$macAdd. ' -- data: '. serialize($data));
+                if (count($data) == 1) { //Name: pas dans le resultat
+                    log::add('MiFlora','debug','Le nom du Parrot n a pas ete trouve '.$macAdd. '  -- data: '. serialize($data));
+                    $MiFloraName='';
+                    $MiFloraBatteryAndFirmwareVersion='';
+                } else {
+                    $data2 = explode(" ,Batterie:  ", $data[1]);
+                    log::add('MiFlora', 'debug', 'process ' . $macAdd . '  -- data2: ' . serialize($data2));
+
+                    if (count($data2) == 1) { //Name: pas dans le resultat
+                        log::add('MiFlora', 'debug', 'La batterie du Parrot n a pas ete trouve ' . $macAdd);
+                        $MiFloraBatteryAndFirmwareVersion = '';
+                        $MiFloraName = '';
+                    } else {
+                        $MiFloraBatteryAndFirmwareVersion = trim($data2[1]);
+                        $MiFloraName = $data2[0];
+                    }
+                }
+
+                log::add('MiFlora', 'debug', 'MiFloraParrotName:' . $MiFloraName);
+                log::add('MiFlora', 'debug', 'MiFloraParrotBattery: ' . $MiFloraBatteryAndFirmwareVersion);
             }
         }
     }
@@ -774,7 +967,7 @@ class MiFlora extends eqLogic
         log::add('MiFlora', 'debug', $macAdd . ' miFloraName:' . $miFloraName);
     }
 
-    public function traiteMesure($macAdd, $MiFloraData, &$temperature, &$moisture, &$fertility, &$lux)
+    public function traiteMesure($macAdd, $MiFloraData, &$temperature, &$moisture, &$fertility, &$lux, $devicetype)
     {
         // process data
         // log::add('MiFlora', 'debug', 'MiFloraData:'.$MiFloraData);
@@ -802,7 +995,6 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
             log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
             log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
-
         }
     }
     public function update_min_hum_Jeedom ($hum_min){
@@ -969,7 +1161,8 @@ class MiFlora extends eqLogic
     {
 
         $rssi = array("id;antenne;mac add;addrType;rssi;dev type");
-        $adapter = config::byKey('adapter', 'MiFlora', 0);
+        $adapter = config::byKey('adapter', 'MiFlora');
+        log::add('MiFlora', 'debug', 'rssi adapter : ' . $adapter);
         if (adapter != 'none') {
             $command = "sudo /usr/bin/python ". dirname(__FILE__) . "/../../resources/MiFlora_rssi_scanner.py --device=" . $adapter . " --antenne=local --id=0 --timeout=" .$timeout;
             log::add('MiFlora', 'debug', 'local command: ' . $command);
