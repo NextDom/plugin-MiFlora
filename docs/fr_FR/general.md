@@ -1,15 +1,15 @@
-#Ecran général du plugin
+# Ecran général du plugin
 L'écran principal du plugin ce présente de la façon suivante :
 
 ![remote1](../images/MiFlora_general.png)
 
-##Ajouter
+### Ajouter
 Permet l'ajout d'un nouvel équipement
-##Lancer Scan
+### Lancer Scan
 Permet de lancer une recherche des équipement MiFlora présent en Bluetooth mais pas encore présent dans Jeedom
-##Configuration
+### Configuration
 Permet la configuration générale du plugin
-##Antennes
+### Antennes
 Permet de définir des antennes distantes pour collecter les données des équipements 
-##Santé
+### Santé
 Permet d'avoir une vision globale du fonctionnement du plugin et de tous les équipements  
