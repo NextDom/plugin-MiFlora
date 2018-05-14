@@ -1,8 +1,8 @@
-[![license](https://img.shields.io/github/license/Jeedom-Plugins-Extra/plugin-MiFlora.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/Jeedom-Plugins-Extra/plugin-MiFlora.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/Jeedom-Plugins-Extra/plugin-MiFlora.svg)](../../releases) [![Waffle.io - Columns and their card count](https://badge.waffle.io/Jeedom-Plugins-Extra/plugin-MiFlora.svg?columns=all)](https://waffle.io/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Join the chat at https://gitter.im/NextDom/plugin-MiFlora](https://badges.gitter.im/NextDom/plugin-MiFlora.svg)](https://gitter.im/NextDom/plugin-MiFlora?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![license](https://img.shields.io/github/license/NextDom/plugin-MiFlora.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NextDom/plugin-MiFlora.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/NextDom/plugin-MiFlora.svg)](../../releases) [![Waffle.io - Columns and their card count](https://badge.waffle.io/NextDom/plugin-MiFlora.svg?columns=all)](https://waffle.io/NextDom/plugin-MiFlora)  [![Join the chat at https://gitter.im/NextDom/plugin-MiFlora](https://badges.gitter.im/NextDom/plugin-MiFlora.svg)](https://gitter.im/NextDom/plugin-MiFlora?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-### Master: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora.svg?branch=master)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-MiFlora?branch=master)
+### Master: [![Build Status](https://travis-ci.org/NextDom/plugin-MiFlora.svg?branch=master)](https://travis-ci.org/NextDom/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/NextDom/plugin-MiFlora?branch=master)
 
-### Develop: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora.svg?branch=Develop)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-MiFlora/badge.svg?branch=Develop)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-MiFlora?branch=Develop)
+### Develop: [![Build Status](https://travis-ci.org/NextDom/plugin-MiFlora.svg?branch=Develop)](https://travis-ci.org/NextDom/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-MiFlora/badge.svg?branch=Develop)](https://coveralls.io/github/NextDom/plugin-MiFlora?branch=Develop)
 
 # Présentation:
 
@@ -20,5 +20,5 @@ Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de me
 
 # Documentation complète:
 
-[![Read the Docs](plugin_info/MiFlora_icon.png)](https://jeedom-plugins-extra.github.io/plugin-MiFlora)
+[![Read the Docs](plugin_info/MiFlora_icon.png)](https://NextDom.github.io/plugin-MiFlora)
 
