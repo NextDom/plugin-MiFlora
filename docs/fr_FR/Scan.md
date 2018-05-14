@@ -16,3 +16,5 @@ remarque: on peut retrouver le même équipement détecté par des antennes diff
 cela permet de choisir l'antenne qui a la meilleure réception
 ##RSSI
 indique la puissance du signal de réception plus le chiffre est petit moins le signa est bon (donc un signal a -75 est meilleur qu'un signal à -96)
+
+Attention: la majorité des plugins Bluetooth monopolisent le controleur, le scan ne trouvent aucune antenne quand un autre plugin bloque le controleur. Pour avoir un resultat fiable il faut dédier un 'adaptateur Bluetooth' à MiFlora, celui integré à un raspberry PI ou un dongle par exemple.
