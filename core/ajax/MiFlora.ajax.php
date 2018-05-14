@@ -18,17 +18,14 @@
 
 try {
     require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-    require_once dirname(__FILE__) . '/../../../../plugins/MiFlora/core/class/MiFlora.class.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
         throw new \Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
-    ajax::init();
-
-     // action qui permet d'obtenir l'ensemble des eqLogic
-    switch (init('action')) {
+    // action qui permet d'obtenir l'ensemble des eqLogic
+    switch(init('action')){
         case 'getAll':
             $eqLogics = eqLogic::byType('MiFlora');
             // la liste des équipements
@@ -50,44 +47,9 @@ try {
         ajax::success(MiFlora::saveStack($params));
     }
 
-
-    if (init('action') == 'save_MiFloraRemote') {
-        $MiFloraRemoteSave = jeedom::fromHumanReadable(json_decode(init('MiFlora_remote'), true));
-        $MiFlora_remote = MiFlora_remote::byId($MiFloraRemoteSave['id']);
-        if (!is_object($MiFlora_remote)) {
-            $MiFlora_remote = new MiFlora_remote();
-        }
-        utils::a2o($MiFlora_remote, $MiFloraRemoteSave);
-        $MiFlora_remote->save();
-        ajax::success(utils::o2a($MiFlora_remote));
-    }
-
-    if (init('action') == 'get_MiFloraRemote') {
-        $MiFlora_remote = MiFlora_remote::byId(init('id'));
-        if (!is_object($MiFlora_remote)) {
-            throw new Exception(__('Remote inconnu : ', __FILE__) . init('id'), 9999);
-        }
-        ajax::success(jeedom::toHumanReadable(utils::o2a($MiFlora_remote)));
-    }
-
-    if (init('action') == 'remove_MiFloraRemote') {
-        $id = init('id') ;
-        log::add('MiFlora','info', 'remote  id ' . $id ) ;
-        $MiFlora_remote = MiFlora_remote::byId(init('id'));
-        log::add('MiFlora','debug', 'remote  remove' ) ;
-        if (!is_object($MiFlora_remote)) {
-            throw new Exception(__('Remote inconnu : ', __FILE__) . init('id'), 9999);
-        }
-        $MiFlora_remote->remove();
-        ajax::success();
-    }
-
-
-
     throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
-}catch
-    (\Exception $e) {
-        ajax::error(displayExeption($e), $e->getCode());
-    }
+} catch (\Exception $e) {
+    ajax::error(displayException($e), $e->getCode());
+}
 
