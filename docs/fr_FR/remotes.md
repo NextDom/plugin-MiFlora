@@ -1,8 +1,8 @@
 # Description
 
-Cetle page permet la récupération des données des équipements distants via des antennes déportées 
+Cette page permet la récupération des données des équipements distants via des antennes déportées 
 
-Peuvent être utilisé comme antenne toute machine linux sur laquelle la commande Gatttol fonctionne et sur laquelle le ssh est possible.
+Peuvent être utilisé comme antenne toute machine linux sur laquelle la commande `gatttool` fonctionne et sur laquelle le ssh est possible.
 
 Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de mesurer l'hygrométrie, la température, la lumière, l'engrais d'une plante. Nul besoin d'autre chose qu'une connexion Bluetooth, y compris via un appareil déporté.
 
