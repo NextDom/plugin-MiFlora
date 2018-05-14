@@ -25,21 +25,21 @@ L'écran ce présente comme ceci
 
 
 
-###nom
+### nom
 indique le nom de l'antenne
 
-###ip
+### ip
 indique l'adresse ip de l'antenne distante 
 
-###User
+### User
 indique le nom du user qui sera utilisé pour lancer les commandes distante (attention ce user doit disposer du droit de lancer des commandes sudo)
 
-###Password
+### Password
 indique le mot de passe du compte 'User'
 
-###port
+### port
 indique le port pour la commande ssh (en général port = 22)
 
-###Device
+### Device
 indique le nom du device bluetooth qui sera utilisé sur la machine distante 
 (valeures possibles de hci0 a hci3 )
