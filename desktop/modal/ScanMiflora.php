@@ -52,7 +52,7 @@ $eqLogics = MiFlora::byType('MiFlora');
              }
          }
 
-        if ($found == 0 and ($dev_value[5] == "Flower care"  or $dev_value[5] == "Flower mate" or substr($dev_value[5],0,12) =="Flower power")){
+        if ($found == 0 and ($dev_value[5] == "Flower care"  or $dev_value[5] == "Flower mate" or substr($dev_value[5],0,12) =="Flower power") or substr($dev_value[5],0,10)=="Parrot pot"){
 
 
              log::add('MiFlora','info','on a trouver une nouvelle mac adresse ' .  $dev_value[2]) ;
