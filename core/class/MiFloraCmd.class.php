@@ -17,8 +17,8 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-require_once dirname(__FILE__) . '/MiFlora.class.php';
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/MiFlora.class.php';
 
 
 
