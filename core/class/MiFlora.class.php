@@ -393,14 +393,14 @@ class MiFlora extends eqLogic
                     if ($old_Hummin != 1) {   // seulement si nouvelle valeur
                         $mi_flora->setStatus('HumMin', 1);
                         $mi_flora->update_min_hum_Jeedom(1);
-                        log::add('MiFlora', 'refresh value update');
+                        log::add('MiFlora','info', 'refresh value update');
                     }
                     log::add('MiFlora', 'debug', 'en dessous humidité minimale en base ' . $moisture);
                 } else {
                     if ($old_Hummin != 0) {
                         $mi_flora->setStatus('HumMin', 0);
                         $mi_flora->update_min_hum_Jeedom(0);
-                        log::add('MiFlora', 'refresh value update');
+                        log::add('MiFlora','info', 'refresh value update');
                     }
                     log::add('MiFlora', 'debug', 'au dessus humidité minimale en base ' . $moisture);
                 }
