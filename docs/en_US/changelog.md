@@ -1,4 +1,3 @@
-# Changelog
 
 ### Version 2.0.4 - April 14, 2018
 * Refresh management by object:
