@@ -1,6 +1,6 @@
 {% include_relative presentation.md %}
-{% include_relative configuration.md %}
 {% include_relative general.md %}
+{% include_relative configuration.md %}
 {% include_relative ajouter.md %}
 {% include_relative remotes.md %}
 {% include_relative Scan.md %}
