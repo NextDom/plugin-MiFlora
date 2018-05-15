@@ -17,8 +17,8 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-    require_once dirname(__FILE__) . '/../../../../plugins/MiFlora/core/class/MiFlora.class.php';
+    require_once __DIR__ . '/../../../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../../../plugins/MiFlora/core/class/MiFlora.class.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
