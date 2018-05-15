@@ -20,4 +20,4 @@ Lien vers le forum [ici](https://www.jeedom.com/forum/viewtopic.php?t=22870)
 
 # Chat
 
-https://gitter.im/NextDom/plugin-MiFlora
+Lien vers le chat [ici](https://gitter.im/NextDom/plugin-MiFlora)
