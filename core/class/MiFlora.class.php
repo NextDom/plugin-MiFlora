@@ -299,12 +299,13 @@ class MiFlora extends eqLogic
                 $MiFloraName=$MiFloraNameString;
             }
             $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
-            if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
-                log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
+/*         if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
+              log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
 
-            } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
-                log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
-            }
+           } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
+               log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
+           }
+*/
         }
 
         $tryGetData = 0;
@@ -386,6 +387,7 @@ class MiFlora extends eqLogic
 
             // regarde si humidité minimum
             $old_Hummin = $mi_flora->getstatus('HumMin') ;
+
             $hum_min = $mi_flora->getConfiguration ('HumMin');
             if ($hum_min != 0) {
                 log::add('MiFlora', 'debug', 'humidité minimale en base ' . $hum_min . 'humidité precedente ' . $old_Hummin);
@@ -393,14 +395,14 @@ class MiFlora extends eqLogic
                     if ($old_Hummin != 1) {   // seulement si nouvelle valeur
                         $mi_flora->setStatus('HumMin', 1);
                         $mi_flora->update_min_hum_Jeedom(1);
-                        log::add('MiFlora','info', 'refresh value update');
+                        log::add('MiFlora','info', 'refresh value update 1');
                     }
                     log::add('MiFlora', 'debug', 'en dessous humidité minimale en base ' . $moisture);
                 } else {
                     if ($old_Hummin != 0) {
                         $mi_flora->setStatus('HumMin', 0);
                         $mi_flora->update_min_hum_Jeedom(0);
-                        log::add('MiFlora','info', 'refresh value update');
+                        log::add('MiFlora', 'info','refresh value update 0');
                     }
                     log::add('MiFlora', 'debug', 'au dessus humidité minimale en base ' . $moisture);
                 }
@@ -1051,7 +1053,7 @@ class MiFlora extends eqLogic
                 }
                 $cmd = $this->getCmd(null, 'lastrefresh');
                 if (is_object($cmd)) {
-                    $lastrefresh=(date("j-m H:i"));
+                    $lastrefresh=(date("Y-m-j H:i"));
                     $cmd->event($lastrefresh);
                     log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
                 }
@@ -1152,6 +1154,9 @@ class MiFlora extends eqLogic
         foreach (MiFlora::byType('MiFlora') as $miflora) {
             $miflora->save();
         }
+        $cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../resources/install.sh';
+        $cmd .= ' >> ' . log::getPathToLog('MiFlora_dependancy') . ' 2>&1 &';
+        exec($cmd);
         log::add('MiFlora','info','fin dependances');
 
 
