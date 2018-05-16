@@ -42,6 +42,14 @@ class MiFloraCmd extends cmd
          $miflora = new MiFlora() ;
          $eqLogic = $this->getEqLogic();
          $devicetype = $eqLogic->getConfiguration('devicetype');
+         $FirmwareVersion = $eqLogic->getConfiguration('firmware_version');
+         if ($FirmwareVersion == ''){
+             log::add('MiFlora', 'debug', 'firmware inconnue: '.$eqLogic->getHumanName(false, false));
+             $processBattery = 1;
+         } else {
+             $processBattery = 0;
+         }
+
          log::add('MiFlora', 'debug', 'refresh - devicetype: ' . $devicetype);
          MiFlora::processOneMiFlora($eqLogic,$processBattery,$devicetype);
          log::add('MiFlora', 'debug', 'fin de refresh ok ');
