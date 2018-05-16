@@ -473,7 +473,7 @@ class MiFlora extends eqLogic
         }
         if ($this->getConfiguration('antenna') != 'Auto') {
             $this->setConfiguration ('real_antenna','local') ;
-        }else {
+        } else {
             if (empty($this->getConfiguration('real_antenna'))) {
                 $this->setConfiguration('real_antenna', 'local');
             }

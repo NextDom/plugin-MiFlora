@@ -27,8 +27,19 @@ $("#table_cmd").sortable({
 
  $('#bt_scanMiFlora').on('click', function () {
     $('#md_modal').dialog({title: "{{Scan MiFlora}}"});
-    $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=ScanMiflora').dialog('open');
+    $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=ScanMiflora&mode=Scan').dialog('open');
 });
+
+ $('#bt_searchMiFlora').on('click', function () {
+    $('#md_modal').dialog({title: "{{Scan MiFlora}}"});
+    $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=ScanMiflora&mode=Search').dialog('open');
+});
+
+$('.bt_selectValue').on('click', function () {
+	var $selectedValue = $(this).closest("tr").find("td").eq(2).first().text();       
+    $('input[data-l2key="macAdd"]').val($selectedValue);
+    $('#md_modal').dialog('close');
+  });
 
 $('#bt_healthMiFlora').on('click', function () {
     $('#md_modal').dialog({title: "{{Santé MiFlora}}"});
