@@ -40,6 +40,70 @@ $('#bt_remoteMiFlora').on('click', function () {
     $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=MiFlora.remote&id=MiFlora').dialog('open');
 });
 
+function getModelListParam(_conf,_id) {
+    $.ajax({// fonction permettant de faire de l'ajax
+        type: "POST", // methode de transmission des données au fichier php
+        url: "plugins/MiFlora/core/ajax/blea.ajax.php", // url du fichier php
+        data: {
+            action: "getModelListParam",
+            conf: _conf,
+            id: _id,
+        },
+        dataType: 'json',
+        global: false,
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) { // si l'appel a bien fonctionné
+            if (data.state != 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            var options = '';
+            for (var i in data.result[0]) {
+                if (data.result[0][i]['selected'] == 1){
+                    options += '<option value="'+i+'" selected>'+data.result[0][i]['value']+'</option>';
+                } else {
+                    options += '<option value="'+i+'">'+data.result[0][i]['value']+'</option>';
+                }
+            }
+            if (data.result[1] == true){
+                $(".refreshdelay").show();
+            } else {
+                $(".refreshdelay").hide();
+            }
+            if (data.result[2] != false){
+                $(".globalRemark").show();
+                $(".globalRemark").empty().append(data.result[2]);
+            } else {
+                $(".globalRemark").empty()
+                $(".globalRemark").hide();
+            }
+            if (data.result[3] != false){
+                $(".specificmodal").show();
+                $(".specificmodal").attr('data-modal', data.result[3]);
+            } else {
+                $(".specificmodal").hide();
+            }
+            if (data.result[4] != false){
+                $(".cancontrol").show();
+            } else {
+                $(".cancontrol").hide();
+            }
+            if (data.result[5] != false){
+                $(".canbelocked").show();
+            } else {
+                $(".canbelocked").hide();
+            }
+            $(".modelList").show();
+            $(".listModel").html(options);
+            $icon = $('.eqLogicAttr[data-l1key=configuration][data-l2key=iconModel]').value();
+            if($icon != '' && $icon != null){
+                $('#img_device').attr("src", 'plugins/blea/core/config/devices/'+$icon+'.jpg');
+            }
+        }
+    });
+}
 
 /*
  * Fonction pour l'ajout de commande, appellé automatiquement par plugin.MiFlora
