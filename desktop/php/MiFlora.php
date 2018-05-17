@@ -187,7 +187,7 @@ $eqlogicss = eqLogic::byType($plugin->getId());
                             <span class="col-sm-3 eqLogicAttr" data-l1key="configuration" data-l2key="plant_name"></span>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{Firmware}}</label>
+                            <label class="col-sm-3 control-label">{{Firmware}}</label>
                             <span class="col-sm-3 eqLogicAttr" data-l1key="configuration" data-l2key="firmware_version"></span>
                         </div>
                         <div class="form-group">
