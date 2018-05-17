@@ -1258,6 +1258,31 @@ class MiFlora extends eqLogic
         }
 
 
+    public static function getRemoteLog($_remoteId,$_dependancy='') {
+        $remoteObject = MiFlora_remote::byId($_remoteId);
+        $name = $remoteObject->getRemoteName();
+        $local = dirname(__FILE__) . '/../../../../log/MiFlora_'.str_replace(' ','-',$name).$_dependancy;
+        log::add('MiFlora','info','Suppression de la log ' . $local);
+        exec('rm '. $local);
+        log::add('MiFlora','info',__('Récupération de la log distante',__FILE__));
+        $remoteObject->getFiles($local,'/tmp/MiFlora'.$_dependancy);
+        $remoteObject->execCmd(['cat /dev/null > /tmp/MiFlora'.$_dependancy]);
+        return True;
+    }
+
+    public static function dependancyRemote($_remoteId) {
+        log::add('MiFlora','info','Installation des dépendances debut');
+        $remoteObject = MiFlora_remote::byId($_remoteId);
+        $user=$remoteObject->getConfiguration('remoteUser');
+        $script = dirname(__FILE__) . '/../../resources/install_remote.sh';
+        $remoteObject->sendFiles($script,'/tmp/install_remote.sh');
+        log::add('MiFlora','info',__('Installation des dépendances',__FILE__));
+        $remoteObject->execCmd(['sudo rm /tmp/MiFlora_dependancy  ']);
+        $remoteObject->execCmd(['sudo bash /tmp/install_remote.sh  >> ' . '/tmp/MiFlora_dependancy' . ' 2>&1 &']);
+        return True;
+    }
+
+
 
 
 }
@@ -1356,6 +1381,52 @@ class MiFlora_remote {
 
     }
 
+    public function sendFiles($_local, $_target) {
+        $ip = $this->getConfiguration('remoteIp');
+        $port = $this->getConfiguration('remotePort');
+        $user = $this->getConfiguration('remoteUser');
+        $pass = $this->getConfiguration('remotePassword');
+
+        if (!$connection = ssh2_connect($ip, $port)) {
+            log::add('MiFlora', 'error', 'connexion SSH KO');
+            return;
+        } else {
+            if (!ssh2_auth_password($connection, $user, $pass)) {
+                log::add('MiFlora', 'error', 'Authentification SSH KO');
+                return;
+            } else {
+                log::add('MiFlora', 'info', 'Envoie de fichier sur ' . $ip);
+                $result = ssh2_scp_send($connection, $_local,  $_target, 0777);
+                $closesession = ssh2_exec($connection, 'exit');
+                stream_set_blocking($closesession, true);
+                stream_get_contents($closesession);
+            }
+        }
+        return;
+    }
+
+    public function getFiles($_local, $_target) {
+        $ip = $this->getConfiguration('remoteIp');
+        $port = $this->getConfiguration('remotePort');
+        $user = $this->getConfiguration('remoteUser');
+        $pass = $this->getConfiguration('remotePassword');
+        if (!$connection = ssh2_connect($ip, $port)) {
+            log::add('MiFlora', 'error', 'connexion SSH KO');
+            return;
+        } else {
+            if (!ssh2_auth_password($connection, $user, $pass)) {
+                log::add('MiFlora', 'error', 'Authentification SSH KO');
+                return;
+            } else {
+                log::add('MiFlora', 'info', __('Récupération de fichier depuis ',__FILE__) . $ip);
+                $result = ssh2_scp_recv($connection, $_target, $_local);
+                $closesession = ssh2_exec($connection, 'exit');
+                stream_set_blocking($closesession, true);
+                stream_get_contents($closesession);
+            }
+        }
+        return;
+    }
 
 
 
