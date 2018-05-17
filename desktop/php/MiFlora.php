@@ -29,7 +29,7 @@ $eqlogicss = eqLogic::byType($plugin->getId());
                 <center>
                     <i class="fa fa-plus-circle" style="font-size : 6em;color:#94ca02;"></i>
                 </center>
-                <span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Ajouter}}</center></span>
+                <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Ajouter}}</center></span>
             </div>
 
             <div class="cursor" id="bt_scanMiFlora" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
@@ -116,15 +116,20 @@ $eqlogicss = eqLogic::byType($plugin->getId());
                                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group input-group-sm">
                             <label class="col-sm-3 control-label">{{MiFlora Bluetooth mac add}}</label>
                             <div class="col-sm-3">
-                                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="macAdd" placeholder="MiFloraBTAdd"/>
+                            	<div class="input-group input-group-sm">
+                                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="macAdd" placeholder="xx:xx:xx:xx"/>
+                                <span class="input-group-btn">
+									<a class="btn btn-default"  id="bt_searchMiFlora" title="Sélectionner la commande"><i class="fa fa-search"></i></a>
+								</span>
+                            </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{frequence de recuperation des données}}</label>
+                            <label class="col-sm-3 control-label">{{Fréquence de récuperation des données}}</label>
                             <div class="col-sm-3">
                                 <select id="frequence" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="frequence" placeholder="frequence de rafraichissement">
                                     <option selected value=0>{{default}}</option>
@@ -182,7 +187,7 @@ $eqlogicss = eqLogic::byType($plugin->getId());
                             <span class="col-sm-3 eqLogicAttr" data-l1key="configuration" data-l2key="plant_name"></span>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{firmware}}</label>
+                            <label class="col-sm-3 control-label">{Firmware}}</label>
                             <span class="col-sm-3 eqLogicAttr" data-l1key="configuration" data-l2key="firmware_version"></span>
                         </div>
                         <div class="form-group">
