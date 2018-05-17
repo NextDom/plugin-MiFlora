@@ -17,8 +17,8 @@
  */
 
 try {
-    require_once __DIR__ . '/../../../../core/php/core.inc.php';
-    require_once __DIR__ . '/../../../../plugins/MiFlora/core/class/MiFlora.class.php';
+    require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+    require_once dirname(__FILE__) . '/../../../../plugins/MiFlora/core/class/MiFlora.class.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -49,6 +49,7 @@ try {
         $params = init('params');
         ajax::success(MiFlora::saveStack($params));
     }
+
 
 
     if (init('action') == 'save_MiFloraRemote') {
@@ -82,12 +83,20 @@ try {
         ajax::success();
     }
 
+    if (init('action') == 'getRemoteLogDependancy') {
+        ajax::success(MiFlora::getRemoteLog(init('remoteId'),'_dependancy'));
+    }
+
+    if (init('action') == 'dependancyRemote') {
+        ajax::success(MiFlora::dependancyRemote(init('remoteId')));
+    }
+
 
 
     throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 }catch
     (\Exception $e) {
-        ajax::error(displayExeption($e), $e->getCode());
+        ajax::error(displayException($e), $e->getCode());
     }
 
