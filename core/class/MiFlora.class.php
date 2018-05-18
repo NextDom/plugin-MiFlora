@@ -291,19 +291,26 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', '-------------- Get Firmware ----------------------------------');
             $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraNameString, $adapter, $seclvl, $antenne, $devicetype, $mi_flora);
             if ($devicetype == 'MiFlora') {
-                $mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
-                $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
+                $resultStatic=$mi_flora->traiteMiFloraBatteryAndFirmwareVersion($macAdd, $MiFloraBatteryAndFirmwareVersion, $battery, $FirmwareVersion);
+                if ($resultStatic == true) {
+                    $mi_flora->traiteMiFloraName($macAdd, $MiFloraNameString, $MiFloraName);
+                }
             } else{
                 $FirmwareVersion='';
                 $battery=$MiFloraBatteryAndFirmwareVersion;
                 $MiFloraName=$MiFloraNameString;
+                $resultStatic=true;
             }
-            $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
-            if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
-                log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
+            if ($resultStatic == true) {
+                $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
+                if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
+                    log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery . ' ' . $mi_flora->getHumanName(false, false));
 
-            } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
-                log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery.' ' . $mi_flora->getHumanName(false, false));
+                } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
+                    log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery . ' ' . $mi_flora->getHumanName(false, false));
+                }
+            } else{
+                log::add('MiFlora', 'debug', 'Erreur de lecture de la batterie de '.$mi_flora->getHumanName(false, false));
             }
         }
 
@@ -960,12 +967,18 @@ class MiFlora extends eqLogic
         //Characteristic value/descriptor: 64 10 32 2e 36 2e 32
         $MiFloraData = explode(": ", $MiFloraData);
         $MiFloraData = explode(" ", $MiFloraData[1]);
-        $battery = hexdec($MiFloraData[0]);
-        $FirmwareVersion = $MiFloraData[2] . $MiFloraData[3] . $MiFloraData[4] . $MiFloraData[5] . $MiFloraData[6];
-        $FirmwareVersion = hex2bin($FirmwareVersion);
-        log::add('MiFlora', 'debug', $macAdd . ' MiFloraData[0]:' . $MiFloraData[0]);
-        log::add('MiFlora', 'debug', $macAdd . ' battery:' . $battery);
-        log::add('MiFlora', 'debug', $macAdd . ' FirmwareVersion:' . $FirmwareVersion);
+        if ($MiFloraData[0] == ''){
+            log::add('MiFlora', 'debug', $macAdd . ' Battery field empty');
+            return false;
+        } else {
+            $battery = hexdec($MiFloraData[0]);
+            $FirmwareVersion = $MiFloraData[2] . $MiFloraData[3] . $MiFloraData[4] . $MiFloraData[5] . $MiFloraData[6];
+            $FirmwareVersion = hex2bin($FirmwareVersion);
+            log::add('MiFlora', 'debug', $macAdd . ' MiFloraData[0]:' . $MiFloraData[0]);
+            log::add('MiFlora', 'debug', $macAdd . ' battery:' . $battery);
+            log::add('MiFlora', 'debug', $macAdd . ' FirmwareVersion:' . $FirmwareVersion);
+            return true;
+        }
     }
 
     public function traiteMiFloraName($macAdd, $MiFloraData, &$miFloraName)
