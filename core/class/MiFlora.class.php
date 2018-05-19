@@ -541,17 +541,6 @@ class MiFlora extends eqLogic
                   $this->setConfiguration('real_antenna', '1');
               }
           }
-          if (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 10), 'C4:7C:8D:6') == 0) {
-              $this->setConfiguration('devicetype', 'MiFlora');
-              log::add('MiFlora', 'info', 'MiFlora - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
-
-          } elseif (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), 'A0:14:3D') == 0) {
-              $this->setConfiguration('devicetype', 'Parrot');
-              log::add('MiFlora', 'info', 'Parrot - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- '.substr($this->getConfiguration('macAdd'), 0, 8));
-              // Je ne sais pas differencier les 2 Parrots, il faut chercher le nom et changer le type ensuite
-          } else {
-              log::add('MiFlora', 'error', 'Objet inconnu: ' . $this->getConfiguration('macAdd'). ' - '.  $this->getHumanName(false, false));
-          }
       }
 
     public function postUpdate()
