@@ -70,7 +70,7 @@ $eqLogics = MiFlora::byType('MiFlora');
 
              echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $dev_value[5] . '</span></td>';
 
-             echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $dev_value[2] . '</span></td>';
+             echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . strtoupper($dev_value[2]) . '</span></td>';
 
              echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $dev_value[1] . '</span></td>' ;
 
