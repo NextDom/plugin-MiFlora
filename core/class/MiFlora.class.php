@@ -301,15 +301,17 @@ class MiFlora extends eqLogic
                 $MiFloraName=$MiFloraNameString;
                 $resultStatic=true;
             }
-          
+
             if ($resultStatic == true) {
                 $mi_flora->updateStaticData($macAdd, $battery, $FirmwareVersion, $MiFloraName);
               //TODO: check standard threshold instead of MiFlora ones
-                if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
-                    log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery . ' ' . $mi_flora->getHumanName(false, false));
+                if($mi_flora->getConfiguration('battery_danger_threshold') == '') {
+                    if ($battery < $mi_flora->getConfiguration('battery_danger_threshold')) {
+                        log::add('MiFlora', 'error', 'Error: Batterie faible - ' . $battery . ' ' . $mi_flora->getHumanName(false, false));
 
-                } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
-                    log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery . ' ' . $mi_flora->getHumanName(false, false));
+                    } elseif ($battery < $mi_flora->getConfiguration('battery_warning_threshold')) {
+                        log::add('MiFlora', 'error', 'Warning: Batterie faible - ' . $battery . ' ' . $mi_flora->getHumanName(false, false));
+                    }
                 }
             } else{
                 log::add('MiFlora', 'debug', 'Erreur de lecture de la batterie de '.$mi_flora->getHumanName(false, false));
@@ -504,7 +506,7 @@ class MiFlora extends eqLogic
                 log::add('MiFlora', 'info', 'Parrot - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- '.substr($this->getConfiguration('macAdd'), 0, 8));
                 // Je ne sais pas differencier les 2 Parrots, il faut chercher le nom et changer le type ensuite
             } else {
-                log::add('MiFlora', 'error', 'Objet inconnu: ' . $this->getConfiguration('macAdd'));
+                log::add('MiFlora', 'error', 'Objet inconnu: ' . $this->getConfiguration('macAdd') . ' - '.  $this->getHumanName(false, false));
             }
         }
 
@@ -539,13 +541,16 @@ class MiFlora extends eqLogic
                   $this->setConfiguration('real_antenna', '1');
               }
           }
-          if (substr($this->getConfiguration('macAdd'),0,10) == 'C4:7C:8D:6') {
+          if (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 10), 'C4:7C:8D:6') == 0) {
               $this->setConfiguration('devicetype', 'MiFlora');
-          } elseif (substr($this->getConfiguration('macAdd'),0,8) == 'A0:14:3D') {
+              log::add('MiFlora', 'info', 'MiFlora - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
+
+          } elseif (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), 'A0:14:3D') == 0) {
               $this->setConfiguration('devicetype', 'Parrot');
+              log::add('MiFlora', 'info', 'Parrot - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- '.substr($this->getConfiguration('macAdd'), 0, 8));
               // Je ne sais pas differencier les 2 Parrots, il faut chercher le nom et changer le type ensuite
-          }else {
-              log::add('MiFlora','error', 'Objet inconnu: '.$this->getConfiguration('macAdd'));
+          } else {
+              log::add('MiFlora', 'error', 'Objet inconnu: ' . $this->getConfiguration('macAdd'). ' - '.  $this->getHumanName(false, false));
           }
       }
 
