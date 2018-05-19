@@ -82,6 +82,14 @@ try {
         ajax::success();
     }
 
+    if (init('action') == 'getRemoteLogDependancy') {
+        ajax::success(MiFlora::getRemoteLog(init('remoteId'),'_dependancy'));
+    }
+
+    if (init('action') == 'dependancyRemote') {
+        ajax::success(MiFlora::dependancyRemote(init('remoteId')));
+    }
+
 
 
     throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));

@@ -51,7 +51,6 @@ $('#bt_remoteMiFlora').on('click', function () {
     $('#md_modal').load('index.php?v=d&plugin=MiFlora&modal=MiFlora.remote&id=MiFlora').dialog('open');
 });
 
-
 /*
  * Fonction pour l'ajout de commande, appellé automatiquement par plugin.MiFlora
  */

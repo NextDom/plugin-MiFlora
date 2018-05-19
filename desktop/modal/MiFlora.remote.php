@@ -98,7 +98,20 @@ foreach ($remotes as $remote) {
                                 <label class="checkbox-inline"><input type="checkbox" class="MiFloraRemoteAttr" data-l1key="configuration" data-l2key="ScanMode" checked/>{{Mode auto et Scan }}</label>
                                </div>
                         </div>
-            		</fieldset>
+                        <?php
+                        if (method_exists( $id ,'dependancyRemote')){
+                                echo '<label class="col-sm-2 control-label">{{Installation des dépendances}}</label>
+						<div class="col-sm-3">
+							<a class="btn btn-warning MiFloraRemoteAction" data-action="dependancyRemote"><i class="fa fa-spinner"></i> {{Lancer les dépendances}}</a>
+						</div>
+						<div class="col-sm-2">
+							<a class="btn btn-success MiFloraRemoteAction" data-action="getRemoteLogDependancy"><i class="fa fa-file-text-o"></i> {{Log dépendances}}</a>
+						</div>';
+                            }
+                            echo'</div>';
+                         ?>
+
+                    </fieldset>
 				</form>
 	</div>
 </div>
@@ -237,7 +250,51 @@ foreach ($remotes as $remote) {
             }
         });
     });
+    $('.MiFloraRemoteAction[data-action=dependancyRemote]').on('click',function(){
+        var MiFlora_remote = $('.MiFloraRemote').getValues('.MiFloraRemoteAttr')[0];
+        $.ajax({
+            type: "POST",
+            url: "plugins/"+plugin+"/core/ajax/"+plugin+".ajax.php",
+            data: {
+                action: "dependancyRemote",
+                remoteId: $('.li_MiFloraRemote.active').attr('data-MiFloraRemote_id'),
+            },
+            dataType: 'json',
+            error: function (request, status, error) {
+                handleAjaxError(request, status, error,$('#div_MiFloraRemoteAlert'));
+            },
+            success: function (data) {
+                if (data.state != 'ok') {
+                    $('#div_MiFloraRemoteAlert').showAlert({message: data.result, level: 'danger'});
+                    return;
+                }
+                $('#div_MiFloraRemoteAlert').showAlert({message: '{{Envoie réussie}}', level: 'success'});
+            }
+        });
+    });
 
+    $('.MiFloraRemoteAction[data-action=getRemoteLogDependancy]').on('click',function(){
+        var MiFlora_remote = $('.MiFloraRemote').getValues('.MiFloraRemoteAttr')[0];
+        $.ajax({
+            type: "POST",
+            url: "plugins/"+plugin+"/core/ajax/"+plugin+".ajax.php",
+            data: {
+                action: "getRemoteLogDependancy",
+                remoteId: $('.li_MiFloraRemote.active').attr('data-MiFloraRemote_id'),
+            },
+            dataType: 'json',
+            error: function (request, status, error) {
+                handleAjaxError(request, status, error,$('#div_MiFloraRemoteAlert'));
+            },
+            success: function (data) {
+                if (data.state != 'ok') {
+                    $('#div_MiFloraRemoteAlert').showAlert({message: data.result, level: 'danger'});
+                    return;
+                }
+                $('#div_MiFloraRemoteAlert').showAlert({message: '{{Log récupérée}}', level: 'success'});
+            }
+        });
+    });
 window.setInterval(function () {
     displayMiFloraRemoteComm($('.li_MiFloraRemote.active').attr('data-MiFloraRemote_id'));
 }, 5000);
