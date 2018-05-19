@@ -120,7 +120,7 @@ $eqlogicss = eqLogic::byType($plugin->getId());
                             <label class="col-sm-3 control-label">{{MiFlora Bluetooth mac add}}</label>
                             <div class="col-sm-3">
                             	<div class="input-group input-group-sm">
-                                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="macAdd" placeholder="xx:xx:xx:xx"/>
+                                <input type="text" style="text-transform: uppercase;" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="macAdd" placeholder="xx:xx:xx:xx"/>
                                 <span class="input-group-btn">
 									<a class="btn btn-default"  id="bt_searchMiFlora" title="Sélectionner la commande"><i class="fa fa-search"></i></a>
 								</span>
