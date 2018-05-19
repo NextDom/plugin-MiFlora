@@ -15,6 +15,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 //require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 require_once dirname(__FILE__) . '/../../core/class/MiFlora.class.php';
 
@@ -22,6 +23,7 @@ if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
 $eqLogics = MiFlora::byType('MiFlora');
+
 ?>
 
 <table class="table table-condensed tablesorter" id="table_ScanMiFlora">
@@ -32,6 +34,12 @@ $eqLogics = MiFlora::byType('MiFlora');
 			<th>{{Mac}}</th>
             <th>{{Antenne}}</th>
             <th>{{ RSSI }}</th>
+<?php
+ if ($_GET["mode"] == "Search") {
+ 	echo '<th>{{Sélection}}</th>';
+ }
+?>
+            
         </tr>
 	</thead>
 	<tbody>
@@ -52,10 +60,9 @@ $eqLogics = MiFlora::byType('MiFlora');
              }
          }
 
-        if ($found == 0 and ($dev_value[5] == "Flower care"  or $dev_value[5] == "Flower mate" or substr($dev_value[5],0,12) =="Flower power")){
+        if ($found == 0 and ($dev_value[5] == "Flower care"  or $dev_value[5] == "Flower mate" or substr($dev_value[5],0,12) =="Flower power") or substr($dev_value[5],0,10)=="Parrot pot"){
 
-
-             log::add('MiFlora','info','on a trouver une nouvelle mac adresse ' .  $dev_value[2]) ;
+             log::add('MiFlora','info','on a trouvé une nouvelle adresse mac ' . $dev_value[2]) ;
 
              $img = '<img class="lazy" src="plugins/MiFlora/plugin_info/MiFlora_icon.png" height="55" width="55"  />';
 
@@ -68,6 +75,10 @@ $eqLogics = MiFlora::byType('MiFlora');
              echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $dev_value[1] . '</span></td>' ;
 
              echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $dev_value[4] . '</span></td>' ;
+             
+             if ($_GET["mode"] == "Search") {
+            	echo '<td><a class="btn btn-sm btn-default bt_selectValue" id="bt_selectValueID">' . '{{Sélectionner}}' . '</a></td>' ;
+             }
 
          }
 
@@ -82,3 +93,6 @@ $eqLogics = MiFlora::byType('MiFlora');
 ?>
 	</tbody>
 </table>
+<?php
+    include_file('desktop', 'MiFlora', 'js', 'MiFlora');
+

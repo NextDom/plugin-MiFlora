@@ -1,4 +1,5 @@
-# Description
+# Antennes distantes
+### Description
 
 Cette page permet la récupération des données des équipements distants via des antennes déportées 
 
@@ -7,7 +8,7 @@ Peuvent être utilisé comme antenne toute machine linux sur laquelle la command
 Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de mesurer l'hygrométrie, la température, la lumière, l'engrais d'une plante. Nul besoin d'autre chose qu'une connexion Bluetooth, y compris via un appareil déporté.
 
 
-# Ecran de base
+### Ecran de base
 
 L'écran de base ce présente comme ceci
 
@@ -16,7 +17,7 @@ L'écran de base ce présente comme ceci
 
 
 
-## ajout d'une antenne
+### ajout d'une antenne
 
 
 L'écran ce présente comme ceci
@@ -25,21 +26,21 @@ L'écran ce présente comme ceci
 
 
 
-### nom
+#### nom
 indique le nom de l'antenne
 
-### ip
+#### ip
 indique l'adresse ip de l'antenne distante 
 
-### User
+#### User
 indique le nom du user qui sera utilisé pour lancer les commandes distante (attention ce user doit disposer du droit de lancer des commandes sudo)
 
-### Password
+#### Password
 indique le mot de passe du compte 'User'
 
-### port
+#### port
 indique le port pour la commande ssh (en général port = 22)
 
-### Device
+#### Device
 indique le nom du device bluetooth qui sera utilisé sur la machine distante 
 (valeures possibles de hci0 a hci3 )

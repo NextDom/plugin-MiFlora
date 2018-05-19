@@ -391,7 +391,7 @@ if flora_action == "all" or flora_action == "data":
     if FlowerPowerOrPot == "0":
         handlerd = "0x0047"
     else:
-        handlerd = "0x0049" ## TODO trouver handle
+        handlerd = "0x0047" ## TODO trouver handle
 
     DLI_calibre = read_ble_float(mac_add, handlerd, adpater, security)
     if flora_debug == "1":

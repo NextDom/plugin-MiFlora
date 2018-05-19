@@ -1,7 +1,5 @@
-### Version 2.0.6 & 2.0.5 - 7 Mai 2018
-* Mise a jour du lien pour la doc
 
-### Version 2.0.6 - 23 Avril 2018 Bêta
+### Version 2.0.6 - 23 Avril 2018 Beta
 * Correction du warning dans http.error
 
 ### Version 2.0.5 - 18 Avril 2018
@@ -28,7 +26,7 @@
   * mise en place de travis-ci
   * correction des warnings lint python
   * Correction de la documentation
-  
+
 ### Version 2.0.0: Mars 2018
 
 * Migration de la documentation au format markdown et intégration dans le template Jeedom-Plugins-Extra
