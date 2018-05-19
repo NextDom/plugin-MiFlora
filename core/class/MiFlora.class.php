@@ -1053,7 +1053,7 @@ class MiFlora extends eqLogic
                 }
                 $cmd = $this->getCmd(null, 'lastrefresh');
                 if (is_object($cmd)) {
-                    $lastrefresh=(date("Y-m-j H:i"));
+                    $lastrefresh=(date("j-m H:i"));
                     $cmd->event($lastrefresh);
                     log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
                 }
