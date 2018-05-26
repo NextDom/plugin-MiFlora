@@ -17,7 +17,10 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/MiFlora.class.php';
+
+
 
 class MiFloraCmd extends cmd
 {
@@ -28,12 +31,31 @@ class MiFloraCmd extends cmd
       }
      */
 
-    // public function execute(array $_options = null)
-    public function execute($_options = array()) {
-        log::add('MiFlora', 'info', 'Commande recue : ' . $_options['message']);
-        $eqLogic = $this->getEqLogic();
-        MiFlora::sendCommand($eqLogic->getId(), $this->getLogicalId(), $_options['message']);
-        return true;
+    public function execute($_options = null)
+    {
+        if ($this->getType() != 'action') {
+            return;
+        }
+        if ($this->getLogicalId() == 'refresh') {
+         log::add('MiFlora', 'debug', 'Commande recue : ' . $_options['message'].' logicalId: '.$this->getLogicalId());
+         $processBattery = 0;
+         $miflora = new MiFlora() ;
+         $eqLogic = $this->getEqLogic();
+         $devicetype = $eqLogic->getConfiguration('devicetype');
+         $FirmwareVersion = $eqLogic->getConfiguration('firmware_version');
+         if ($FirmwareVersion == ''){
+             log::add('MiFlora', 'debug', 'firmware inconnue: '.$eqLogic->getHumanName(false, false));
+             $processBattery = 1;
+         } else {
+             $processBattery = 0;
+         }
+
+         log::add('MiFlora', 'debug', 'refresh - devicetype: ' . $devicetype);
+         MiFlora::processOneMiFlora($eqLogic,$processBattery,$devicetype);
+         log::add('MiFlora', 'debug', 'fin de refresh ok ');
+         return true;
+        }
     }
 
 }
+

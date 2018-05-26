@@ -55,4 +55,5 @@ BlueZ est incompatible avec blueman (sudo apt-get remove blueman)
 
 > Les seuils peuvent être trouvés en utilisant la base de plantes de Xiaomi ou celle de Parrot à défaut un seuil entre 14 et 16 semble convenir à une majorité de plantes d'intérieur.
 
-> Il est aussi possible de reguler un arrosage automatique, MiFlora semble bien résiter aux intempéries
+> Il est aussi possible de réguler un arrosage automatique, MiFlora semble bien résister aux intempéries
+
