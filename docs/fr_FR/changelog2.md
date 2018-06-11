@@ -1,6 +1,6 @@
 # Changelog
 
-### Version 3.0.0 - 14 Mai 2018 Bêta
+### Version 3.0.0 - 14 Mai 2018 Bêta - 11 Juin Stable
 * Gestion d'antennes déportés
    - Possibilité de créer des antennes
    - Possibilité pour chaque objet de spécifier par quelle antenne il va être lu
