@@ -1,40 +1,8 @@
-
-*.php~
-
-3rparty/sshmifloa.py
-
-3rparty/test.php
-
-resources/hci.php
-
-resources/install.py
-
-resources/install.sh
-
 .remote-sync.json
-
-resources/install.txt
 
 migration2team/flower.png
 
 migration2team/MiFlora_icon.png
 
-.idea/misc.xml
+.idea/*
 
-.idea/modules.xml
-
-.idea/plugin-MiFlora-cloneRJ-Jeedom-Plugins-Extra.iml
-
-.idea/vcs.xml
-
-.idea/workspace.xml
-
-.idea/deployment.xml
-
-.idea/webServers.xml
-
-core/class/MiFlora0.class.php
-
-core/class/MiFlora.class.new.php
-
-core/class/MiFlora.class.master.php
