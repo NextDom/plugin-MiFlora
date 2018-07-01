@@ -27,7 +27,7 @@ if (!isConnect()) {
     <fieldset>
     	<span>
         <div class="form-group"> <br>
-           <a href=https://jeedom-plugins-extra.github.io/plugin-MiFlora/fr_FR target="_blank"><font size="+1"><center>Cliquer pour voir la documentation du plugin</center></font></a>
+           <a href=https://NextDom.github.io/plugin-MiFlora/fr_FR target="_blank"><font size="+1"><center>Cliquer pour voir la documentation officielle du plugin en version stable</center></font></a>
        </div>
 	</span>
         <div class="form-group"> <br>
