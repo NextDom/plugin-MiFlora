@@ -8,7 +8,7 @@ mais nécéssite plus de suivi et de maintenance, principalement les démons et 
 ### Est-ce que ce plugin s'appuie sur des API tiers ?
 
 > Le plugin utilise le Bluetooth pour récupérer les informations du MiFlora.
-Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --char-read -a 0x35` fonctionne sur le device cible.
+Il faut installer le Bluetooth et s'assurer que `gatttool -b macAddMiFlora --char-read -a 0x35` fonctionne sur l'objet cible.
 
 ### Est ce que ce plugin monopolise le Bluetooth ?
 
@@ -44,6 +44,14 @@ Attention: en mode debug, les données sont récupérés en permanence indépend
 
 > Il y a beaucoup de configuration qui peuvent générer ce problème. Avec Pixel il faut faire attention d'avoir un seul gestionnaire de bluetooth.
 BlueZ est incompatible avec blueman (sudo apt-get remove blueman)
+
+### Comment voir les MiFlora dans l'app Jeedom?
+> Dans la configuration du plugin mobile Jeedom, il faut chercher Miflora et cocher la case activer, configurer la température avec Info/Température et l'hygrometrie avec Info/Humidité, les autres avec Aucun.
+Les informations remontent ensuite toute seule dans la partie objets de l'app Jeedom
+
+### Pourquoi ai je le message: Objet inconnu: xxx?
+> MiFlora gere les Parrots Flower et MiFlora. Le plugin les differencie en utilisant les addresses MAC reservés à ces deux societés. La Mac address saisi ne correspond pas. Si c'est
+bien un de ces deux objets, il faut faire une demande de support ou une PR sur GitHub.
 
 ### Le plugin fonctionne bien: que puis je faire avec ?
 
