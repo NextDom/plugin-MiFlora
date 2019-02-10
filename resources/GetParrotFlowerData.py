@@ -188,7 +188,7 @@ def convert_lux(raw_value):
         sunlight = 0.08640000000000001 * (192773.17000000001 * math.pow(raw_value_int, -1.0606619))
     else:
         sunlight = 0
-    return round(sunlight * 10) / 10
+    return round(642.2*sunlight * 10) / 10
 
 
 def convert_soil_ec(raw_value):
@@ -598,7 +598,7 @@ if flora_debug == "1":
 if flora_debug == "0":
     if flora_action == "data":
         print "{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
-            soil_ec, ",\"Lux\":", dli_calibre, ",\"Air_Temperature\":", \
+            soil_ec, ",\"Lux\":", lux, ",\"Air_Temperature\":", \
             temperature_air_calibre, ",\"Soil_Temperature\":", temperature_terre, "}"
 
     if flora_action == "static":
