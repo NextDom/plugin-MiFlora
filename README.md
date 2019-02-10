@@ -1,4 +1,4 @@
-[![license](https://img.shields.io/github/license/NextDom/plugin-MiFlora.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NextDom/plugin-MiFlora.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/NextDom/plugin-MiFlora.svg)](../../releases) [![Waffle.io - Columns and their card count](https://badge.waffle.io/NextDom/plugin-MiFlora.svg?columns=all)](https://waffle.io/NextDom/plugin-MiFlora)
+[![license](https://img.shields.io/github/license/NextDom/plugin-MiFlora.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NextDom/plugin-MiFlora.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/NextDom/plugin-MiFlora.svg)](../../releases) [![Waffle.io - Columns and their card count](https://badge.waffle.io/NextDom/plugin-MiFlora.svg?columns=all)](https://waffle.io/NextDom/plugin-MiFlora)  [![Join the chat at https://gitter.im/NextDom/plugin-MiFlora](https://badges.gitter.im/NextDom/plugin-MiFlora.svg)](https://gitter.im/NextDom/plugin-MiFlora?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ### Master: [![Build Status](https://travis-ci.org/NextDom/plugin-MiFlora.svg?branch=master)](https://travis-ci.org/NextDom/plugin-MiFlora)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-MiFlora/badge.svg?branch=master)](https://coveralls.io/github/NextDom/plugin-MiFlora?branch=master)
 
@@ -6,9 +6,11 @@
 
 # Présentation:
 
-Plugin permettant de récupérer les informations des Xiaomi Plants ou MiFlora ainsi que des Parrot flower et Parrot pot
+Plugin permettant de récupérer les informations des Parrot flower power, Parrot plants, Xiaomi Plants ou MiFlora.
 
-Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de mesurer l’hygrométrie, la température, la lumière, l’engrais d’une plante. Nul besoin d’autre chose qu’une connexion Bluetooth, y compris via un appareil déporté.
+Les Xiaomi Plants sont des sticks Bluetooth de la marque Xiaomi permettant de mesurer l’hygrométrie, la température, la lumière, l’engrais d’une plante. Nul besoin d’autre chose qu’une connexion Bluetooth, y compris via des antennes déportées.
+
+Le Parrots flower est la version originale de Parrot du stick MiFlora, le Parrot Pot est un pot de fleurs avec les fonctionalités du Parrot flower.
 
 [![Read the Docs](docs/images/MiFlora-Screenshot1.png)](docs/images/MiFlora-Screenshot1.png)
 
