@@ -330,6 +330,7 @@ class MiFlora extends eqLogic
         $FirmwareVersion = $mi_flora->getConfiguration('firmware_version');
         if ($FirmwareVersion == '' && $devicetype == 'MiFlora'){
             $loopcondition = false;
+            // TODO: Error affiche quand le device n'est pas joignable ???
             log::add('MiFlora', 'error', 'Firmware MiFlora inconnue: '. $mi_flora->getHumanName(false, false) );
         } else {
             $loopcondition = true;
@@ -517,14 +518,11 @@ class MiFlora extends eqLogic
                 $this->setConfiguration('devicetype', 'MiFlora');
                 log::add('MiFlora', 'info', 'MiFlora - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
 
-            } elseif (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), 'A0:14:3D') == 0) {
+            } elseif (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), 'A0:14:3D') == 0 ||
+                      strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), '90:03:B7') == 0)
+                // Issue from G4Seb
+            {
                 $this->setConfiguration('devicetype', 'Parrot');
-# TODO
-                ssdd
-                sdsd
-
-                sds
-
                 log::add('MiFlora', 'info', 'Parrot - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- '.substr($this->getConfiguration('macAdd'), 0, 8));
                 // Je ne sais pas differencier les 2 Parrots, il faut chercher le nom et changer le type ensuite
             } else {
@@ -768,10 +766,10 @@ class MiFlora extends eqLogic
 
             log::add('MiFlora', 'debug', 'connexion SSH ...' . $commande);
             if (!$connection = ssh2_connect($ip, $port)) {
-                log::add('MiFlora', 'error', 'connexion SSH KO');
+                log::add('MiFlora', 'error', 'connexion SSH KO: '.$ip.' port:'.$port);
             } else {
                 if (!ssh2_auth_password($connection, $user, $pass)) {
-                    log::add('MiFlora', 'error', 'Authentification SSH KO');
+                    log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
                     ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetMiFloraData.py', '/tmp/GetMiFloraData.py', 0755);
@@ -852,10 +850,10 @@ class MiFlora extends eqLogic
 
             log::add('MiFlora', 'debug', 'connexion SSH ...');
             if (!$connection = ssh2_connect($ip, $port)) {
-                log::add('MiFlora', 'error', 'connexion SSH KO');
+                log::add('MiFlora', 'error', 'connexion SSH KO: '.$ip.' port:'.$port);
             } else {
                 if (!ssh2_auth_password($connection, $user, $pass)) {
-                    log::add('MiFlora', 'error', 'Authentification SSH KO');
+                    log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
                     if ($devicetype == 'MiFlora') {
@@ -1269,10 +1267,10 @@ class MiFlora extends eqLogic
             log::add('MiFlora','debug', 'Commande get rssi : ' .$commande) ;
 
             if (!$connection = ssh2_connect($ip, $port)) {
-                log::add('MiFlora', 'error', 'connexion SSH KO');
+                log::add('MiFlora', 'error', 'connexion SSH KO: '.$ip.' port:'.$port);
             } else {
                 if (!ssh2_auth_password($connection, $user, $pass)) {
-                    log::add('MiFlora', 'error', 'Authentification SSH KO');
+                    log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH copy du fichier');
                     ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/MiFlora_rssi_scanner.py', '/tmp/MiFlora_rssi_scanner.py', 0755);
@@ -1405,11 +1403,11 @@ class MiFlora_remote {
         $user = $this->getConfiguration('remoteUser');
         $pass = $this->getConfiguration('remotePassword');
         if (!$connection = ssh2_connect($ip, $port)) {
-            log::add('MiFlora', 'error', 'connexion SSH KO');
+            log::add('MiFlora', 'error', 'connexion SSH KO: '.$ip.' port:'.$port);
             return;
         } else {
             if (!ssh2_auth_password($connection, $user, $pass)) {
-                log::add('MiFlora', 'error', 'Authentification SSH KO');
+                log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 return;
             } else {
                 foreach ($_cmd as $cmd){
@@ -1433,11 +1431,11 @@ class MiFlora_remote {
         $pass = $this->getConfiguration('remotePassword');
 
         if (!$connection = ssh2_connect($ip, $port)) {
-            log::add('MiFlora', 'error', 'connexion SSH KO');
+            log::add('MiFlora', 'error', 'connexion SSH KO: '.$ip.' port:'.$port);
             return;
         } else {
             if (!ssh2_auth_password($connection, $user, $pass)) {
-                log::add('MiFlora', 'error', 'Authentification SSH KO');
+                log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 return;
             } else {
                 log::add('MiFlora', 'info', 'Envoie de fichier sur ' . $ip);
@@ -1456,11 +1454,11 @@ class MiFlora_remote {
         $user = $this->getConfiguration('remoteUser');
         $pass = $this->getConfiguration('remotePassword');
         if (!$connection = ssh2_connect($ip, $port)) {
-            log::add('MiFlora', 'error', 'connexion SSH KO');
+            log::add('MiFlora', 'error', 'connexion SSH KO: '.$ip.' port:'.$port);
             return;
         } else {
             if (!ssh2_auth_password($connection, $user, $pass)) {
-                log::add('MiFlora', 'error', 'Authentification SSH KO');
+                log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 return;
             } else {
                 log::add('MiFlora', 'info', __('Récupération de fichier depuis ',__FILE__) . $ip);
