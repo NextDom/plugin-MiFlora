@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 3.0.1 - 10 Fevrier 2019 Stable
+* Ajoute un nouveau range de MacAdd pour les Parrots
+* clarification les erreurs/warnings
+* ajout de questions a la FAQ
+* Correction de l'erreur de mesure Lux Parrot, suite à un commentaire sur le forum
+
 ### Version 3.0.0 - 14 Mai 2018 Bêta - 30 Juin Stable
 * Gestion d'antennes déportés
    - Possibilité de créer des antennes
@@ -18,9 +24,3 @@
     - Attention de bien mettre une fréquence d'au moins 15 minutes pour vos objets existants.
 
 * Gestion du Parrot flower de la même manière que les MiFlora
-
-### Version 3.0.1 - 10 Fevrier 2019 Stable
-* Ajoute un nouveau range de MacAdd pour les Parrots
-* clarification les erreurs/warnings
-* ajout de questions a la FAQ
-* Correction de l'erreur de mesure Lux Parrot, suite à un commentaire sur le forum
