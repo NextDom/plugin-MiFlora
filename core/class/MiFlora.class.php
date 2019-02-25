@@ -519,8 +519,13 @@ class MiFlora extends eqLogic
                 log::add('MiFlora', 'info', 'MiFlora - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
 
             } elseif (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), 'A0:14:3D') == 0 ||
-                      strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), '90:03:B7') == 0)
-                // Issue from G4Seb
+                      strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), '90:03:B7') == 0 ||
+                      strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), '00:12:1C') == 0 ||
+                      strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), '00:26:7E') == 0 ||
+                      strcasecmp(substr($this->getConfiguration('macAdd'), 0, 8), '90:3A:E6') == 0
+                     )
+                // Issue from G4Seb + add all parrot ranges found in https://gist.github.com/aallan/b4bb86db86079509e6159810ae9bd3e4
+
             {
                 $this->setConfiguration('devicetype', 'Parrot');
                 log::add('MiFlora', 'info', 'Parrot - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- '.substr($this->getConfiguration('macAdd'), 0, 8));
