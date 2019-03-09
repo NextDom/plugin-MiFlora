@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 3.0.2 - 9 Mars 2019 Stable
+* Corrige un bug: le parcours des objets s'arrete si un objet ne reponds pas
+
 ### Version 3.0.1 - 10 Fevrier 2019 Stable
 * Ajoute un nouveau range de MacAdd pour les Parrots
 * clarification les erreurs/warnings

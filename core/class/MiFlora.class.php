@@ -337,51 +337,24 @@ class MiFlora extends eqLogic
         }
         while ($loopcondition) {
             if ($tryGetData > 3) { // stop after 4 try
-                break;
-            }
-            if ($tryGetData > 0) {
-                log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
-            }
-            log::add('MiFlora', 'debug', ' ProcessMyMiFlora  FirmwareVersion:' . $FirmwareVersion . ' antenne ' . $antenne);
-
-            $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne, $devicetype);
-            log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
-            $tryGetData++;
-
-            if ($devicetype == 'MiFlora') {
-                // TODO
-                // traiter ces reponses en erreur
-                // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
-                // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux, $devicetype);
-                // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
-                if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
-                    // wait  hopping it'll be better ...
-                    log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
-                    sleep(5 * $tryGetData);
-                } else {
-                    $loopcondition = false;
-                }
+                $loopcondition = false;
             } else {
+                if ($tryGetData > 0) {
+                    log::add('MiFlora', 'info', 'mi flora data for ' . $macAdd . ' is empty or null, trying again, nb retry:' . $tryGetData);
+                }
+                log::add('MiFlora', 'debug', ' ProcessMyMiFlora  FirmwareVersion:' . $FirmwareVersion . ' antenne ' . $antenne);
 
+                $mi_flora->getMesure($macAdd, $MiFloraData, $FirmwareVersion, $adapter, $seclvl, $antenne, $devicetype);
+                log::add('MiFlora', 'debug', 'mi flora data:' . $MiFloraData . ':');
+                $tryGetData++;
 
-
-
-                    // split sur Soil_moisture:
-                $data = explode("Soil_moisture", $MiFloraData);
-                log::add('MiFlora','debug','process $MiFloraData '.$macAdd. ' -- data: '. serialize($data));
-                if (count($data) == 1) { //Name: pas dans le resultat
-                    log::add('MiFlora', 'debug', 'Les donnees du Parrot n a pas ete trouve ' . $macAdd . '  -- data: ' . serialize($data));
-                    $MiFloraData='';
-                } else {
-                    $resultsParrot = json_decode($MiFloraData); // TODO Virer les erreurs (device pas dispo)
-                    log::add('MiFlora', 'debug', 'Parrot json ' . $macAdd . '  -- data: ' . serialize($resultsParrot));
-
-                    $temperature = $resultsParrot->{"Air_Temperature"};
-                    $moisture = $resultsParrot->{"Soil_moisture"};
-                    $fertility = $resultsParrot->{"Fertility"};
-                    $lux = $resultsParrot->{"Lux"};
-                    // TODO - test tout a 0, retry
+                if ($devicetype == 'MiFlora') {
+                    // TODO
+                    // traiter ces reponses en erreur
+                    // Characteristic value/descriptor: aa bb cc dd ee ff 99 88 77 66 00 00 00 00 00 00
+                    // Characteristic value/descriptor: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                    $mi_flora->traiteMesure($macAdd, $MiFloraData, $temperature, $moisture, $fertility, $lux, $devicetype);
+                    // log::add('MiFlora', 'debug', 'temperature:'.$temperature.':');
                     if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
                         // wait  hopping it'll be better ...
                         log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
@@ -389,10 +362,35 @@ class MiFlora extends eqLogic
                     } else {
                         $loopcondition = false;
                     }
-                    log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
-                    log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
-                    log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
-                    log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
+                } else {
+
+                        // split sur Soil_moisture:
+                    $data = explode("Soil_moisture", $MiFloraData);
+                    log::add('MiFlora','debug','process $MiFloraData '.$macAdd. ' -- data: '. serialize($data));
+                    if (count($data) == 1) { //Name: pas dans le resultat
+                        log::add('MiFlora', 'debug', 'Les donnees du Parrot n a pas ete trouve ' . $macAdd . '  -- data: ' . serialize($data));
+                        $MiFloraData='';
+                    } else {
+                        $resultsParrot = json_decode($MiFloraData); // TODO Virer les erreurs (device pas dispo)
+                        log::add('MiFlora', 'debug', 'Parrot json ' . $macAdd . '  -- data: ' . serialize($resultsParrot));
+
+                        $temperature = $resultsParrot->{"Air_Temperature"};
+                        $moisture = $resultsParrot->{"Soil_moisture"};
+                        $fertility = $resultsParrot->{"Fertility"};
+                        $lux = $resultsParrot->{"Lux"};
+                        // TODO - test tout a 0, retry
+                        if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
+                            // wait  hopping it'll be better ...
+                            log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
+                            sleep(5 * $tryGetData);
+                        } else {
+                            $loopcondition = false;
+                        }
+                        log::add('MiFlora', 'debug', $macAdd . ' Temperature:' . $temperature);
+                        log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
+                        log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
+                        log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
+                    }
                 }
             }
         }
