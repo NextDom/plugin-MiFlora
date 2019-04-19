@@ -1,0 +1,36 @@
+# compare ././core/ajax/MiFlora.ajax.php ../../Desktop/MiFlora//./core/ajax/MiFlora.ajax.php :
+diff ././core/ajax/MiFlora.ajax.php ../../Desktop/MiFlora//./core/ajax/MiFlora.ajax.php
+# compare ././core/class/MiFlora.class.php ../../Desktop/MiFlora//./core/class/MiFlora.class.php :
+diff ././core/class/MiFlora.class.php ../../Desktop/MiFlora//./core/class/MiFlora.class.php
+# compare ././core/class/MiFloraCmd.class.php ../../Desktop/MiFlora//./core/class/MiFloraCmd.class.php :
+diff ././core/class/MiFloraCmd.class.php ../../Desktop/MiFlora//./core/class/MiFloraCmd.class.php
+# compare ././core/php/MiFlora.inc.php ../../Desktop/MiFlora//./core/php/MiFlora.inc.php :
+diff ././core/php/MiFlora.inc.php ../../Desktop/MiFlora//./core/php/MiFlora.inc.php
+# compare ././core/template/dashboard/miflora.html ../../Desktop/MiFlora//./core/template/dashboard/miflora.html :
+diff ././core/template/dashboard/miflora.html ../../Desktop/MiFlora//./core/template/dashboard/miflora.html
+# compare ././core/template/mobile/miflora.html ../../Desktop/MiFlora//./core/template/mobile/miflora.html :
+diff ././core/template/mobile/miflora.html ../../Desktop/MiFlora//./core/template/mobile/miflora.html
+# compare ././desktop/js/MiFlora.js ../../Desktop/MiFlora//./desktop/js/MiFlora.js :
+diff ././desktop/js/MiFlora.js ../../Desktop/MiFlora//./desktop/js/MiFlora.js
+# compare ././desktop/modal/MiFlora.remote.php ../../Desktop/MiFlora//./desktop/modal/MiFlora.remote.php :
+diff ././desktop/modal/MiFlora.remote.php ../../Desktop/MiFlora//./desktop/modal/MiFlora.remote.php
+# compare ././desktop/modal/ScanMiflora.php ../../Desktop/MiFlora//./desktop/modal/ScanMiflora.php :
+diff ././desktop/modal/ScanMiflora.php ../../Desktop/MiFlora//./desktop/modal/ScanMiflora.php
+# compare ././desktop/modal/health.php ../../Desktop/MiFlora//./desktop/modal/health.php :
+diff ././desktop/modal/health.php ../../Desktop/MiFlora//./desktop/modal/health.php
+# compare ././desktop/modal/modal.template.php ../../Desktop/MiFlora//./desktop/modal/modal.template.php :
+diff ././desktop/modal/modal.template.php ../../Desktop/MiFlora//./desktop/modal/modal.template.php
+# compare ././desktop/php/MiFlora.php ../../Desktop/MiFlora//./desktop/php/MiFlora.php :
+diff ././desktop/php/MiFlora.php ../../Desktop/MiFlora//./desktop/php/MiFlora.php
+# compare ././plugin_info/configuration.php ../../Desktop/MiFlora//./plugin_info/configuration.php :
+diff ././plugin_info/configuration.php ../../Desktop/MiFlora//./plugin_info/configuration.php
+# compare ././plugin_info/info.json ../../Desktop/MiFlora//./plugin_info/info.json :
+diff ././plugin_info/info.json ../../Desktop/MiFlora//./plugin_info/info.json
+# compare ././plugin_info/install.php ../../Desktop/MiFlora//./plugin_info/install.php :
+diff ././plugin_info/install.php ../../Desktop/MiFlora//./plugin_info/install.php
+# compare ././resources/GetMiFloraData.py ../../Desktop/MiFlora//./resources/GetMiFloraData.py :
+diff ././resources/GetMiFloraData.py ../../Desktop/MiFlora//./resources/GetMiFloraData.py
+# compare ././resources/GetParrotFlowerData.py ../../Desktop/MiFlora//./resources/GetParrotFlowerData.py :
+diff ././resources/GetParrotFlowerData.py ../../Desktop/MiFlora//./resources/GetParrotFlowerData.py
+# compare ././resources/MiFlora_rssi_scanner.py ../../Desktop/MiFlora//./resources/MiFlora_rssi_scanner.py :
+diff ././resources/MiFlora_rssi_scanner.py ../../Desktop/MiFlora//./resources/MiFlora_rssi_scanner.py

@@ -18,7 +18,6 @@ done | sort -u`
 
 for i in $LISTMERGED
 do
-    echo "compare $OLDPLUGIN/$i $NEWPLUGIN/$i :"
-    diff $OLDPLUGIN/$i $NEWPLUGIN/$i
+    echo "# compare $OLDPLUGIN/$i $NEWPLUGIN/$i :"
+    echo diff $OLDPLUGIN/$i $NEWPLUGIN/$i
 done
-  

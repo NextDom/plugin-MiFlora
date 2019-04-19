@@ -65,3 +65,42 @@ bien un de ces deux objets, il faut faire une demande de support ou une PR sur G
 
 > Il est aussi possible de réguler un arrosage automatique, MiFlora semble bien résister aux intempéries
 
+### Le plugin n'arrive pas a recuperer les valeurs des objets:
+> Utiliser le mode debug et verifier les log. N'oubliez pas d'enlever le mode debug à la fin (info par exemple) afin de ne plus relever les veleurs toutes les minutes.
+
+> Verifier la connection gatttool directement depuis Linux:
+
+> `sudo hcitool lescan`
+
+> Reponse attendu: `<MacAdd> Nom ou (unknown)`
+
+>`sudo gatttool -b <MacAdd>  -I`
+
+>`connect`
+
+> Reponse attendu: 
+
+>`Attempting to connect to C4:7C:8D:60:E8:21`
+
+>`Connection successful`
+
+> Ensuite
+
+>`sudo gatttool --adapter=hci0 -b <MacAdd> --char-read -a 0x38`
+
+>Reponse attendu:
+
+>`Characteristic value/descriptor: 64 10 32 2e 36 2e 32`
+
+> Si le firmware est recent, il faut tester le script python de recuperation des données:
+
+>`/usr/bin/python /var/www/html/plugins/MiFlora/resources/GetMiFloraData.py  <MacAdd> 2.6.6 0 hci0 low`
+
+> Le script fait plusieurs essaies de connections, le résultat suivant est correct: une erreur ensuite OK:
+
+>`connect error: Transport endpoint is not connected (107)
+  ('Error ', 1, ' from gatttool (', '', ')')`
+
+>`Characteristic value/descriptor: cc 00 00 b8 01 00 00 1b b3 00 00 00 00 00 00 00`
+
+> Etant donné l'instabilité des connections et le fait que plusieurs process soient gerés en différé, il faut attendre 12 heures pour etre sur d'avoir bien tout initialisé.
