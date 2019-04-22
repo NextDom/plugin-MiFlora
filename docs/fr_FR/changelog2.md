@@ -1,6 +1,6 @@
 # Changelog
-### Version 3.0.3 - 17 Avril 2019 Stable
-* Ajout du range de mac address 90:03:B7:E pour les MiFlora suite à la demande d'Ouarsa sur le forum
+### Version 3.0.3 - 22 Avril 2019 Stable
+* Modification de la doc
 
 ### Version 3.0.2 - 9 Mars 2019 Stable
 * Corrige un bug: le parcours des objets s'arrete si un objet ne reponds pas

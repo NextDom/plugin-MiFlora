@@ -84,7 +84,7 @@ bien un de ces deux objets, il faut faire une demande de support ou une PR sur G
 
 >`Connection successful`
 
-> Ensuite
+> Ensuite, pour les MiFlora:
 
 >`sudo gatttool --adapter=hci0 -b <MacAdd> --char-read -a 0x38`
 
@@ -104,3 +104,11 @@ bien un de ces deux objets, il faut faire une demande de support ou une PR sur G
 >`Characteristic value/descriptor: cc 00 00 b8 01 00 00 1b b3 00 00 00 00 00 00 00`
 
 > Etant donné l'instabilité des connections et le fait que plusieurs process soient gerés en différé, il faut attendre 12 heures pour etre sur d'avoir bien tout initialisé.
+
+> Pour les parrots:
+
+ `/usr/bin/python /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py  macAdd:[xx:xx:xx:xx:xx:xx], action:[all|data|static|watering] flower_power_or_pot:[0|1],debug:[0|1],security:[low|medium|high],adapter:hci[0-9]`
+ 
+ > Cas standard:
+
+ `/usr/bin/python /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py <MacAdd> data 0 0 low hci0`
