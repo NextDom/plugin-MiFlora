@@ -112,3 +112,7 @@ bien un de ces deux objets, il faut faire une demande de support ou une PR sur G
  > Cas standard:
 
  `/usr/bin/python /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py <MacAdd> data 0 0 low hci0`
+
+> Pour verifier le fonctionement du scanner:
+
+ `sudo /usr/bin/python /var/www/html/plugins/MiFlora/resources/MiFlora_rssi_scanner.py --device=hci0 --antenne=local --id=0 --timeout=30`
