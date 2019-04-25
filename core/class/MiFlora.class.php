@@ -394,10 +394,10 @@ class MiFlora extends eqLogic
                 }
             }
         }
-        if ($MiFloraData == '') {
+        if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
             $mi_flora->setStatus('OK', 0);
   //          $mi_flora->updateJeedom($macAdd, 0, 0, 0, 0);
-            log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour ' . $mi_flora->getHumanName(false, false));
+            log::add('MiFlora', 'warning', 'mi flora data is empty, retried ' . $tryGetData . ' times, stop pour ' . $mi_flora->getHumanName(false, false).'force status OK=0:'.$mi_flora->getStatus('OK') );
             // message::add('MiFlora', 'mi flora data is empty for ' . $mi_flora->getHumanName(false, false) . ' check module');
 
         } else {
@@ -756,7 +756,7 @@ class MiFlora extends eqLogic
                     $commande = "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x35 --sec-level=" . $seclvl;
                     # $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
                 } else {
-                    $commande = "/usr/bin/python /tmp/GetMiFloraData.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
+                    $commande = "/usr/bin/python3 /tmp/GetMiFloraDataPy3.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
                 }
             } else{
                 if ($devicetype=='ParrotFlower'){
@@ -768,7 +768,7 @@ class MiFlora extends eqLogic
                 $commande = "/usr/bin/python /tmp/GetParrotFlowerData.py " . $macAdd . " data " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
             }
 
-            log::add('MiFlora', 'debug', 'connexion SSH ...' . $commande);
+            log::add('MiFlora', 'info', 'connexion SSH ...' . $commande);
             if (!$connection = ssh2_connect($ip, $port)) {
                 log::add('MiFlora', 'error', 'connexion SSH KO: '.$ip.' port:'.$port);
             } else {
@@ -776,12 +776,12 @@ class MiFlora extends eqLogic
                     log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
-                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetMiFloraData.py', '/tmp/GetMiFloraData.py', 0755);
+                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetMiFloraDataPy3.py', '/tmp/GetMiFloraDataPy3.py', 0755);
 
                     $gattresult = ssh2_exec($connection, $commande);
                     stream_set_blocking($gattresult, true);
                     $MiFloraData = stream_get_contents($gattresult);
-                    log::add('MiFlora', 'debug', 'SSH result:' . $MiFloraData);
+                    log::add('MiFlora', 'info', 'SSH result:' . $MiFloraData);
 
                     $closesession = ssh2_exec($connection, 'exit');
                     stream_set_blocking($closesession, true);
@@ -1065,7 +1065,7 @@ class MiFlora extends eqLogic
             $cmd = $this->getCmd(null, 'OK');
             if (is_object($cmd)) {
                 $cmd->event(0);
-                log::add('MiFlora', 'info', 'module absent');
+                log::add('MiFlora', 'info', 'module absent: '.$macAdd);
             }
 
         } else {

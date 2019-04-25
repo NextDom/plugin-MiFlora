@@ -3,7 +3,7 @@ echo 0 > /tmp/dependancy_MiFlora_in_progress
 echo "Launch install of MiFlora dependancy"
 sudo apt-get update
 echo 50 > /tmp/dependancy_MiFlora_in_progress
-sudo apt-get install -y python-pip python-dev build-essential python-requests bluetooth libffi-dev libssl-dev
+sudo apt-get install -y python-pip  python3-pip  python-dev build-essential python-requests bluetooth libffi-dev libssl-dev
 sudo apt-get install python-pip libglib2.0-dev
 echo 70 > /tmp/dependancy_MiFlora_in_progress
 sudo pip install pyudev

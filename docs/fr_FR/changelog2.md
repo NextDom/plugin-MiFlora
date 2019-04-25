@@ -1,4 +1,8 @@
 # Changelog
+### Version 3.1.0 - 23 Avril 2019 Stable
+* Corrige un bug: le parcours des objets s'arrete si un objet ne reponds pas, 2eme partie
+* Debut du passage a python3: dependances et GetMifloraData
+
 ### Version 3.0.3 - 22 Avril 2019 Stable
 * Modification de la doc
 
