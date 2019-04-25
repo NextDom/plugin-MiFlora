@@ -752,6 +752,7 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'info', 'dev :' . $adapter);
 
             if ($devicetype == 'MiFlora') {
+                $cpcmd="GetMiFloraDataPy3.py";
                 if ($FirmwareVersion == "2.6.2") {
                     $commande = "gatttool --adapter=" . $adapter . " -b " . $macAdd . " --char-read -a 0x35 --sec-level=" . $seclvl;
                     # $commande="/usr/bin/python /tmp/getMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
@@ -759,13 +760,14 @@ class MiFlora extends eqLogic
                     $commande = "/usr/bin/python3 /tmp/GetMiFloraDataPy3.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
                 }
             } else{
+                $cpcmd="GetParrotFlowerData.py";
                 if ($devicetype=='ParrotFlower'){
                     $devicetypeNum=0;
                 } else{
                     $devicetypeNum=1;
                 }
                 log::add('MiFlora','debug','$devicetypeNum'.$devicetypeNum,'$devicetype'.$devicetype);
-                $commande = "/usr/bin/python /tmp/GetParrotFlowerData.py " . $macAdd . " data " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                $commande = "/usr/bin/python3 /tmp/GetParrotFlowerData.py " . $macAdd . " data " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
             }
 
             log::add('MiFlora', 'info', 'connexion SSH ...' . $commande);
@@ -776,7 +778,7 @@ class MiFlora extends eqLogic
                     log::add('MiFlora', 'error', 'Authentification SSH KO: '.$ip.' user:'.$user);
                 } else {
                     log::add('MiFlora', 'debug', 'Commande par SSH');
-                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetMiFloraDataPy3.py', '/tmp/GetMiFloraDataPy3.py', 0755);
+                    ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/'.$cpcmd, '/tmp/'.$cpcmd, 0755);
 
                     $gattresult = ssh2_exec($connection, $commande);
                     stream_set_blocking($gattresult, true);
@@ -797,7 +799,7 @@ class MiFlora extends eqLogic
                     $command = "gatttool --adapter=" . $adapter . " -b " . $macAdd . '  --char-read -a 0x35 --sec-level=' . $seclvl . ' 2>&1 ';
                     # $command="/usr/bin/python ".dirname(__FILE__) . "/../../resources/GetMiFloraData.py ".$macAdd." ".$FirmwareVersion." 0 ".$adapter." ".$seclvl;
                 } else {
-                    $command = "/usr/bin/python " . dirname(__FILE__) . "/../../resources/GetMiFloraData.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
+                    $command = "/usr/bin/python3 " . dirname(__FILE__) . "/../../resources/GetMiFloraData.py " . $macAdd . " " . $FirmwareVersion . " 0 " . $adapter . " " . $seclvl;
                 }
             } else {
                 if ($devicetype=='ParrotFlower'){
@@ -805,7 +807,7 @@ class MiFlora extends eqLogic
                 } else{
                     $devicetypeNum=1;
                 }
-                $command = "/usr/bin/python " . dirname(__FILE__) . "/../../resources/GetParrotFlowerData.py " . $macAdd . " data " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                $command = "/usr/bin/python3 " . dirname(__FILE__) . "/../../resources/GetParrotFlowerData.py " . $macAdd . " data " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
             }
             log::add('MiFlora', 'debug', 'command: ' . $command);
             $MiFloraData = exec($command);
@@ -885,7 +887,7 @@ class MiFlora extends eqLogic
                         } else{
                             $devicetypeNum=1;
                         }
-                        $commande = "/usr/bin/python /tmp/GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                        $commande = "/usr/bin/python3 /tmp/GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
                         log::add('MiFlora', 'debug','$commande' . $commande);
                         ssh2_scp_send($connection, realpath(dirname(__FILE__)) . '/../../resources/GetParrotFlowerData.py', '/tmp/GetParrotFlowerData.py', 0755);
                         $gattresult = ssh2_exec($connection, $commande);
@@ -948,7 +950,7 @@ class MiFlora extends eqLogic
                     $MiFloraName = '';
                 }
             } else {
-                $command = "/usr/bin/python /tmp/GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                $command = "/usr/bin/python3 /tmp/GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
                 $MiFloraBatteryAndFirmwareVersion = exec($command);
                 $data = explode("Name:  ", $MiFloraBatteryAndFirmwareVersion);
                 log::add('MiFlora','debug','process '.$macAdd. ' -- data: '. serialize($data));
@@ -1216,7 +1218,7 @@ class MiFlora extends eqLogic
         $adapter = config::byKey('adapter', 'MiFlora');
         log::add('MiFlora', 'debug', 'rssi adapter : ' . $adapter);
         if (adapter != 'none') {
-            $command = "sudo /usr/bin/python ". dirname(__FILE__) . "/../../resources/MiFlora_rssi_scanner.py --device=" . $adapter . " --antenne=local --id=0 --timeout=" .$timeout;
+            $command = "sudo /usr/bin/python3 ". dirname(__FILE__) . "/../../resources/MiFlora_rssi_scanner.py --device=" . $adapter . " --antenne=local --id=0 --timeout=" .$timeout;
             log::add('MiFlora', 'debug', 'local command: ' . $command);
             $rssiData = exec($command);
             log::add('MiFlora', 'debug', 'commande result:' . $rssiData);
@@ -1266,7 +1268,7 @@ class MiFlora extends eqLogic
             }
             log::add('MiFlora','info','on traite antenne ' . $antenne ." scan mode a 1");
 
-            $commande = "sudo /usr/bin/python /tmp/MiFlora_rssi_scanner.py --device=" . $adapter  . " --antenne=" . $antenne ." --id=" . $id . " --timeout=" . $timeout ;
+            $commande = "sudo /usr/bin/python3 /tmp/MiFlora_rssi_scanner.py --device=" . $adapter  . " --antenne=" . $antenne ." --id=" . $id . " --timeout=" . $timeout ;
 
             log::add('MiFlora','debug', 'Commande get rssi : ' .$commande) ;
 
