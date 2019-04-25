@@ -29,8 +29,8 @@ parser.add_argument("--antenne", help="Nom de l antenne", type=str)
 parser.add_argument("--timeout", help="delai de scan", type=str)
 args = parser.parse_args()
 
-# print "device : " + args.device
-# print "antenne : "  + args.antenne
+# print ("device : " + args.device)
+# print ("antenne : "  + args.antenne)
 
 
 # recupere le numero du controleur
@@ -43,25 +43,25 @@ elif args.device == "hci2":
 elif args.device == "hci3":
     index = 3
 else:
-    print "device error (hci0 a hci3) \n"
+    print ("device error (hci0 a hci3)")
 
 scanner = Scanner(index).withDelegate(ScanDelegate())
 
 try:
     devices = scanner.scan(int(args.timeout))
 except: # pylint: disable-msg=W0702
-    print "Erreur dans le scan le controleur est probablement occupe essayer un autre "
+    print ("Erreur dans le scan le controleur est probablement occupe essayer un autre ")
 else:
     file_dat = "/tmp/MiFlora_rssi_" + args.antenne + ".dat"
-    # print "file_dat : " + file_dat
+    # print ("file_dat : " + file_dat)
     file_out = open(file_dat, "w")
 
     for dev in devices:
-        #    print "%s,%s,(%s),%d;" % (args.antenne,dev.addr, dev.addrType, dev.rssi)
+        #    print ("%s,%s,(%s),%d;" % (args.antenne,dev.addr, dev.addrType, dev.rssi))
         for (adtype, desc, value) in dev.getScanData():
             if desc == "Complete Local Name":
-                print "%s;%s;%s;%s;%d;%s," % (args.id, args.antenne, dev.addr, dev.addrType, \
-                                              dev.rssi, value)
+                print ("%s;%s;%s;%s;%d;%s," % (args.id, args.antenne, dev.addr, dev.addrType, \
+                                              dev.rssi, value))
                 file_out.write("%s;%s;%s;%s;%d;%s\n" % (args.id, args.antenne, dev.addr, \
                                                         dev.addrType, dev.rssi, value))
 

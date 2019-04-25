@@ -15,7 +15,8 @@ echo 80 > /tmp/dependancy_MiFlora_in_progress
 sudo pip install cryptography
 echo 90 > /tmp/dependancy_MiFlora_in_progress
 sudo pip install pycrypto
-# sudo pip install bluepy
+sudo pip install bluepy
+sudo python3 -m pip install bluepy
 echo 95 > /tmp/dependancy_MiFlora_in_progress
 sudo connmanctl enable bluetooth >/dev/null 2>&1
 sudo hciconfig hci0 up >/dev/null 2>&1
