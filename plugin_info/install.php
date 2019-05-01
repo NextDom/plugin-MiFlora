@@ -27,7 +27,7 @@ function MiFlora_install() {
 
 function MiFlora_update() {
     log::add('MiFlora', 'info', 'config - update started');
-    message::add('MiFlora', 'Cette mise à jour nécessite de relancer les dépendances (local + antennes) même si elles apparaissent vertes');
+    message::add('MiFlora', 'La mise à jour de 3.0.x en 3.1.0 nécessite de relancer les dépendances (local + antennes) même si elles apparaissent vertes, ce n est pas necessaire si la version etait deja >= 3.1.0');
 
     $sql = file_get_contents(dirname(__FILE__) . '/install.sql');
     log::add('MiFlora', 'info', 'sql - '.$sql);
