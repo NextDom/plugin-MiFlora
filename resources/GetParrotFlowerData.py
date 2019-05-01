@@ -122,7 +122,7 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3, 
     return returnValue
 
 
-def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retries=3, timeout=8)):
+def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retries=3, timeout=8):
     """
     Read from a BLE address and return a float
 
