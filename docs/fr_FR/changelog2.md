@@ -1,4 +1,7 @@
 # Changelog
+### Version 3.1.1 - 1 Mai 2019 Stable
+*  Corrige un bug: Gestion du timeout pour les Parrots (3eme partie), ex la pile est usée, le parrot ne reponds pas, le cron15 se bloque
+
 ### Version 3.1.0 - 25 Avril 2019 Stable
 * Corrige un bug: le parcours des objets s'arrete si un objet ne reponds pas, 2eme partie
 * Passage a python3: **attention il faut lancer les dependances localement et sur toutes les antennes**

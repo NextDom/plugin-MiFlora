@@ -33,7 +33,7 @@ def convert_hex_to_float(hex_string):
 
 # pylint: disable=too-many-arguments
 def write_ble(mac, handle, value, write_adpater="hci0",
-              write_security="high", retries=3):
+              write_security="high", retries=3, timeout=8):
     """
     Read from a BLE address
 
@@ -46,18 +46,25 @@ def write_ble(mac, handle, value, write_adpater="hci0",
     attempt = 0
     delay = 10
     while attempt <= retries:
+        returnValue = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-write-req -a {} -n {} \
             --sec-level={} ".format(write_adpater, mac, handle, value, write_security)
             # print cmd
             # cmd = "gatttool --device={} --char-read -a {} 2>/dev/null".format(mac, handle)
             with lock:
-                result = subprocess.check_output(cmd, shell=True)
+                result = subprocess.check_output(cmd, shell=True, timeout=timeout)
             result = result.decode("utf-8").strip(' \n\t')
             # print("Got ",result," from gatttool")
+            return returnValue
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
+            returnValue=-1
+
+        except subprocess.TimeoutExpired:
+            print("Error - Timeout while waiting for gatttool output")
+            returnValue=-1
 
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
@@ -65,10 +72,10 @@ def write_ble(mac, handle, value, write_adpater="hci0",
             time.sleep(delay)
             delay *= 2
 
-    return None
+    return returnValue
 
 
-def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3):
+def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3, timeout=8):
     """
     Read from a BLE address
 
@@ -81,13 +88,14 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3):
     attempt = 0
     delay = 10
     while attempt <= retries:
+        returnValue = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-read -a {} \
             --sec-level={} 2>/dev/null".format(read_adpater, mac, handle, read_security)
             # print cmd
             with lock:
                 result = subprocess.check_output(cmd,
-                                                 shell=True)
+                                                 shell=True, timeout=timeout)
 
             result = result.decode("utf-8").strip(' \n\t')
             # print("Got ",result, " from gatttool")
@@ -99,9 +107,11 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3):
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
+            returnValue=-1
 
-        # except subprocess.TimeoutExpired:
-        #    print("Timeout while waiting for gatttool output")
+        except subprocess.TimeoutExpired:
+            print("Error - Timeout while waiting for gatttool output")
+            returnValue=-1
 
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
@@ -109,10 +119,10 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3):
             time.sleep(delay)
             delay *= 2
 
-    return None
+    return returnValue
 
 
-def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retries=3):
+def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retries=3, timeout=8)):
     """
     Read from a BLE address and return a float
 
@@ -125,13 +135,14 @@ def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retri
     attempt = 0
     delay = 10
     while attempt <= retries:
+        returnValue = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-read -a {} \
             --sec-level={} 2>/dev/null".format(read_adpater, mac, handle, read_security)
             # print cmd
             with lock:
                 result = subprocess.check_output(cmd,
-                                                 shell=True)
+                                                 shell=True, timeout=timeout)
 
             result = result.decode("utf-8").strip(' \n\t')
             # print("Got ",result, " from gatttool")
@@ -145,9 +156,11 @@ def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retri
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
+            returnValue=-1
 
-        # except subprocess.TimeoutExpired:
-        #    print("Timeout while waiting for gatttool output")
+        except subprocess.TimeoutExpired:
+            print("Error - Timeout while waiting for gatttool output")
+            returnValue=-1
 
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
@@ -155,7 +168,7 @@ def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retri
             time.sleep(delay)
             delay *= 2
 
-    return None
+    return returnValue
 
 
 def convert_temperature(raw_value):
