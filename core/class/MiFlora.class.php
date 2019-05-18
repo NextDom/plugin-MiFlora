@@ -245,7 +245,7 @@ class MiFlora extends eqLogic
 
             $parrotname = substr($MiFloraName, 0, 10);
             log::add('MiFlora','debug','$parrotname 2 '.$parrotname);
-            if ($parrotname == 'Flower Pot') {
+            if ($parrotname == 'Parrot pot') {
                 $mi_flora->setConfiguration('devicetype', 'ParrotPot');
                 $mi_flora->save();
             } else{

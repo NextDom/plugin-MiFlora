@@ -1,4 +1,7 @@
 # Changelog
+### Version 3.1.2 - 18 Mai 2019 Stable
+*  Corrige un bug: Detection du Parrot pot
+
 ### Version 3.1.1 - 1 Mai 2019 Stable
 *  Corrige un bug: Gestion du timeout pour les Parrots (3eme partie), ex la pile est usée, le parrot ne reponds pas, le cron15 se bloque
 
