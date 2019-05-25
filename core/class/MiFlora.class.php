@@ -950,7 +950,8 @@ class MiFlora extends eqLogic
                     $MiFloraName = '';
                 }
             } else {
-                $command = "/usr/bin/python3 /tmp/GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                $command = "/usr/bin/python3 ". dirname(__FILE__) ."/../../GetParrotFlowerData.py " . $macAdd . " static " . $devicetypeNum . " 0 " . $seclvl . " " . $adapter;
+                log::add('MiFlora','debug','GetParrotFlowerData.py static'.$command);
                 $MiFloraBatteryAndFirmwareVersion = exec($command);
                 $data = explode("Name:  ", $MiFloraBatteryAndFirmwareVersion);
                 log::add('MiFlora','debug','process '.$macAdd. ' -- data: '. serialize($data));
