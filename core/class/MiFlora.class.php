@@ -1185,11 +1185,12 @@ class MiFlora extends eqLogic
         $return = array();
         $return['log'] = 'MiFlora_update';
         $return['progress_file'] = '/tmp/dependancy_MiFlora_in_progress';
-        $return['state'] = 'nok';
+        $return['state'] = 'ok';
         $sql = "SHOW TABLES LIKE 'MiFlora_remote'";
         DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
         foreach (MiFlora::byType('MiFlora') as $miflora) {
             $return['state'] = 'ok';
+            // check that one item is defined, not liked to dependancies, should be rewritten to take care of dep errors: $return['state'] = 'nok';
         }
         return $return;
     }
