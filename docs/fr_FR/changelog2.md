@@ -1,4 +1,7 @@
 # Changelog
+### Version 3.1.3 - 25 Mai 2019 Stable
+*  Corrige un bug: Interdit les espaces dans les noms d'antennes
+
 ### Version 3.1.2 - 18 Mai 2019 Stable
 *  Corrige un bug: Detection du Parrot pot
 
