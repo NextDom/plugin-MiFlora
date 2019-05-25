@@ -8,7 +8,7 @@ inspired by #  https://github.com/open-homeautomation/miflora
 
 usage:
 cd [path plugin ou copy de ce script]/jeedom_MiFlora/resources
-/usr/bin/python ./getMiFloraDataPy3.py C4:7C:8D:60:E8:21 2.7.0 0 hci0 high
+/usr/bin/python3 ./getMiFloraDataPy3.py C4:7C:8D:60:E8:21 2.7.0 0 hci0 high
 """
 # from struct import *
 # from datetime import datetime, timedelta

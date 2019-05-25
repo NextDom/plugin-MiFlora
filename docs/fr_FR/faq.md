@@ -94,7 +94,7 @@ bien un de ces deux objets, il faut faire une demande de support ou une PR sur G
 
 > Si le firmware est recent, il faut tester le script python de recuperation des données:
 
->`/usr/bin/python /var/www/html/plugins/MiFlora/resources/GetMiFloraData.py  <MacAdd> 2.6.6 0 hci0 low`
+>`/usr/bin/python3 /var/www/html/plugins/MiFlora/resources/GetMiFloraData.py  <MacAdd> 2.6.6 0 hci0 low`
 
 > Le script fait plusieurs essaies de connections, le résultat suivant est correct: une erreur ensuite OK:
 
@@ -107,12 +107,19 @@ bien un de ces deux objets, il faut faire une demande de support ou une PR sur G
 
 > Pour les parrots:
 
- `/usr/bin/python /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py  macAdd:[xx:xx:xx:xx:xx:xx], action:[all|data|static|watering] flower_power_or_pot:[0|1],debug:[0|1],security:[low|medium|high],adapter:hci[0-9]`
+>`/usr/bin/python3 /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py  macAdd:[xx:xx:xx:xx:xx:xx], action:[all|data|static|watering] flower_power_or_pot:[0|1],debug:[0|1],security:[low|medium|high],adapter:hci[0-9]`
  
- > Cas standard:
+ > Cas standard
 
- `/usr/bin/python /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py <MacAdd> data 0 0 low hci0`
+ > 1 - Flower power:
+
+> `/usr/bin/python3 /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py <MacAdd> data 0 0 low hci0`
+
+>  2 - Parrot pot:
+>  `/usr/bin/python3 /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py <MacAdd> data 1 0 low hci0`
+
+>  Remplacer `data` par `static` pour voir les données statiques (nom, batterie)
 
 > Pour verifier le fonctionement du scanner:
 
- `sudo /usr/bin/python /var/www/html/plugins/MiFlora/resources/MiFlora_rssi_scanner.py --device=hci0 --antenne=local --id=0 --timeout=30`
+> `sudo /usr/bin/python3 /var/www/html/plugins/MiFlora/resources/MiFlora_rssi_scanner.py --device=hci0 --antenne=local --id=0 --timeout=30`
