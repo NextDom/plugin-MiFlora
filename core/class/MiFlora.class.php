@@ -1185,7 +1185,7 @@ class MiFlora extends eqLogic
         $return = array();
         $return['log'] = 'MiFlora_update';
         $return['progress_file'] = '/tmp/dependancy_MiFlora_in_progress';
-        $return['state'] = 'nok';
+        $return['state'] = 'ok';
         $sql = "SHOW TABLES LIKE 'MiFlora_remote'";
         DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
         foreach (MiFlora::byType('MiFlora') as $miflora) {
