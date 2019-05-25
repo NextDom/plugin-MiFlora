@@ -1373,6 +1373,7 @@ class MiFlora_remote {
 
     /*     * *********************Methode d'instance************************* */
     public function preSave() {
+                $this->setRemoteName(trim($this->getRemoteName()));
                 if (trim($this->getRemoteName()) == '') {
                         throw new Exception(__('Le nom de l antenne ne peut être vide'));
         }
@@ -1381,6 +1382,7 @@ class MiFlora_remote {
 
     public function preInsert() {
             log::add('MiFlora','info','preInsert');
+            $this->setRemoteName(trim($this->getRemoteName()));
        }
     public function postInsert() {
             log::add('MiFlora','info','postInsert');
