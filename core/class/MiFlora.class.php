@@ -233,23 +233,23 @@ class MiFlora extends eqLogic
         $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraName, $adapter, $seclvl, $antenne, $devicetype,$mi_flora);
 
         $parrotname = substr($MiFloraName,0,12);
-        log::add('MiFlora','debug','$parrotname '.$parrotname);
+        log::add('MiFlora','debug','$parrotname: '.$parrotname);
         if ($parrotname == 'Flower power'){
             $mi_flora->setConfiguration('devicetype','ParrotFlower');
             $mi_flora->save();
-            log::add('MiFlora','debug','setConfiguration ParrotFlower'.$parrotname);
+            log::add('MiFlora','debug','setConfiguration ParrotFlower: '.$parrotname);
         } else {
             // Try parrot pot
             $devicetype = 'ParrotPot';
             $mi_flora->getMiFloraStaticData($macAdd, $MiFloraBatteryAndFirmwareVersion, $MiFloraName, $adapter, $seclvl, $antenne, $devicetype,$mi_flora);
 
             $parrotname = substr($MiFloraName, 0, 10);
-            log::add('MiFlora','debug','$parrotname 2 '.$parrotname);
+            log::add('MiFlora','debug','$parrotname 2: '.$parrotname);
             if ($parrotname == 'Parrot pot') {
                 $mi_flora->setConfiguration('devicetype', 'ParrotPot');
                 $mi_flora->save();
             } else{
-                log:add('MiFlora','error','Parrot objet non identifie'. $macAdd);
+                log:add('MiFlora','error','Parrot objet non identifie: '. $macAdd);
             }
         }
     }
