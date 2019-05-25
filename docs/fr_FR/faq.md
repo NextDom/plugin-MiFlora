@@ -116,6 +116,7 @@ bien un de ces deux objets, il faut faire une demande de support ou une PR sur G
 > `/usr/bin/python3 /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py <MacAdd> data 0 0 low hci0`
 
 >  2 - Parrot pot:
+
 >  `/usr/bin/python3 /var/www/html/plugins/MiFlora/resources/GetParrotFlowerData.py <MacAdd> data 1 0 low hci0`
 
 >  Remplacer `data` par `static` pour voir les données statiques (nom, batterie)
