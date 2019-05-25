@@ -1498,7 +1498,7 @@ class MiFlora_remote {
     }
 
     public function setRemoteName($name) {
-        $this->remoteName = $name;
+        $this->remoteName = trim($name);
         return $this;
     }
 
