@@ -66,7 +66,7 @@ class MiFlora extends eqLogic
         $frequenceItemMin = 1000;
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
-			if ($status = $mi_flora->getStatus('OK') == 0 ){
+			if ($status = $mi_flora->getStatus('OK') != 1 ){
 			// force check si erreur de collete  precedente
 				return 1 ;
 			}
@@ -194,9 +194,15 @@ class MiFlora extends eqLogic
 
                 if ($mi_flora->getStatus('OK') == 1){
 					log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' . round($frequenceItem * 60) . ' minutes, go');
-  				} else {
-					log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la précedente collecte  go');
-				}
+  				} elseif ($mi_flora->getStatus('OK') == 0) {
+                    //if miflora KO skip one to let time focus on ok, switch back to 0 next call
+                    $mi_flora->setStatus('OK', -1);
+                    log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la précedente collecte skip');
+                    return;
+				}  elseif ($mi_flora->getStatus('OK') == -1) {
+                    $mi_flora->setStatus('OK', 0);
+					log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la collecte n-2 go');
+                }
 
                 //$mi_flora->refreshWidget();
 
