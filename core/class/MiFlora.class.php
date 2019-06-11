@@ -198,7 +198,7 @@ class MiFlora extends eqLogic
                     //if miflora KO skip one to let time focus on ok, switch back to 0 next call
                     $mi_flora->setStatus('OK', -1);
                     log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la précedente collecte skip');
-                    return;
+                    continue;
 				}  elseif ($mi_flora->getStatus('OK') == -1) {
                     $mi_flora->setStatus('OK', 0);
 					log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la collecte n-2 go');
