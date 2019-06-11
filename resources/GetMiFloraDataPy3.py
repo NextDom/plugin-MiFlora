@@ -88,7 +88,7 @@ read_flora_debug=0, retries=3, timeout=8):
 
     global lock # pylint: disable=global-statement
     attempt = 0
-    delay = 10
+    delay = 2
     # print ("read_ble")
     while attempt <= retries:
         returnValue = None
