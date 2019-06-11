@@ -183,7 +183,9 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'info', 'enter item per item:' . $mi_flora->getHumanName(false, false));
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
 			log::add('MiFlora','info', 'analyse de ' . $mi_flora->getHumanName(false, false) . 'frequence ' . $frequence .' status ' .$mi_flora->getStatus('OK'));
-            if ((MiFlora::isProcessMiFlora($frequenceItem, $minutesStartCron) == 0) && ( $mi_flora->getStatus('OK') == 1) ) {
+        
+            // If nok or OK but last com > $frequenceItem then force process
+            if ((MiFlora::isProcessMiFlora($frequenceItem, $minutesStartCron) == 0) && ( $mi_flora->getStatus('OK') == 1) && time()-strtotime($mi_flora->getStatus('lastCommunication')) < round($frequenceItem * 3600) ) {
                 log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' .  round($frequenceItem * 60) . " minutes, next");
             } else {
                 if (((date("h") == 12 && intval($minutesStartCron) < 5)) || $FirmwareVersion == '') {
