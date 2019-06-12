@@ -6,7 +6,8 @@ is part of bluez on Linux.
 No other operating systems are supported at the moment
 
 usage:
-/usr/bin/python ./getParrotFlowerData.py C4:7C:8D:60:E8:21 2.6.6 0 hci0 high
+/usr/bin/python3 ./getParrotFlowerData.py A0:14:3D:7D:77:26,data,0
+
 """
 
 from threading import Lock
@@ -496,27 +497,27 @@ if flower_power_or_pot == "1":
         result_flora = read_ble(mac_add, handlerd, adpater, security)
         if flora_debug == "1":
             print ("Water Tank Level Brut: ", result_flora)
-        batterie = convert_battery(result_flora)
+        waterTankLevel = convert_battery(result_flora)
         if flora_debug == "1":
-            print (" -->Water Tank Level: ", batterie)
+            print (" -->Water Tank Level: ", waterTankLevel)
 
         # Watering Mode
         handlerd = "0x0090"
         result_flora = read_ble(mac_add, handlerd, adpater, security)
         if flora_debug == "1":
             print ("Watering Mode: ", result_flora)
-        batterie = convert_battery(result_flora)
+        wateringMode = convert_battery(result_flora)
         if flora_debug == "1":
-            print (" -->Watering Mode: ", batterie)
+            print (" -->Watering Mode: ", wateringMode)
 
         # Watering Status
         handlerd = "0x009a"
         result_flora = read_ble(mac_add, handlerd, adpater, security)
         if flora_debug == "1":
             print ("Watering Status: ", result_flora)
-        batterie = convert_battery(result_flora)
+        wateringStatus = convert_battery(result_flora)
         if flora_debug == "1":
-            print (" -->Watering Status: ", batterie)
+            print (" -->Watering Status: ", wateringStatus)
 
         if flora_debug == "1":
             print ("=============")
@@ -610,23 +611,36 @@ if flora_debug == "1":
 
 if flora_debug == "0":
     if flora_action == "data":
-        print ("{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
-            soil_ec, ",\"Lux\":", lux, ",\"Air_Temperature\":", \
-            temperature_air_calibre, ",\"Soil_Temperature\":", temperature_terre, "}")
+        if flower_power_or_pot == "0":
+            print ("{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
+                soil_ec, ",\"Lux\":", lux, ",\"Air_Temperature\":", \
+                temperature_air_calibre, ",\"Soil_Temperature\":", temperature_terre, "}")
+
+        if flower_power_or_pot == "1":
+            print ("{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
+                soil_ec, ",\"Lux\":", lux, ",\"Air_Temperature\":", \
+                temperature_air_calibre, ",\"Soil_Temperature\":", temperature_terre, \
+                ",\"Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
+                ",\"Watering_Status\":",wateringStatus,"}")
 
     if flora_action == "static":
         print ("Name: ", device_name, ",Batterie: ", batterie)
+
     if flower_power_or_pot == "0":
         if flora_action == "all":
             print ("Name: ", device_name, ",Batterie: ", batterie, ",Soil_moisture:", \
                 soil_moisture_rj, ",Fertility:", soil_ec, ",Lux:", lux, ",Air_Temperature:", \
                 temperature_air, ",Soil_Temperature:", temperature_terre)
+                
     if flower_power_or_pot == "1":
         if flora_action == "all":
             print ("Name: ", device_name, ",Batterie: ", batterie, ",Soil_moisture:", \
                 soil_moisture_rj, ",Fertility:", soil_ec, ",Lux:", lux, ",Air_Temperature:", \
-                temperature_air, ",Soil_Temperature:", temperature_terre)
-            # TODO print watering values at the end # pylint: disable=fixme
+                temperature_air, ",Soil_Temperature:", temperature_terre, \
+                ",\"Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
+                ",\"Watering_Status\":",wateringStatus,"}")
+
         if flora_action == "watering":
-            print ("watering TBD")
-            # TODO print watering values # pylint: disable=fixme
+            print ("Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
+                ",\"Watering_Status\":",wateringStatus,"}")
+            
