@@ -214,7 +214,7 @@ def convert_soil_ec(raw_value):
     except (TypeError, AttributeError):
         raw_value_int = 0
 
-    soil_ec_l = (raw_value_int * 3.3) / (pow(2, 11) - 1)
+    soil_ec_l = (raw_value_int * 3.3) / (pow(2, 11) - 1) * 1000
 
     # Est ce que cette conversion est bonne ??
     # TODO: convert raw(0 - 1771) to 0 to 10(mS / cm) # pylint: disable=fixme
