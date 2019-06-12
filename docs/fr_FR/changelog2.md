@@ -1,4 +1,7 @@
 # Changelog
+### Version 3.1.5 - 12 Juin 2019 Stable
+*  Correction bug Parrot fertility
+
 ### Version 3.1.4 - 12 Juin 2019 Stable
 *  Optimise la recuperation des données quand plusieurs objets ne repondent pas
 
