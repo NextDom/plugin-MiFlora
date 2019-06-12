@@ -1,4 +1,7 @@
 # Changelog
+### Version 3.1.4 - 12 Juin 2019 Stable
+*  Optimise la recuperation des données quand plusieurs objets ne repondent pas
+
 ### Version 3.1.3 - 25 Mai 2019 Stable
 *  Corrige deux bugs: 
     - Interdit les espaces dans les noms d'antennes
