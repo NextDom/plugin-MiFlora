@@ -66,7 +66,7 @@ class MiFlora extends eqLogic
         $frequenceItemMin = 1000;
         foreach (eqLogic::byType('MiFlora', true) as $mi_flora) {
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
-			if ($status = $mi_flora->getStatus('OK') == 0 ){
+			if ($status = $mi_flora->getStatus('OK') != 1 ){
 			// force check si erreur de collete  precedente
 				return 1 ;
 			}
@@ -183,7 +183,9 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'info', 'enter item per item:' . $mi_flora->getHumanName(false, false));
             $frequenceItem = MiFlora::getFrequenceItem($mi_flora);
 			log::add('MiFlora','info', 'analyse de ' . $mi_flora->getHumanName(false, false) . 'frequence ' . $frequence .' status ' .$mi_flora->getStatus('OK'));
-            if ((MiFlora::isProcessMiFlora($frequenceItem, $minutesStartCron) == 0) && ( $mi_flora->getStatus('OK') == 1) ) {
+        
+            // If nok or OK but last com > $frequenceItem then force process
+            if ((MiFlora::isProcessMiFlora($frequenceItem, $minutesStartCron) == 0) && ( $mi_flora->getStatus('OK') == 1) && time()-strtotime($mi_flora->getStatus('lastCommunication')) < round($frequenceItem * 3600) ) {
                 log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' .  round($frequenceItem * 60) . " minutes, next");
             } else {
                 if (((date("h") == 12 && intval($minutesStartCron) < 5)) || $FirmwareVersion == '') {
@@ -194,9 +196,15 @@ class MiFlora extends eqLogic
 
                 if ($mi_flora->getStatus('OK') == 1){
 					log::add('MiFlora', 'info', $mi_flora->getHumanName(false, false) . ' frequence toutes les ' . round($frequenceItem * 60) . ' minutes, go');
-  				} else {
-					log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la précedente collecte  go');
-				}
+  				} elseif ($mi_flora->getStatus('OK') == 0) {
+                    //if miflora KO skip one to let time focus on ok, switch back to 0 next call
+                    $mi_flora->setStatus('OK', -1);
+                    log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la précedente collecte skip');
+                    continue;
+				}  elseif ($mi_flora->getStatus('OK') == -1) {
+                    $mi_flora->setStatus('OK', 0);
+					log::add('MiFlora', 'warning', $mi_flora->getHumanName(false, false) . ' en erreur lors de la collecte n-2 go');
+                }
 
                 //$mi_flora->refreshWidget();
 

@@ -46,7 +46,7 @@ write_security="high", retries=3, timeout=8):
 
     global lock # pylint: disable=global-statement
     attempt = 0
-    delay = 10
+    delay = 2
     # print ("write_ble")
     while attempt <= retries:
         returnValue = None
@@ -88,7 +88,7 @@ read_flora_debug=0, retries=3, timeout=8):
 
     global lock # pylint: disable=global-statement
     attempt = 0
-    delay = 10
+    delay = 2
     # print ("read_ble")
     while attempt <= retries:
         returnValue = None
@@ -141,7 +141,7 @@ security = sys.argv[5]
 print ("start ")
 resWrite=0
 if firmware != "2.6.2":
-    resWrite=write_ble(mac_add, handlewr, "A01F", adpater, security, 3)
+    resWrite=write_ble(mac_add, handlewr, "A01F", adpater, security, 2)
 if resWrite != -1 :  
     result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
     if flora_debug == "1":
