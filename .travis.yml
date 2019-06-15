@@ -24,7 +24,7 @@ matrix:
             - libssl-dev
             - libglib2.0-dev
       install:
-        - pip install pylint
+        - pip install pylint bluepy
       script:
         - cd ${TRAVIS_BUILD_DIR}
         - ./tests/tools/lintAllPythonFiles.sh
