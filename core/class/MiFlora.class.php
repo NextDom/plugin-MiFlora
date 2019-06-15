@@ -1163,6 +1163,7 @@ class MiFlora extends eqLogic
         } else {
             if ($temperature > 100 || $temperature < -50) {
                 log::add('MiFlora', 'error', 'Temperature hors plage (' . $temperature . ') pour ' . $macAdd . ', erreur de connection Bluetooth');
+                $cmd = $this->getCmd(null, 'OK');
                 if (is_object($cmd)) {
                     $cmd->event(0);
                     log::add('MiFlora', 'info', 'module en erreur');
