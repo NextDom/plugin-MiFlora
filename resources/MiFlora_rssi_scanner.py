@@ -5,6 +5,7 @@ Scan RSSI MiFlora or Parrot
 @param: xxx
 @param: xxx
 """
+# pylint: disable=C0103
 import argparse
 import sys
 from bluepy.btle import Scanner, DefaultDelegate
@@ -43,14 +44,14 @@ elif args.device == "hci2":
 elif args.device == "hci3":
     index = 3
 else:
-    print ("device error (hci0 a hci3)")
+    print("device error (hci0 a hci3)")
 
 scanner = Scanner(index).withDelegate(ScanDelegate())
 
 try:
     devices = scanner.scan(int(args.timeout))
 except: # pylint: disable-msg=W0702
-    print ("Erreur dans le scan le controleur est probablement occupe essayer un autre ")
+    print("Erreur dans le scan le controleur est probablement occupe essayer un autre ")
 else:
     file_dat = "/tmp/MiFlora_rssi_" + args.antenne + ".dat"
     # print ("file_dat : " + file_dat)
@@ -60,7 +61,7 @@ else:
         #    print ("%s,%s,(%s),%d;" % (args.antenne,dev.addr, dev.addrType, dev.rssi))
         for (adtype, desc, value) in dev.getScanData():
             if desc == "Complete Local Name":
-                print ("%s;%s;%s;%s;%d;%s," % (args.id, args.antenne, dev.addr, dev.addrType, \
+                print("%s;%s;%s;%s;%d;%s," % (args.id, args.antenne, dev.addr, dev.addrType, \
                                               dev.rssi, value))
                 file_out.write("%s;%s;%s;%s;%d;%s\n" % (args.id, args.antenne, dev.addr, \
                                                         dev.addrType, dev.rssi, value))
