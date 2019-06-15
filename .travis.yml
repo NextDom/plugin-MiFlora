@@ -14,7 +14,6 @@ matrix:
         - cd ${TRAVIS_BUILD_DIR}
         - ls -latr
     - language: python
-      python: 3.4
       addons:
         apt:
           - python-requests
@@ -22,6 +21,7 @@ matrix:
           - libffi-dev
           - libssl-dev
           - libglib2.0-dev
+      python: 3.4
       install:
         - pip install pylint
         script:
