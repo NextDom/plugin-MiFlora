@@ -710,6 +710,48 @@ class MiFlora extends eqLogic
             $MiFloraCmd->setIsHistorized(1);
             $MiFloraCmd->save();
         }
+        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'waterTankLevel');
+        if (!is_object($cmdlogic)) {
+            $MiFloraCmd = new MiFloraCmd();
+            $MiFloraCmd->setName(__('WaterTankLevel', __FILE__));
+            $MiFloraCmd->setEqLogic_id($this->id);
+            $MiFloraCmd->setLogicalId('waterTankLevel');
+            $MiFloraCmd->setConfiguration('data', 'waterTankLevel');
+            $MiFloraCmd->setEqType('miflora');
+            $MiFloraCmd->setType('info');
+            $MiFloraCmd->setSubType('numeric');
+            $MiFloraCmd->setUnite('%');
+            $MiFloraCmd->setIsHistorized(1);
+            $MiFloraCmd->save();
+        }
+        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'wateringMode');
+        if (!is_object($cmdlogic)) {
+            $MiFloraCmd = new MiFloraCmd();
+            $MiFloraCmd->setName(__('WateringMode', __FILE__));
+            $MiFloraCmd->setEqLogic_id($this->id);
+            $MiFloraCmd->setLogicalId('wateringMode');
+            $MiFloraCmd->setConfiguration('data', 'wateringMode');
+            $MiFloraCmd->setEqType('miflora');
+            $MiFloraCmd->setType('info');
+            $MiFloraCmd->setSubType('numeric');
+            $MiFloraCmd->setUnite('');
+            $MiFloraCmd->setIsHistorized(1);
+            $MiFloraCmd->save();
+        }
+        $cmdlogic = MiFloraCmd::byEqLogicIdAndLogicalId($this->getId(), 'wateringStatus');
+        if (!is_object($cmdlogic)) {
+            $MiFloraCmd = new MiFloraCmd();
+            $MiFloraCmd->setName(__('WateringStatus', __FILE__));
+            $MiFloraCmd->setEqLogic_id($this->id);
+            $MiFloraCmd->setLogicalId('wateringStatus');
+            $MiFloraCmd->setConfiguration('data', 'wateringStatus');
+            $MiFloraCmd->setEqType('miflora');
+            $MiFloraCmd->setType('info');
+            $MiFloraCmd->setSubType('numeric');
+            $MiFloraCmd->setUnite('');
+            $MiFloraCmd->setIsHistorized(1);
+            $MiFloraCmd->save();
+        }
     }
 
     /* public function preRemove()
