@@ -47,7 +47,7 @@ def write_ble(mac, handle, value, write_adpater="hci0",
     attempt = 0
     delay = 10
     while attempt <= retries:
-        returnValue = None
+        return_value = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-write-req -a {} -n {} \
             --sec-level={} ".format(write_adpater, mac, handle, value, write_security)
@@ -57,15 +57,15 @@ def write_ble(mac, handle, value, write_adpater="hci0",
                 result = subprocess.check_output(cmd, shell=True, timeout=timeout)
             result = result.decode("utf-8").strip(' \n\t')
             # print("Got ",result," from gatttool")
-            return returnValue
+            return return_value
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
-            returnValue=-1
+            return_value = -1
 
         except subprocess.TimeoutExpired:
             print("Error - Timeout while waiting for gatttool output")
-            returnValue=-1
+            return_value = -1
 
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
@@ -73,7 +73,7 @@ def write_ble(mac, handle, value, write_adpater="hci0",
             time.sleep(delay)
             delay *= 2
 
-    return returnValue
+    return return_value
 
 
 def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3, timeout=8):
@@ -89,7 +89,7 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3, 
     attempt = 0
     delay = 10
     while attempt <= retries:
-        returnValue = None
+        return_value = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-read -a {} \
             --sec-level={} 2>/dev/null".format(read_adpater, mac, handle, read_security)
@@ -108,11 +108,11 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3, 
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
-            returnValue=-1
+            return_value = -1
 
         except subprocess.TimeoutExpired:
             print("Error - Timeout while waiting for gatttool output")
-            returnValue=-1
+            return_value = -1
 
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
@@ -120,7 +120,7 @@ def read_ble(mac, handle, read_adpater="hci0", read_security="high", retries=3, 
             time.sleep(delay)
             delay *= 2
 
-    return returnValue
+    return return_value
 
 
 def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retries=3, timeout=8):
@@ -136,7 +136,7 @@ def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retri
     attempt = 0
     delay = 10
     while attempt <= retries:
-        returnValue = None
+        return_value = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-read -a {} \
             --sec-level={} 2>/dev/null".format(read_adpater, mac, handle, read_security)
@@ -157,11 +157,11 @@ def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retri
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
-            returnValue=-1
+            return_value = -1
 
         except subprocess.TimeoutExpired:
             print("Error - Timeout while waiting for gatttool output")
-            returnValue=-1
+            return_value = -1
 
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
@@ -169,7 +169,7 @@ def read_ble_float(mac, handle, read_adpater="hci0", read_security="high", retri
             time.sleep(delay)
             delay *= 2
 
-    return returnValue
+    return return_value
 
 
 def convert_temperature(raw_value):
@@ -312,7 +312,7 @@ if len(sys.argv) == 1:
           flower_power_or_pot:[0|1],debug:[0|1],security:[low|medium|high],adapter:hci[0-9]")
     exit(0)
 
-timeout = 20
+#timeout = 20
 adpater = "hci0"
 security = "high"
 flora_debug = 0
@@ -343,11 +343,11 @@ if flora_debug == "1":
           flower_power_or_pot, " debug:", flower_power_or_pot, " security:", security, \
           " adpater:", adpater)
 
-if flora_action == "all" or flora_action == "data":
+if flora_action in ('all', 'data'):
     if flora_debug == "1":
-        print ("=============")
-        print ("Donnees de base :")
-        print ("=============")
+        print("=============")
+        print("Donnees de base :")
+        print("=============")
 
     # Gestion de la temperature de la terre
     if flower_power_or_pot == "0":
@@ -357,11 +357,11 @@ if flora_action == "all" or flora_action == "data":
 
     result_flora = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Soil Temperature brute:", result_flora)
+        print("Soil Temperature brute:", result_flora)
     # avec convert_temperature 21.5, app: 22/23 live
     temperature_terre = convert_temperature(result_flora)
     if flora_debug == "1":
-        print (" -->Soil Temperature:", temperature_terre)
+        print(" -->Soil Temperature:", temperature_terre)
 
     # Gestion de la temperature de l'air
     if flower_power_or_pot == "0":
@@ -371,10 +371,10 @@ if flora_action == "all" or flora_action == "data":
 
     result_flora = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Air Temperature brute:", result_flora)
+        print("Air Temperature brute:", result_flora)
     temperature_air = convert_temperature(result_flora)
     if flora_debug == "1":
-        print (" -->Air Temperature:", temperature_air)
+        print(" -->Air Temperature:", temperature_air)
 
     antoine = 8.07131 - (1730.63 / (233.426 + temperature_terre))
     last_pressure = math.pow(10, antoine - 2)
@@ -390,20 +390,20 @@ if flora_action == "all" or flora_action == "data":
        # handlerd = "0x0043" #TODO - DEBUG TO REMOVE
     result_flora = read_ble_float(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Air Temperature brute calibre:", result_flora)
+        print("Air Temperature brute calibre:", result_flora)
     temperature_air_calibre = result_flora
     if flora_debug == "1":
-        print (" -->Air Temperature calibre:", temperature_air_calibre)
+        print(" -->Air Temperature calibre:", temperature_air_calibre)
 
     # Gestion des LUX
     handlerd = "0x0025"
     result_flora = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Lux brute:", result_flora)
+        print("Lux brute:", result_flora)
     # 0.1 app: 0 moyenne 976 (semble bien etre la version live)
     lux = convert_lux(result_flora)
     if flora_debug == "1":
-        print (" -->Lux:", lux)
+        print(" -->Lux:", lux)
 
     # Gestion de Soil ElectricalConductivity
     if flower_power_or_pot == "0":
@@ -413,12 +413,12 @@ if flora_action == "all" or flora_action == "data":
 
     soil_ec_brut = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Soil EC brut:", soil_ec_brut)
+        print("Soil EC brut:", soil_ec_brut)
     soil_ec = convert_soil_ec(soil_ec_brut)
     soil_moisture_rj = convert_soil_rj(soil_ec_brut)
     if flora_debug == "1":
-        print (" -->Soil EC:", soil_ec, " (comment utiliser ?)")
-        print (" -->relativeHumidity RJ:", soil_moisture_rj)
+        print(" -->Soil EC:", soil_ec, " (comment utiliser ?)")
+        print(" -->relativeHumidity RJ:", soil_moisture_rj)
 
     # Gestion de Soil Moisture
     if flower_power_or_pot == "0":
@@ -428,10 +428,10 @@ if flora_action == "all" or flora_action == "data":
 
     soil_moisture_brut = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Soil Moisture brut: ", soil_moisture_brut)
+        print("Soil Moisture brut: ", soil_moisture_brut)
     soil_moisture = convert_soil_moisture(soil_moisture_brut)
     if flora_debug == "1":
-        print (" -->relativeHumidity-Soil Moisture brut:", soil_moisture)
+        print(" -->relativeHumidity-Soil Moisture brut:", soil_moisture)
 
     # Gestion de Soil Moisture calibre (VWC)
     if flower_power_or_pot == "0":
@@ -441,10 +441,10 @@ if flora_action == "all" or flora_action == "data":
 
     soil_moisture_brut_calibre = read_ble_float(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Soil Moisture brut calibre: ", soil_moisture_brut_calibre)
+        print("Soil Moisture brut calibre: ", soil_moisture_brut_calibre)
     soil_moisture_calibre = soil_moisture_brut_calibre
     if flora_debug == "1":
-        print (" -->relativeHumidity-Soil Moisture brut calibre:", soil_moisture_calibre)
+        print(" -->relativeHumidity-Soil Moisture brut calibre:", soil_moisture_calibre)
 
     # Gestion de DLI calibre
     if flower_power_or_pot == "0":
@@ -454,9 +454,9 @@ if flora_action == "all" or flora_action == "data":
 
     dli_calibre = read_ble_float(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("DLI calibre: ", dli_calibre)
+        print("DLI calibre: ", dli_calibre)
 
-if flora_action == "all" or flora_action == "static":
+if flora_action in ('all', 'static'):
     # Gestion de la batterie
     if flower_power_or_pot == "0":
         handlerd = "0x004c"
@@ -465,11 +465,11 @@ if flora_action == "all" or flora_action == "static":
 
     result_flora = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Batterie brut: ", result_flora)
+        print("Batterie brut: ", result_flora)
     # 30 , app: courbe semble etre vers 35-37
     batterie = convert_battery(result_flora)
     if flora_debug == "1":
-        print (" -->Batterie %: ", batterie)
+        print(" -->Batterie %: ", batterie)
 
     # Gestion du nom
     if flower_power_or_pot == "0":
@@ -479,50 +479,50 @@ if flora_action == "all" or flora_action == "static":
 
     result_flora = read_ble(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
-        print ("Name brut: ", result_flora)
+        print("Name brut: ", result_flora)
     device_name = convert_name(result_flora)
     if flora_debug == "1":
-        print (" -->Name: ", device_name)
+        print(" -->Name: ", device_name)
 
 if flower_power_or_pot == "1":
-    if flora_action == "all" or flora_action == "watering" or flora_action == "data":
+    if flora_action in ('all', 'watering', 'data'):
         if flora_debug == "1":
-            print ("=============")
-            print ("Donnees de watering :")
-            print ("=============")
+            print("=============")
+            print("Donnees de watering :")
+            print("=============")
 
         # Water Tank Level
         # 0x008b
         handlerd = "0x008b"
         result_flora = read_ble(mac_add, handlerd, adpater, security)
         if flora_debug == "1":
-            print ("Water Tank Level Brut: ", result_flora)
-        waterTankLevel = convert_battery(result_flora)
+            print("Water Tank Level Brut: ", result_flora)
+        water_tank_level = convert_battery(result_flora)
         if flora_debug == "1":
-            print (" -->Water Tank Level: ", waterTankLevel)
+            print(" -->Water Tank Level: ", water_tank_level)
 
         # Watering Mode
         handlerd = "0x0090"
         result_flora = read_ble(mac_add, handlerd, adpater, security)
         if flora_debug == "1":
-            print ("Watering Mode: ", result_flora)
-        wateringMode = convert_battery(result_flora)
+            print("Watering Mode: ", result_flora)
+        watering_mode = convert_battery(result_flora)
         if flora_debug == "1":
-            print (" -->Watering Mode: ", wateringMode)
+            print(" -->Watering Mode: ", watering_mode)
 
         # Watering Status
         handlerd = "0x009a"
         result_flora = read_ble(mac_add, handlerd, adpater, security)
         if flora_debug == "1":
-            print ("Watering Status: ", result_flora)
-        wateringStatus = convert_battery(result_flora)
+            print("Watering Status: ", result_flora)
+        watering_status = convert_battery(result_flora)
         if flora_debug == "1":
-            print (" -->Watering Status: ", wateringStatus)
+            print(" -->Watering Status: ", watering_status)
 
         if flora_debug == "1":
-            print ("=============")
-            print ("Autres donnees :")
-            print ("=============")
+            print("=============")
+            print("Autres donnees :")
+            print("=============")
 
         #
         # handlerd = "0x0028"
@@ -593,55 +593,54 @@ if flower_power_or_pot == "1":
         # print " -->Couleur: ", Name
 
 if flora_debug == "1":
-    if flora_action == "static" or flora_action == "all":
-        print (" -->Name: ", device_name)
-        print (" -->Batterie %: ", batterie)
-    if flora_action == "data" or flora_action == "all":
-        print (" -->relativeHumidity:", soil_moisture)
-        print (" -->relativeHumidity calibre:", soil_moisture_calibre)
-        print (" -->relativeHumidity RJ:", soil_moisture_rj)
-        print (" -->Soil EC:", soil_ec)
-        print (" -->Lux:", lux)
-        print (" -->Air Temperature:", temperature_air)
-        print (" -->Air Temperature calibre:", temperature_air_calibre)
-        print (" -->Soil Temperature:", temperature_terre)
+    if flora_action in ('static', 'all'):
+        print(" -->Name: ", device_name)
+        print(" -->Batterie %: ", batterie)
+    if flora_action in ('data', 'all'):
+        print(" -->relativeHumidity:", soil_moisture)
+        print(" -->relativeHumidity calibre:", soil_moisture_calibre)
+        print(" -->relativeHumidity RJ:", soil_moisture_rj)
+        print(" -->Soil EC:", soil_ec)
+        print(" -->Lux:", lux)
+        print(" -->Air Temperature:", temperature_air)
+        print(" -->Air Temperature calibre:", temperature_air_calibre)
+        print(" -->Soil Temperature:", temperature_terre)
     if flower_power_or_pot == 1:
-        if flora_action == "watering" or flora_action == "all":
-            print ("Water_Tank_Level:",waterTankLevel,",Watering_Mode:",wateringMode,\
-                ",Watering_Status:",wateringStatus)
+        if flora_action in ('watering', 'all'):
+            print("Water_Tank_Level:", water_tank_level, ",Watering_Mode:", watering_mode,\
+                ",Watering_Status:", watering_status)
 
 if flora_debug == "0":
     if flora_action == "data":
         if flower_power_or_pot == "0":
-            print ("{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
+            print("{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
                 soil_ec, ",\"Lux\":", lux, ",\"Air_Temperature\":", \
                 temperature_air_calibre, ",\"Soil_Temperature\":", temperature_terre, "}")
 
         if flower_power_or_pot == "1":
-            print ("{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
+            print("{\"Soil_moisture\":", soil_moisture_calibre, ",\"Fertility\":", \
                 soil_ec, ",\"Lux\":", lux, ",\"Air_Temperature\":", \
                 temperature_air_calibre, ",\"Soil_Temperature\":", temperature_terre, \
-                ",\"Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
-                ",\"Watering_Status\":",wateringStatus,"}")
+                ",\"Water_Tank_Level\":", water_tank_level, ",\"Watering_Mode\":", watering_mode,\
+                ",\"Watering_Status\":", watering_status, "}")
 
     if flora_action == "static":
-        print ("Name: ", device_name, ",Batterie: ", batterie)
+        print("Name: ", device_name, ",Batterie: ", batterie)
 
     if flower_power_or_pot == "0":
         if flora_action == "all":
-            print ("Name: ", device_name, ",Batterie: ", batterie, ",Soil_moisture:", \
+            print("Name: ", device_name, ",Batterie: ", batterie, ",Soil_moisture:", \
                 soil_moisture_rj, ",Fertility:", soil_ec, ",Lux:", lux, ",Air_Temperature:", \
                 temperature_air, ",Soil_Temperature:", temperature_terre)
-                
+
     if flower_power_or_pot == "1":
         if flora_action == "all":
-            print ("Name: ", device_name, ",Batterie: ", batterie, ",Soil_moisture:", \
+            print("Name: ", device_name, ",Batterie: ", batterie, ",Soil_moisture:", \
                 soil_moisture_rj, ",Fertility:", soil_ec, ",Lux:", lux, ",Air_Temperature:", \
                 temperature_air, ",Soil_Temperature:", temperature_terre, \
-                ",Water_Tank_Level:",waterTankLevel,",Watering_Mode:",wateringMode,\
-                ",Watering_Status:",wateringStatus)
+                ",Water_Tank_Level:", water_tank_level, ",Watering_Mode:", watering_mode,\
+                ",Watering_Status:", watering_status)
 
         if flora_action == "watering":
-            print ("Water_Tank_Level:",waterTankLevel,",Watering_Mode:",wateringMode,\
-                ",Watering_Status:",wateringStatus)
-            
+            print("Water_Tank_Level:", water_tank_level, ",Watering_Mode:", watering_mode,\
+                ",Watering_Status:", watering_status)
