@@ -15,14 +15,6 @@ matrix:
         - ls -latr
     - language: python
       python: 3.4
-      addons:
-        apt:
-          packages:
-            - python-requests
-            - bluetooth
-            - libffi-dev
-            - libssl-dev
-            - libglib2.0-dev
       install:
         - pip install pylint
         script:
