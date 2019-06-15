@@ -16,11 +16,12 @@ matrix:
     - language: python
       addons:
         apt:
-          - python-requests
-          - bluetooth
-          - libffi-dev
-          - libssl-dev
-          - libglib2.0-dev
+          packages:
+            - python-requests
+            - bluetooth
+            - libffi-dev
+            - libssl-dev
+            - libglib2.0-dev
       python: 3.4
       install:
         - pip install pylint
