@@ -607,8 +607,8 @@ if flora_debug == "1":
         print (" -->Soil Temperature:", temperature_terre)
     if flower_power_or_pot == 1:
         if flora_action == "watering" or flora_action == "all":
-            print ("Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
-                ",\"Watering_Status\":",wateringStatus,"}")
+            print ("Water_Tank_Level:",waterTankLevel,",Watering_Mode:",wateringMode,\
+                ",Watering_Status:",wateringStatus)
 
 if flora_debug == "0":
     if flora_action == "data":
@@ -638,10 +638,10 @@ if flora_debug == "0":
             print ("Name: ", device_name, ",Batterie: ", batterie, ",Soil_moisture:", \
                 soil_moisture_rj, ",Fertility:", soil_ec, ",Lux:", lux, ",Air_Temperature:", \
                 temperature_air, ",Soil_Temperature:", temperature_terre, \
-                ",\"Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
-                ",\"Watering_Status\":",wateringStatus)
+                ",Water_Tank_Level:",waterTankLevel,",Watering_Mode:",wateringMode,\
+                ",Watering_Status:",wateringStatus)
 
         if flora_action == "watering":
-            print ("Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
-                ",\"Watering_Status\":",wateringStatus)
+            print ("Water_Tank_Level:",waterTankLevel,",Watering_Mode:",wateringMode,\
+                ",Watering_Status:",wateringStatus)
             
