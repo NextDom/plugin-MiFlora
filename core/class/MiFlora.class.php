@@ -386,7 +386,14 @@ class MiFlora extends eqLogic
                         $moisture = $resultsParrot->{"Soil_moisture"};
                         $fertility = $resultsParrot->{"Fertility"};
                         $lux = $resultsParrot->{"Lux"};
-                        // TODO - test tout a 0, retry
+
+                        if ($devicetype == 'ParrotPot') {
+                            $waterTankLevel = $resultsParrot->{"Water_Tank_Level"}; 
+                            $wateringMode = $resultsParrot->{"Watering_Mode"}; 
+                            $wateringStatus = $resultsParrot->{"Watering_Status"};
+                        }
+
+                        // test tout a 0, retry
                         if ($MiFloraData == '' or ($temperature == 0 and $moisture == 0 and $fertility == 0 and $lux == 0)) {
                             // wait  hopping it'll be better ...
                             log::add('MiFlora', 'warning', 'wait 5 s * ' . $tryGetData . ' pour ' . $mi_flora->getHumanName(false, false) . ' hopping it ll be better ...');
@@ -398,6 +405,11 @@ class MiFlora extends eqLogic
                         log::add('MiFlora', 'debug', $macAdd . ' Moisture:' . $moisture);
                         log::add('MiFlora', 'debug', $macAdd . ' Fertility:' . $fertility);
                         log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
+                        if ($devicetype == 'ParrotPot') {
+                            log::add('MiFlora', 'debug', $macAdd . ' waterTankLevel:' . $waterTankLevel);
+                            log::add('MiFlora', 'debug', $macAdd . ' wateringMode:' . $wateringMode);
+                            log::add('MiFlora', 'debug', $macAdd . ' wateringStatus:' . $wateringStatus);
+                        }
                     }
                 }
             }
@@ -413,6 +425,9 @@ class MiFlora extends eqLogic
 
 
             $mi_flora->updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux );
+            if ($devicetype == 'ParrotPot') {
+                $mi_flora->updateJeedomWatering($waterTankLevel,$wateringMode,$wateringStatus);
+            }
 
             // regarde si humidité minimum
             if ($mi_flora->getConfiguration ('HumMin_init') != "") {
@@ -1071,6 +1086,25 @@ class MiFlora extends eqLogic
         }
 
 
+
+    }
+    public function updateJeedomWatering($waterTankLevel,$wateringMode,$wateringStatus);
+    {
+        $cmd = $this->getCmd(null, 'waterTankLevel');
+        if (is_object($cmd)) {
+            $cmd->event($waterTankLevel);
+            log::add('MiFlora', 'info', $macAdd . ' Store waterTankLevel:' . $waterTankLevel);
+        }
+        $cmd = $this->getCmd(null, 'wateringMode');
+        if (is_object($cmd)) {
+            $cmd->event($wateringMode);
+            log::add('MiFlora', 'info', $macAdd . ' Store wateringMode:' . $wateringMode);
+        }
+        $cmd = $this->getCmd(null, 'wateringStatus');
+        if (is_object($cmd)) {
+            $cmd->event($wateringStatus);
+            log::add('MiFlora', 'info', $macAdd . ' Store wateringStatus:' . $wateringStatus);
+        }
 
     }
     public function updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux )
