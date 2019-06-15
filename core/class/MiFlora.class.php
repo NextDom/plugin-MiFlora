@@ -1088,7 +1088,7 @@ class MiFlora extends eqLogic
 
 
     }
-    public function updateJeedomWatering($waterTankLevel,$wateringMode,$wateringStatus);
+    public function updateJeedomWatering($waterTankLevel,$wateringMode,$wateringStatus)
     {
         $cmd = $this->getCmd(null, 'waterTankLevel');
         if (is_object($cmd)) {
