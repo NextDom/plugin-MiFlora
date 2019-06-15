@@ -387,7 +387,7 @@ if flora_action == "all" or flora_action == "data":
         handlerd = "0x0043"
     else:
         handlerd = "0x0044"
-
+       # handlerd = "0x0043" #TODO - DEBUG TO REMOVE
     result_flora = read_ble_float(mac_add, handlerd, adpater, security)
     if flora_debug == "1":
         print ("Air Temperature brute calibre:", result_flora)
@@ -485,7 +485,7 @@ if flora_action == "all" or flora_action == "static":
         print (" -->Name: ", device_name)
 
 if flower_power_or_pot == "1":
-    if flora_action == "all" or flora_action == "watering":
+    if flora_action == "all" or flora_action == "watering" or flora_action == "data":
         if flora_debug == "1":
             print ("=============")
             print ("Donnees de watering :")
@@ -607,7 +607,8 @@ if flora_debug == "1":
         print (" -->Soil Temperature:", temperature_terre)
     if flower_power_or_pot == 1:
         if flora_action == "watering" or flora_action == "all":
-            print ("watering TBD")
+            print ("Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
+                ",\"Watering_Status\":",wateringStatus,"}")
 
 if flora_debug == "0":
     if flora_action == "data":
@@ -638,9 +639,9 @@ if flora_debug == "0":
                 soil_moisture_rj, ",Fertility:", soil_ec, ",Lux:", lux, ",Air_Temperature:", \
                 temperature_air, ",Soil_Temperature:", temperature_terre, \
                 ",\"Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
-                ",\"Watering_Status\":",wateringStatus,"}")
+                ",\"Watering_Status\":",wateringStatus)
 
         if flora_action == "watering":
             print ("Water_Tank_Level\":",waterTankLevel,",\"Watering_Mode\":",wateringMode,\
-                ",\"Watering_Status\":",wateringStatus,"}")
+                ",\"Watering_Status\":",wateringStatus)
             
