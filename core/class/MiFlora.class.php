@@ -1119,90 +1119,41 @@ class MiFlora extends eqLogic
             log::add('MiFlora', 'debug', $macAdd . ' Lux:' . $lux);
         }
     }
-    public function update_min_hum_Jeedom ($hum_min){
-
-        $cmd = $this->getCmd(null, 'HumMin');
-        if (is_object($cmd)) {
-            $cmd->event($hum_min);
-            log::add('MiFlora', 'info', 'enregistrement Humiditée min '. $hum_min);
-        }
-
-
-
+    public function update_min_hum_Jeedom ($hum_min) {
+        $this->checkAndUpdateCmd('HumMin',$hum_min);
+        log::add('MiFlora', 'info', 'enregistrement Humiditée min '. $hum_min);
     }
-    public function updateJeedomWatering($waterTankLevel,$wateringMode,$wateringStatus)
-    {
-        $cmd = $this->getCmd(null, 'waterTankLevel');
-        if (is_object($cmd)) {
-            $cmd->event($waterTankLevel);
-            log::add('MiFlora', 'info', $macAdd . ' Store waterTankLevel:' . $waterTankLevel);
-        }
-        $cmd = $this->getCmd(null, 'wateringMode');
-        if (is_object($cmd)) {
-            $cmd->event($wateringMode);
-            log::add('MiFlora', 'info', $macAdd . ' Store wateringMode:' . $wateringMode);
-        }
-        $cmd = $this->getCmd(null, 'wateringStatus');
-        if (is_object($cmd)) {
-            $cmd->event($wateringStatus);
-            log::add('MiFlora', 'info', $macAdd . ' Store wateringStatus:' . $wateringStatus);
-        }
-
+    public function updateJeedomWatering($waterTankLevel,$wateringMode,$wateringStatus) {
+        $this->checkAndUpdateCmd('waterTankLevel',$waterTankLevel);
+        $this->checkAndUpdateCmd('wateringMode',$wateringMode);
+        $this->checkAndUpdateCmd('wateringStatus',$wateringStatus);
+        log::add('MiFlora', 'info', $macAdd . ' Store waterTankLevel:' . $waterTankLevel);
+        log::add('MiFlora', 'info', $macAdd . ' Store wateringMode:' . $wateringMode);
+        log::add('MiFlora', 'info', $macAdd . ' Store wateringStatus:' . $wateringStatus);
     }
     public function updateJeedom($macAdd, $temperature, $moisture, $fertility, $lux )
     {
         // store into Jeedom DB
         if ($temperature == 0 && $moisture == 0 && $fertility == 0 && $lux == 0) {
             log::add('MiFlora', 'warning', 'Toutes les mesures a 0 pour ' . $macAdd . ', erreur de connection Mi Flora');
-            $cmd = $this->getCmd(null, 'OK');
-            if (is_object($cmd)) {
-                $cmd->event(0);
-                log::add('MiFlora', 'info', 'module absent: '.$macAdd);
-            }
-
+            $this->checkAndUpdateCmd('OK',0);
         } else {
             if ($temperature > 100 || $temperature < -50) {
                 log::add('MiFlora', 'error', 'Temperature hors plage (' . $temperature . ') pour ' . $macAdd . ', erreur de connection Bluetooth');
-                $cmd = $this->getCmd(null, 'OK');
-                if (is_object($cmd)) {
-                    $cmd->event(0);
-                    log::add('MiFlora', 'info', 'module en erreur');
-                }
-
+                $this->checkAndUpdateCmd('OK',0);
             } else {
-                $cmd = $this->getCmd(null, 'temperature');
-                if (is_object($cmd)) {
-                    // $cmd->setCollectDate($date);
-                    $cmd->event($temperature);
-                    log::add('MiFlora', 'info', $macAdd . ' Store Temperature:' . $temperature);
-                }
-                $cmd = $this->getCmd(null, 'moisture');
-                if (is_object($cmd)) {
-                    $cmd->event($moisture);
-                    log::add('MiFlora', 'info', $macAdd . ' Store Moisture:' . $moisture);
-                }
-                $cmd = $this->getCmd(null, 'fertility');
-                if (is_object($cmd)) {
-                    $cmd->event($fertility);
-                    log::add('MiFlora', 'info', $macAdd . ' Store Fertility:' . $fertility);
-                }
-                $cmd = $this->getCmd(null, 'lux');
-                if (is_object($cmd)) {
-                    $cmd->event($lux);
-                    log::add('MiFlora', 'info', $macAdd . ' Store Lux:' . $lux);
-                }
-                $cmd = $this->getCmd(null, 'lastrefresh');
-                if (is_object($cmd)) {
-                    $lastrefresh=(date("j-m H:i"));
-                    $cmd->event($lastrefresh);
-                    log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
-                }
-                $cmd = $this->getCmd(null, 'OK');
-                if (is_object($cmd)) {
-                    $cmd->event(1);
-                    log::add('MiFlora', 'info', 'module present');
-                }
-
+                $this->checkAndUpdateCmd('temperature',$temperature);
+                $this->checkAndUpdateCmd('moisture',$moisture);
+                $this->checkAndUpdateCmd('fertility',$fertility);
+                $this->checkAndUpdateCmd('lux',$lux);
+                $this->checkAndUpdateCmd('lastrefresh',$lastrefresh);
+                $this->checkAndUpdateCmd('OK',1);
+                log::add('MiFlora', 'info', $macAdd . ' Store Temperature:' . $temperature);
+                log::add('MiFlora', 'info', $macAdd . ' Store Moisture:' . $moisture);
+                log::add('MiFlora', 'info', $macAdd . ' Store Fertility:' . $fertility);
+                log::add('MiFlora', 'info', $macAdd . ' Store Lux:' . $lux);
+                log::add('MiFlora', 'info', $macAdd . ' Store LastRefresh:' . $lastrefresh);
+                log::add('MiFlora', 'info', 'module present');
             }
         }
     }
