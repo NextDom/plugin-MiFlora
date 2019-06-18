@@ -14,8 +14,8 @@
             <div style="text-align: center;"><i class="jeedom-thermo-moyen"></i></div>
         </div>
         <div class="col-md-8">
-      <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric"
-            data-cmd_id="#temperature_id#">#temperature# °C</span>
+            <span class="history cursor cmd tooltips cmd cmd-widget" data-type="info" data-subtype="numeric"
+                data-cmd_id="#temperature_id#">#temperature# °C</span>
         </div>
     </div>
     <div class="row flower_style#id#">
@@ -45,8 +45,7 @@
                   data-cmd_id="#fertility_id#">#fertility# uS/cm</span>
         </div>
     </div>
-    <!-- <div class="row flower_style#id#" style="display:none;" > -->
-    <div class="row flower_style#id#">
+    <div class="row flower_style#id#" id="wateringDisplayHide#id#">
         <div class="col-md-4">
             <div style="text-align: center;"><i class="fas fa-fill"></i></div>
         </div>
@@ -60,7 +59,16 @@
         $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
             jeedom.cmd.execute({id: '#refresh_id#'});
         });
-        
+        function hideTankLevelJS#id#(waterTankLevel) {
+            if (typeof waterTankLevel == 'undefined') {
+                 wateringDisplayHide#id#.style.display = 'none'; 
+             } 
+        }   
+        jeedom.cmd.update['#waterTankLevel_id#']=function(_options){
+            hideTankLevelJS#id#(#waterTankLevel#);
+        };
+     
+        hideTankLevelJS#id#(#waterTankLevel#);
     </script>
 </div>
 <style>
