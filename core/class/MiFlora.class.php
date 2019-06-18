@@ -1146,6 +1146,7 @@ class MiFlora extends eqLogic
                 $this->checkAndUpdateCmd('moisture',$moisture);
                 $this->checkAndUpdateCmd('fertility',$fertility);
                 $this->checkAndUpdateCmd('lux',$lux);
+                $lastrefresh=(date("j-m H:i"));
                 $this->checkAndUpdateCmd('lastrefresh',$lastrefresh);
                 $this->checkAndUpdateCmd('OK',1);
                 log::add('MiFlora', 'info', $macAdd . ' Store Temperature:' . $temperature);
