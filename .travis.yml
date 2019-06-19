@@ -14,9 +14,9 @@ matrix:
         - cd ${TRAVIS_BUILD_DIR}
         - ls -latr
     - language: python
-      python: 2.7
+      python: 3.4
       install:
-        - pip install pylint
+        - pip install pylint bluepy
       script:
         - cd ${TRAVIS_BUILD_DIR}
         - ./tests/tools/lintAllPythonFiles.sh

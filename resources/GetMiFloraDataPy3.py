@@ -47,9 +47,9 @@ write_security="high", retries=3, timeout=8):
     global lock # pylint: disable=global-statement
     attempt = 0
     delay = 2
-    # print ("write_ble")
+    # print("write_ble")
     while attempt <= retries:
-        returnValue = None
+        return_value = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-write-req -a {} -n {} \
             --sec-level={} ".format(write_adpater, mac, handle, value, write_security)
@@ -58,15 +58,15 @@ write_security="high", retries=3, timeout=8):
                 result = subprocess.check_output(cmd, shell=True, timeout=timeout)
             result = result.decode("utf-8").strip(' \n\t')
             # print("write_ble - Got ",result," from gatttool")
-            return returnValue
+            return return_value
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
-            returnValue=-1
+            return_value = -1
 
         except subprocess.TimeoutExpired:
             print("Error - Timeout while waiting for gatttool output")
-            returnValue=-1
+            return_value = -1
 
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
@@ -74,7 +74,7 @@ write_security="high", retries=3, timeout=8):
             time.sleep(delay)
             delay *= 2
 
-    return returnValue
+    return return_value
 
 def read_ble(mac, handle, read_adpater="hci0", read_security="high", \
 read_flora_debug=0, retries=3, timeout=8):
@@ -89,9 +89,9 @@ read_flora_debug=0, retries=3, timeout=8):
     global lock # pylint: disable=global-statement
     attempt = 0
     delay = 2
-    # print ("read_ble")
+    # print("read_ble")
     while attempt <= retries:
-        returnValue = None
+        return_value = None
         try:
             cmd = "gatttool --adapter={} --device={} --char-read -a {} \
             --sec-level={} 2>/dev/null".format(read_adpater, mac, handle, read_security)
@@ -112,18 +112,18 @@ read_flora_debug=0, retries=3, timeout=8):
 
         except subprocess.CalledProcessError as err:
             print("Error ", err.returncode, " from gatttool (", err.output, ")")
-            returnValue=-1
+            return_value = -1
 
         except subprocess.TimeoutExpired:
             print("Error - Timeout while waiting for gatttool output")
-            returnValue=-1
+            return_value = -1
         attempt += 1
         # print("Waiting for ",delay," seconds before retrying")
         if attempt < retries:
             time.sleep(delay)
             delay *= 2
 
-    return returnValue
+    return return_value
 
 
 #address = "C4:7C:8D:60:E8:21"
@@ -138,16 +138,16 @@ flora_debug = sys.argv[3]
 adpater = sys.argv[4]
 security = sys.argv[5]
 
-print ("start ")
-resWrite=0
+print("start ")
+res_write = 0
 if firmware != "2.6.2":
-    resWrite=write_ble(mac_add, handlewr, "A01F", adpater, security, 2)
-if resWrite != -1 :  
+    res_write = write_ble(mac_add, handlewr, "A01F", adpater, security, 2)
+if res_write != -1:
     result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
     if flora_debug == "1":
-        print ("read_ble:", parse_data(result_flora))
+        print("read_ble:", parse_data(result_flora))
 else:
     result_flora = -1
 
 if flora_debug == "0":
-    print (result_flora) # pylint: disable=superfluous-parens
+    print(result_flora) # pylint: disable=superfluous-parens

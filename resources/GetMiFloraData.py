@@ -33,6 +33,7 @@ def parse_data(data):
     return data
 
 # pylint: disable=too-many-arguments
+# pylint: disable=R1711
 def write_ble(mac, handle, value, write_adpater="hci0", \
 write_security="high", retries=3):
     """
@@ -65,7 +66,6 @@ write_security="high", retries=3):
         if attempt < retries:
             time.sleep(delay)
             delay *= 2
-
     return None
 
 def read_ble(mac, handle, read_adpater="hci0", read_security="high", \
@@ -135,7 +135,7 @@ if firmware != "2.6.2":
 result_flora = read_ble(mac_add, handlerd, adpater, security, flora_debug)
 
 if flora_debug == "1":
-    print ("read_ble:", parse_data(result_flora))
+    print("read_ble:", parse_data(result_flora))
 
 if flora_debug == "0":
-    print (result_flora) # pylint: disable=superfluous-parens
+    print(result_flora) # pylint: disable=superfluous-parens

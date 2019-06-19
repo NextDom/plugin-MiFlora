@@ -10,6 +10,15 @@
                 "user": "pi",
                 "privateKey": "/Users/rjullien/.ssh/id_rsa",
             }
+            {
+                "type": "sftp",
+                "name": "RPI Test MiFlora",
+                "description": "RPI Test MiFlora",
+                "dir": "/var/www/html/plugins/MiFlora",
+                "host": "10.182.207.59", "port": 22,
+                "user": "pi",
+                "privateKey": "/Users/rjullien/.ssh/id_rsa",
+            }
         ]
     }
 }
