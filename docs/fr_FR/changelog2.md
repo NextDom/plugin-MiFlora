@@ -1,5 +1,5 @@
 # Changelog
-### Version 3.1.6 - xx Juin 2019 Stable
+### Version 3.1.6 - 19 Juin 2019 Stable
 *  Gestion du Parrot Pot water tank
 
 ### Version 3.1.5 - 12 Juin 2019 Stable
