@@ -1,4 +1,8 @@
 # Changelog
+### Version 3.1.7 - 20 Juin 2019 Stable
+*  Gestion des versions du plugin afin d'éviter l'affichage de messages inutiles
+*  Nettoyage de l'ancien mode deporté supprimé par la version 3.0.0
+
 ### Version 3.1.6 - 19 Juin 2019 Stable
 *  Gestion du Parrot Pot water tank
 
