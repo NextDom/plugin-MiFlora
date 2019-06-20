@@ -27,8 +27,25 @@ function MiFlora_install() {
 
 function MiFlora_update() {
     log::add('MiFlora', 'info', 'config - update started');
-    message::add('MiFlora', 'La mise à jour de 3.0.x en 3.1.0 nécessite de relancer les dépendances (local + antennes) même si elles apparaissent vertes, ce n est pas necessaire si la version etait deja >= 3.1.0');
+    # Manage plugin versioning
+    $oldversion = config::byKey('version', 'MiFlora');
 
+    // -------------------------------
+    // To be modified for each version
+    // -------------------------------
+    $newversion = 317;
+
+
+    if ($oldversion<$newversion){
+        config::save('version', $newversion , 'MiFlora');
+        log::add('MiFlora', 'info', 'move from version:' .$oldversion.' to ' . $newversion);
+    }
+    if ($oldversion<317){
+        log::add('MiFlora', 'debug', 'version < 317, sending dep message');
+        message::add('MiFlora', 'La mise à jour de 3.0.x en 3.1.0 nécessite de relancer les dépendances (local + antennes) même si elles apparaissent vertes, ce n est pas necessaire si la version etait deja >= 3.1.0');
+    } 
+
+ // TODO Proteger cette partie > version 317 ??, attn $antenneAncienneMethode
     $sql = file_get_contents(dirname(__FILE__) . '/install.sql');
     log::add('MiFlora', 'info', 'sql - '.$sql);
     DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
@@ -47,9 +64,9 @@ function MiFlora_update() {
             $remoteA->setConfiguration('remotePassword',config::byKey('password', 'MiFlora'));
             $remoteA->setConfiguration('remoteDevice',config::byKey('adapter', 'MiFlora'));
             $remoteA->save();
+
             //supprime pour eviter creer a chaque fois
-            // TODO Sep18 Activer la ligne suivante des que le fallback a la version sans antenne peut etre supprime
-            //     config::save('maitreesclave', 'local' ,'MiFlora');
+            config::save('maitreesclave', 'local' ,'MiFlora');
             log::add('MiFlora', 'debug', 'config - remote  created fin ');
             $antenneAncienneMethode = "deporte";
         } else {
@@ -67,8 +84,9 @@ function MiFlora_update() {
     //pour nouveau mode avec des antennes
 
     // Activer les lignes suivantes des que le fallback a la version sans antenne peut etre supprime
-
-    /*   if (config::byKey('user', 'MiFlora') != ""){
+    if ($oldversion<317){
+      log::add('MiFlora', 'debug', 'version < 317, removing old connection id');
+      if (config::byKey('user', 'MiFlora') != ""){
            config::remove('user', 'MiFlora') ;
        }
        if (config::byKey('password', 'MiFlora') != ""){
@@ -79,8 +97,8 @@ function MiFlora_update() {
        }
        if (config::byKey('addressip', 'MiFlora') != ""){
            config::remove('addressip', 'MiFlora') ;
-       }*/
-
+       }
+    }
 
     if (config::byKey('frequence', 'MiFlora') == ""){
         config::save('frequence', '1', 'MiFlora');
