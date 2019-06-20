@@ -84,8 +84,8 @@ function MiFlora_update() {
     //pour nouveau mode avec des antennes
 
     // Activer les lignes suivantes des que le fallback a la version sans antenne peut etre supprime
-    if ($oldversion<318){
-      log::add('MiFlora', 'debug', 'version < 318, removing old connection id');
+    if ($oldversion<317){
+      log::add('MiFlora', 'debug', 'version < 317, removing old connection id');
       if (config::byKey('user', 'MiFlora') != ""){
            config::remove('user', 'MiFlora') ;
        }
