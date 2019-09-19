@@ -535,7 +535,9 @@ class MiFlora extends eqLogic
         }
         log::add('MiFlora', 'info', 'devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
         if ($this->getConfiguration('devicetype') == ''){
-            if (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 10), 'C4:7C:8D:6') == 0 )
+            if (strcasecmp(substr($this->getConfiguration('macAdd'), 0, 10), 'C4:7C:8D:6') == 0 ||
+                   strcasecmp(substr($this->getConfiguration('macAdd'), 0, 3), '80:') == 0
+                )
             {
                 $this->setConfiguration('devicetype', 'MiFlora');
                 log::add('MiFlora', 'info', 'MiFlora - devicetype: ' . $this->getConfiguration('devicetype') . ' ' . $this->getConfiguration('macAdd') . ' -- ' .substr($this->getConfiguration('macAdd'), 0, 10));
