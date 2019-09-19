@@ -1,4 +1,8 @@
 # Changelog
+### Version 3.1.8 - 10 Spetembre 2019 Beta
+*  Support des nouvelles mac add 80:xx
+*  correction de la page blanche en V4, php 7.2
+
 ### Version 3.1.7 - 20 Juin 2019 Stable
 *  Gestion des versions du plugin afin d'éviter l'affichage de messages inutiles
 *  Nettoyage de l'ancien mode deporté supprimé par la version 3.0.0
