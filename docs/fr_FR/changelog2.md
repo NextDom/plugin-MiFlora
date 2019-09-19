@@ -1,5 +1,5 @@
 # Changelog
-### Version 3.1.8 - 10 Spetembre 2019 Beta
+### Version 3.1.8 - 10 Septembre 2019 Beta
 *  Support des nouvelles mac add 80:xx
 *  correction de la page blanche en V4, php 7.2
 
