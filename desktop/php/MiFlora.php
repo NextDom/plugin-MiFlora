@@ -49,7 +49,7 @@ $eqlogicss = eqLogic::byType($plugin->getId());
 
             <div class="cursor" id="bt_remoteMiFlora" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
                 <center>
-                    <i class="fa fab-bluetooth" style="font-size : 6em;color:#767676;"></i>
+                    <i class="fab fa-bluetooth" style="font-size : 6em;color:#767676;"></i>
                 </center>
                 <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Antennes}}</center></span>
             </div>
