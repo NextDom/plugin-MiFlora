@@ -27,38 +27,33 @@ sendVarToJS('plugin', $id);
 <div id='div_MiFloraRemoteAlert' style="display: none;"></div>
 <div class="row row-overflow">
 
-	 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-8 remoteThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
-<legend><i class="fa fa-table"></i>  {{Mes Antennes}}</legend>
+	 <div class="col-xs-12 remoteThumbnailDisplay">
+<legend><i class="fas fa-table"></i>  {{Mes Antennes}}</legend>
 
 <div class="eqLogicThumbnailContainer">
-	<div class="cursor MiFloraRemoteAction pull-left" data-action="add" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
-     <center>
-      <i class="fa fa-plus-circle" style="font-size : 9em;color:#94ca02;"></i>
-    </center>
-    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Ajouter}}</center></span>
+	<div class="cursor MiFloraRemoteAction pull-left" data-action="add">
+      <i class="fas fa-plus-circle"></i>
+    <span >{{Ajouter}}</span>
   </div>
   <?php
 foreach ($remotes as $remote) {
-	echo '<div class="eqLogicDisplayCard cursor pull-left" data-remote_id="' . $remote->getId() . '" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<div class="eqLogicDisplayCard cursor pull-left" data-remote_id="' . $remote->getId() . '>';
     echo '<div class="cursor li_MiFloraRemote" data-MiFloraRemote_id="' . $remote->getId() . '"></div>';
-
-	echo "<center>";
 	echo '<img class="lazy" src="plugins/MiFlora/plugin_info/antenna.png" height="105" width="95" />';
-	echo "</center>";
-	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02""><center>' . $remote->getRemoteName() . '</center></span>';
+	echo '<span>' . $remote->getRemoteName() . '</span>';
 	echo '</div>';
 }
 ?>
 </div>
 </div>
 
-	<div class="col-lg-10 col-md-9 col-sm-8 col-xs-8 MiFloraRemote" style="border-left: solid 1px #EEE; padding-left: 25px;display:none;">
-		<a class="btn btn-success MiFloraRemoteAction pull-right" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
-		<a class="btn btn-danger MiFloraRemoteAction pull-right" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>
+	<div class="col-xs-12 MiFloraRemote" style="display:none;">
+		<a class="btn btn-success MiFloraRemoteAction pull-right" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}</a>
+		<a class="btn btn-danger MiFloraRemoteAction pull-right" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
 
 			<form class="form-horizontal">
 					<fieldset>
-						<legend><i class="fa fa-arrow-circle-left returnAction cursor"></i> {{Général}}</legend>
+						<legend><i class="fas fa-arrow-circle-left returnAction cursor"></i> {{Général}}</legend>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">{{Nom}}</label>
 							<div class="col-sm-3">
@@ -102,10 +97,10 @@ foreach ($remotes as $remote) {
                         if (method_exists( $id ,'dependancyRemote')){
                                 echo '<label class="col-sm-2 control-label">{{Installation des dépendances}}</label>
 						<div class="col-sm-3">
-							<a class="btn btn-warning MiFloraRemoteAction" data-action="dependancyRemote"><i class="fa fa-spinner"></i> {{Lancer les dépendances}}</a>
+							<a class="btn btn-warning MiFloraRemoteAction" data-action="dependancyRemote"><i class="fas fa-spinner"></i> {{Lancer les dépendances}}</a>
 						</div>
 						<div class="col-sm-2">
-							<a class="btn btn-success MiFloraRemoteAction" data-action="getRemoteLogDependancy"><i class="fa fa-file-text-o"></i> {{Log dépendances}}</a>
+							<a class="btn btn-success MiFloraRemoteAction" data-action="getRemoteLogDependancy"><i class="fas fa-file-text-o"></i> {{Log dépendances}}</a>
 						</div>';
                             }
                             echo'</div>';
