@@ -5,12 +5,10 @@
   "usage": "Il gère la recuperation des infos de manière déportés par SSH.",
   "licence": "GPL2.0",
   "author": "Rene Jullien",
-  "require": "3.0",
+  "require": "3.3.24",
   "version": "3.1.8",
   "category": "nature",
   "hasDependency": true,
   "changelog": "https://NextDom.github.io/plugin-MiFlora/#language#/#tocAnchor-1-13",
   "documentation": "https://NextDom.github.io/plugin-MiFlora/#language#"
 }
-
-
