@@ -19,6 +19,15 @@
                 "user": "pi",
                 "privateKey": "/Users/rjullien/.ssh/id_rsa",
             }
+            {
+                "type": "sftp",
+                "name": "Cam RPI Test MiFlora",
+                "description": "Cam RPI Test MiFlora",
+                "dir": "/var/www/html/plugins/MiFlora",
+                "host": "10.182.207.56", "port": 22,
+                "user": "pi",
+                "privateKey": "/Users/rjullien/.ssh/id_rsa",
+            }
         ]
     }
 }
