@@ -25,11 +25,6 @@ if (!isConnect()) {
 
 <form class="form-horizontal">
     <fieldset>
-    	<span>
-        <div class="form-group"> <br>
-           <a href=https://NextDom.github.io/plugin-MiFlora/fr_FR target="_blank"><font size="+1"><center>Cliquer pour voir la documentation officielle du plugin en version stable</center></font></a>
-       </div>
-	</span>
         <div class="form-group"> <br>
 
           <label class="col-lg-4 control-label">{{frequence de recuperation des données}}</label>
