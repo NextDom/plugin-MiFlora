@@ -2,6 +2,7 @@
 ### Version 3.1.8 - 10 Septembre 2019 Beta
 *  Support des nouvelles mac add 80:xx
 *  correction de la page blanche en V4, php 7.2
+*  version jeedom minimale : 3.3.24 (pour compatibilité V4)
 
 ### Version 3.1.7 - 20 Juin 2019 Stable
 *  Gestion des versions du plugin afin d'éviter l'affichage de messages inutiles
