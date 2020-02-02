@@ -23,4 +23,3 @@ Le Parrots flower est la version originale de Parrot du stick MiFlora, le Parrot
 # Documentation complète:
 
 [![Read the Docs](plugin_info/MiFlora_icon.png)](https://NextDom.github.io/plugin-MiFlora)
-
