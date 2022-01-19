@@ -1,4 +1,8 @@
 # Changelog
+
+### Version 3.1. - 19 Janvier 2022 Stable
+*  Correction Object en jeeObject
+
 ### Version 3.1.7 - 20 Juin 2019 Stable
 *  Gestion des versions du plugin afin d'éviter l'affichage de messages inutiles
 *  Nettoyage de l'ancien mode deporté supprimé par la version 3.0.0
