@@ -1,6 +1,6 @@
 # Changelog
 
-### Version 3.1. - 19 Janvier 2022 Stable
+### Version 3.1.8 - 19 Janvier 2022 Stable
 *  Correction Object en jeeObject
 
 ### Version 3.1.7 - 20 Juin 2019 Stable
